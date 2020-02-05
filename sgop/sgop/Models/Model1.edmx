@@ -1,0 +1,1793 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="sgopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="archivosFotograficos">
+          <Key>
+            <PropertyRef Name="idArchFoto" />
+          </Key>
+          <Property Name="idArchFoto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="noEstimacion" Type="int" />
+          <Property Name="idRequisicion" Type="int" />
+          <Property Name="idConcepto" Type="int" />
+          <Property Name="foto" Type="text" />
+        </EntityType>
+        <EntityType Name="catalogoConceptos">
+          <Key>
+            <PropertyRef Name="idConcepto" />
+          </Key>
+          <Property Name="idConcepto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="clave" Type="varchar" MaxLength="5" />
+          <Property Name="descripcion" Type="varchar" MaxLength="160" />
+          <Property Name="unidad" Type="varchar" MaxLength="5" />
+          <Property Name="precioUnitario" Type="float" />
+        </EntityType>
+        <EntityType Name="catalogoEmpresas">
+          <Key>
+            <PropertyRef Name="idEmpresa" />
+          </Key>
+          <Property Name="idEmpresa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="razonSocial" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="catalogoEstatus">
+          <Key>
+            <PropertyRef Name="idEstatus" />
+          </Key>
+          <Property Name="idEstatus" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="30" />
+          <Property Name="perteneceA" Type="int" />
+        </EntityType>
+        <EntityType Name="catalogoMateriales">
+          <Key>
+            <PropertyRef Name="idMaterial" />
+          </Key>
+          <Property Name="idMaterial" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="catalogoMunicipios">
+          <Key>
+            <PropertyRef Name="idMunicipio" />
+          </Key>
+          <Property Name="idMunicipio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="40" />
+        </EntityType>
+        <EntityType Name="catalogoRoles">
+          <Key>
+            <PropertyRef Name="idRol" />
+          </Key>
+          <Property Name="idRol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="catalogoSistemas">
+          <Key>
+            <PropertyRef Name="idSistema" />
+          </Key>
+          <Property Name="idSistema" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="controlCobros">
+          <Key>
+            <PropertyRef Name="noDocumento" />
+          </Key>
+          <Property Name="noDocumento" Type="int" Nullable="false" />
+          <Property Name="idRequisicion" Type="int" />
+          <Property Name="noEstimacion" Type="int" />
+          <Property Name="clDocumento" Type="char" MaxLength="2" />
+          <Property Name="importe" Type="float" />
+          <Property Name="fechaDocumento" Type="datetime" />
+          <Property Name="docCompensacion" Type="int" />
+          <Property Name="fechaCompensacion" Type="datetime" />
+          <Property Name="factura" Type="text" />
+          <Property Name="usuarioCreacion" Type="int" />
+          <Property Name="usuarioCompensacion" Type="int" />
+        </EntityType>
+        <EntityType Name="controlPagos">
+          <Key>
+            <PropertyRef Name="noDocumento" />
+            <PropertyRef Name="clDocumento" />
+          </Key>
+          <Property Name="idRequisicionParcial" Type="int" Nullable="false" />
+          <Property Name="noDocumento" Type="int" Nullable="false" />
+          <Property Name="idRequisicion" Type="int" />
+          <Property Name="clDocumento" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="importe" Type="float" />
+          <Property Name="fechaDocumento" Type="datetime" />
+          <Property Name="docCompensacion" Type="int" />
+          <Property Name="fechaCompensacion" Type="datetime" />
+          <Property Name="factura" Type="text" />
+          <Property Name="usuarioCreacion" Type="int" />
+          <Property Name="usuarioCompensacion" Type="int" />
+        </EntityType>
+        <EntityType Name="ejecucionesMensuales">
+          <Key>
+            <PropertyRef Name="idEjecucion" />
+          </Key>
+          <Property Name="idEjecucion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="periodo" Type="varchar" MaxLength="5" />
+          <Property Name="idRequisicion" Type="int" />
+          <Property Name="idConcepto" Type="int" />
+          <Property Name="cantidad" Type="float" />
+        </EntityType>
+        <EntityType Name="estimaciones">
+          <Key>
+            <PropertyRef Name="idEstimacion" />
+          </Key>
+          <Property Name="idEstimacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="noEstimacion" Type="int" />
+          <Property Name="idRequisicion" Type="int" />
+          <Property Name="idConcepto" Type="int" />
+          <Property Name="cantidad" Type="float" />
+        </EntityType>
+        <EntityType Name="licitaciones">
+          <Key>
+            <PropertyRef Name="idLicitacion" />
+          </Key>
+          <Property Name="idLicitacion" Type="int" Nullable="false" />
+          <Property Name="idEmpresa" Type="int" />
+          <Property Name="noLicitacion" Type="varchar" MaxLength="30" />
+          <Property Name="nombreObra" Type="varchar" MaxLength="200" />
+          <Property Name="idMunicipio" Type="int" />
+          <Property Name="localidad" Type="varchar" MaxLength="60" />
+          <Property Name="fechaVisita" Type="datetime" />
+          <Property Name="fechaAclaraciones" Type="datetime" />
+          <Property Name="fechaPropuesta" Type="datetime" />
+          <Property Name="fechaFallo" Type="datetime" />
+          <Property Name="actaVisita" Type="text" />
+          <Property Name="actaAclaraciones" Type="text" />
+          <Property Name="actaPropuesta" Type="text" />
+          <Property Name="actaFallo" Type="text" />
+          <Property Name="idEstatus" Type="int" />
+          <Property Name="idRequisicion" Type="int" />
+          <Property Name="fechaCreacion" Type="datetime" />
+          <Property Name="usuarioCreacion" Type="int" />
+          <Property Name="fechaModificacion" Type="datetime" />
+          <Property Name="usuarioModificacion" Type="int" />
+        </EntityType>
+        <EntityType Name="proyectos">
+          <Key>
+            <PropertyRef Name="idProyecto" />
+          </Key>
+          <Property Name="idProyecto" Type="int" Nullable="false" />
+          <Property Name="idLicitacion" Type="int" />
+          <Property Name="idEstatus" Type="int" />
+          <Property Name="fechaContrato" Type="datetime" />
+          <Property Name="polizaAnticipo" Type="text" />
+          <Property Name="polizaVicios" Type="text" />
+          <Property Name="policaCumplimiento" Type="text" />
+          <Property Name="plazoDias" Type="int" />
+          <Property Name="fechaInicioContrato" Type="datetime" />
+          <Property Name="fechaFinalContrato" Type="datetime" />
+          <Property Name="fechaInicioReal" Type="datetime" />
+          <Property Name="fechaFinalReal" Type="datetime" />
+          <Property Name="actaEntrega" Type="text" />
+          <Property Name="jefeObra" Type="int" />
+          <Property Name="fechaCreacion" Type="datetime" />
+          <Property Name="usuarioCreacion" Type="int" />
+          <Property Name="fechaModificacion" Type="datetime" />
+          <Property Name="usuarioModificacion" Type="int" />
+        </EntityType>
+        <EntityType Name="rangos">
+          <Key>
+            <PropertyRef Name="idRango" />
+          </Key>
+          <Property Name="idRango" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rangoInicial" Type="int" />
+          <Property Name="pertenceA" Type="varchar" MaxLength="60" />
+          <Property Name="usuarioCreacion" Type="int" />
+          <Property Name="fechaCreacion" Type="datetime" />
+          <Property Name="usuarioModificacion" Type="int" />
+          <Property Name="fechaModificacion" Type="datetime" />
+        </EntityType>
+        <EntityType Name="relacionConceptosMateriales">
+          <Key>
+            <PropertyRef Name="idRelacion" />
+          </Key>
+          <Property Name="idRelacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idConcepto" Type="int" />
+          <Property Name="idMaterial" Type="int" />
+          <Property Name="cantidad" Type="float" />
+        </EntityType>
+        <EntityType Name="relacionSistemasRoles">
+          <Key>
+            <PropertyRef Name="idRelacion" />
+          </Key>
+          <Property Name="idRelacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idUsuario" Type="int" />
+          <Property Name="idSistema" Type="int" />
+          <Property Name="idRol" Type="int" />
+        </EntityType>
+        <EntityType Name="requisiciones">
+          <Key>
+            <PropertyRef Name="idRequisicion" />
+          </Key>
+          <Property Name="idRequisicion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idRequisicionRango" Type="int" />
+          <Property Name="idConcepto" Type="int" />
+          <Property Name="cantidad" Type="float" />
+          <Property Name="total" Type="float" />
+        </EntityType>
+        <EntityType Name="requisicionesMateriales">
+          <Key>
+            <PropertyRef Name="idRequisicionMaterial" />
+          </Key>
+          <Property Name="idRequisicionMaterial" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idRequisicion" Type="int" />
+          <Property Name="idConcepto" Type="int" />
+          <Property Name="idMaterial" Type="int" />
+          <Property Name="total" Type="float" />
+        </EntityType>
+        <EntityType Name="requisicionesParciales">
+          <Key>
+            <PropertyRef Name="idRequisicionParcial" />
+          </Key>
+          <Property Name="idRequisicionParcial" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idRequisicion" Type="int" />
+          <Property Name="noRequisicion" Type="int" />
+          <Property Name="idConcepto" Type="int" />
+          <Property Name="idMaterial" Type="int" />
+          <Property Name="cantidad" Type="float" />
+          <Property Name="aprobada" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="idUsuario" />
+          </Key>
+          <Property Name="idUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usuario" Type="varchar" MaxLength="20" />
+          <Property Name="password" Type="text" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" />
+          <Property Name="apellidoPaterno" Type="varchar" MaxLength="50" />
+          <Property Name="apellidoMaterno" Type="varchar" MaxLength="50" />
+          <Property Name="correo" Type="varchar" MaxLength="100" />
+          <Property Name="imagenPerfil" Type="text" />
+          <Property Name="bloqueado" Type="char" MaxLength="1" />
+          <Property Name="primerAcceso" Type="char" MaxLength="1" />
+          <Property Name="fechaCreacion" Type="datetime" />
+          <Property Name="usuarioCreacion" Type="varchar" MaxLength="20" />
+          <Property Name="fechaModificacion" Type="datetime" />
+          <Property Name="usuarioModificacion" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="fk_archivosFotograficos_idConcepto">
+          <End Role="catalogoConceptos" Type="Self.catalogoConceptos" Multiplicity="0..1" />
+          <End Role="archivosFotograficos" Type="Self.archivosFotograficos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="archivosFotograficos">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_controlCobros_usuarioCompensacion">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="controlCobros" Type="Self.controlCobros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="controlCobros">
+              <PropertyRef Name="usuarioCompensacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_controlCobros_usuarioCreacion">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="controlCobros" Type="Self.controlCobros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="controlCobros">
+              <PropertyRef Name="usuarioCreacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_controlPagos_usuarioCompensacion">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="controlPagos" Type="Self.controlPagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="controlPagos">
+              <PropertyRef Name="usuarioCompensacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_controlPagos_usuarioCreacion">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="controlPagos" Type="Self.controlPagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="controlPagos">
+              <PropertyRef Name="usuarioCreacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ejecucionesMensuales_idConcepto">
+          <End Role="catalogoConceptos" Type="Self.catalogoConceptos" Multiplicity="0..1" />
+          <End Role="ejecucionesMensuales" Type="Self.ejecucionesMensuales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="ejecucionesMensuales">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_estimaciones_idConcepto">
+          <End Role="catalogoConceptos" Type="Self.catalogoConceptos" Multiplicity="0..1" />
+          <End Role="estimaciones" Type="Self.estimaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="estimaciones">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_idEmpresa">
+          <End Role="catalogoEmpresas" Type="Self.catalogoEmpresas" Multiplicity="0..1" />
+          <End Role="licitaciones" Type="Self.licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoEmpresas">
+              <PropertyRef Name="idEmpresa" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="idEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_idEstatus">
+          <End Role="catalogoEstatus" Type="Self.catalogoEstatus" Multiplicity="0..1" />
+          <End Role="licitaciones" Type="Self.licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoEstatus">
+              <PropertyRef Name="idEstatus" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="idEstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_idMunicipio">
+          <End Role="catalogoMunicipios" Type="Self.catalogoMunicipios" Multiplicity="0..1" />
+          <End Role="licitaciones" Type="Self.licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoMunicipios">
+              <PropertyRef Name="idMunicipio" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="idMunicipio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_usuarioCreacion">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="licitaciones" Type="Self.licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="usuarioCreacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_usuarioModificacion">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="licitaciones" Type="Self.licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="usuarioModificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_idEstatus">
+          <End Role="catalogoEstatus" Type="Self.catalogoEstatus" Multiplicity="0..1" />
+          <End Role="proyectos" Type="Self.proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoEstatus">
+              <PropertyRef Name="idEstatus" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="idEstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_idLicitacion">
+          <End Role="licitaciones" Type="Self.licitaciones" Multiplicity="0..1" />
+          <End Role="proyectos" Type="Self.proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="licitaciones">
+              <PropertyRef Name="idLicitacion" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="idLicitacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_jefeObra">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="proyectos" Type="Self.proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="jefeObra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_usuarioCreacion">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="proyectos" Type="Self.proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="usuarioCreacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_usuarioModificacion">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="proyectos" Type="Self.proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="usuarioModificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionConceptosMateriales_idConcepto">
+          <End Role="catalogoConceptos" Type="Self.catalogoConceptos" Multiplicity="0..1" />
+          <End Role="relacionConceptosMateriales" Type="Self.relacionConceptosMateriales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="relacionConceptosMateriales">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionConceptosMateriales_idMaterial">
+          <End Role="catalogoMateriales" Type="Self.catalogoMateriales" Multiplicity="0..1" />
+          <End Role="relacionConceptosMateriales" Type="Self.relacionConceptosMateriales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="relacionConceptosMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionSistemasRoles_idRol">
+          <End Role="catalogoRoles" Type="Self.catalogoRoles" Multiplicity="0..1" />
+          <End Role="relacionSistemasRoles" Type="Self.relacionSistemasRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoRoles">
+              <PropertyRef Name="idRol" />
+            </Principal>
+            <Dependent Role="relacionSistemasRoles">
+              <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionSistemasRoles_idSistema">
+          <End Role="catalogoSistemas" Type="Self.catalogoSistemas" Multiplicity="0..1" />
+          <End Role="relacionSistemasRoles" Type="Self.relacionSistemasRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoSistemas">
+              <PropertyRef Name="idSistema" />
+            </Principal>
+            <Dependent Role="relacionSistemasRoles">
+              <PropertyRef Name="idSistema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionSistemasRoles_idUsuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="relacionSistemasRoles" Type="Self.relacionSistemasRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="relacionSistemasRoles">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisiciones_idConcepto">
+          <End Role="catalogoConceptos" Type="Self.catalogoConceptos" Multiplicity="0..1" />
+          <End Role="requisiciones" Type="Self.requisiciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="requisiciones">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisicionesMateriales_idConcepto">
+          <End Role="catalogoConceptos" Type="Self.catalogoConceptos" Multiplicity="0..1" />
+          <End Role="requisicionesMateriales" Type="Self.requisicionesMateriales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="requisicionesMateriales">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisicionesMateriales_idMaterial">
+          <End Role="catalogoMateriales" Type="Self.catalogoMateriales" Multiplicity="0..1" />
+          <End Role="requisicionesMateriales" Type="Self.requisicionesMateriales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="requisicionesMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisicionesParciales_idConcepto">
+          <End Role="catalogoConceptos" Type="Self.catalogoConceptos" Multiplicity="0..1" />
+          <End Role="requisicionesParciales" Type="Self.requisicionesParciales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="requisicionesParciales">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisicionesParciales_idMaterial">
+          <End Role="catalogoMateriales" Type="Self.catalogoMateriales" Multiplicity="0..1" />
+          <End Role="requisicionesParciales" Type="Self.requisicionesParciales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="requisicionesParciales">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="sgopModelStoreContainer">
+          <EntitySet Name="archivosFotograficos" EntityType="Self.archivosFotograficos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catalogoConceptos" EntityType="Self.catalogoConceptos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catalogoEmpresas" EntityType="Self.catalogoEmpresas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catalogoEstatus" EntityType="Self.catalogoEstatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catalogoMateriales" EntityType="Self.catalogoMateriales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catalogoMunicipios" EntityType="Self.catalogoMunicipios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catalogoRoles" EntityType="Self.catalogoRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catalogoSistemas" EntityType="Self.catalogoSistemas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="controlCobros" EntityType="Self.controlCobros" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="controlPagos" EntityType="Self.controlPagos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ejecucionesMensuales" EntityType="Self.ejecucionesMensuales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="estimaciones" EntityType="Self.estimaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="licitaciones" EntityType="Self.licitaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="proyectos" EntityType="Self.proyectos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rangos" EntityType="Self.rangos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="relacionConceptosMateriales" EntityType="Self.relacionConceptosMateriales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="relacionSistemasRoles" EntityType="Self.relacionSistemasRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="requisiciones" EntityType="Self.requisiciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="requisicionesMateriales" EntityType="Self.requisicionesMateriales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="requisicionesParciales" EntityType="Self.requisicionesParciales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_archivosFotograficos_idConcepto" Association="Self.fk_archivosFotograficos_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="archivosFotograficos" EntitySet="archivosFotograficos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_controlCobros_usuarioCompensacion" Association="Self.fk_controlCobros_usuarioCompensacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="controlCobros" EntitySet="controlCobros" />
+          </AssociationSet>
+          <AssociationSet Name="fk_controlCobros_usuarioCreacion" Association="Self.fk_controlCobros_usuarioCreacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="controlCobros" EntitySet="controlCobros" />
+          </AssociationSet>
+          <AssociationSet Name="fk_controlPagos_usuarioCompensacion" Association="Self.fk_controlPagos_usuarioCompensacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="controlPagos" EntitySet="controlPagos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_controlPagos_usuarioCreacion" Association="Self.fk_controlPagos_usuarioCreacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="controlPagos" EntitySet="controlPagos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ejecucionesMensuales_idConcepto" Association="Self.fk_ejecucionesMensuales_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="ejecucionesMensuales" EntitySet="ejecucionesMensuales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_estimaciones_idConcepto" Association="Self.fk_estimaciones_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="estimaciones" EntitySet="estimaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_idEmpresa" Association="Self.fk_licitaciones_idEmpresa">
+            <End Role="catalogoEmpresas" EntitySet="catalogoEmpresas" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_idEstatus" Association="Self.fk_licitaciones_idEstatus">
+            <End Role="catalogoEstatus" EntitySet="catalogoEstatus" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_idMunicipio" Association="Self.fk_licitaciones_idMunicipio">
+            <End Role="catalogoMunicipios" EntitySet="catalogoMunicipios" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_usuarioCreacion" Association="Self.fk_licitaciones_usuarioCreacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_usuarioModificacion" Association="Self.fk_licitaciones_usuarioModificacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_idEstatus" Association="Self.fk_proyectos_idEstatus">
+            <End Role="catalogoEstatus" EntitySet="catalogoEstatus" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_idLicitacion" Association="Self.fk_proyectos_idLicitacion">
+            <End Role="licitaciones" EntitySet="licitaciones" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_jefeObra" Association="Self.fk_proyectos_jefeObra">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_usuarioCreacion" Association="Self.fk_proyectos_usuarioCreacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_usuarioModificacion" Association="Self.fk_proyectos_usuarioModificacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionConceptosMateriales_idConcepto" Association="Self.fk_relacionConceptosMateriales_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="relacionConceptosMateriales" EntitySet="relacionConceptosMateriales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionConceptosMateriales_idMaterial" Association="Self.fk_relacionConceptosMateriales_idMaterial">
+            <End Role="catalogoMateriales" EntitySet="catalogoMateriales" />
+            <End Role="relacionConceptosMateriales" EntitySet="relacionConceptosMateriales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionSistemasRoles_idRol" Association="Self.fk_relacionSistemasRoles_idRol">
+            <End Role="catalogoRoles" EntitySet="catalogoRoles" />
+            <End Role="relacionSistemasRoles" EntitySet="relacionSistemasRoles" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionSistemasRoles_idSistema" Association="Self.fk_relacionSistemasRoles_idSistema">
+            <End Role="catalogoSistemas" EntitySet="catalogoSistemas" />
+            <End Role="relacionSistemasRoles" EntitySet="relacionSistemasRoles" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionSistemasRoles_idUsuario" Association="Self.fk_relacionSistemasRoles_idUsuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="relacionSistemasRoles" EntitySet="relacionSistemasRoles" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisiciones_idConcepto" Association="Self.fk_requisiciones_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="requisiciones" EntitySet="requisiciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisicionesMateriales_idConcepto" Association="Self.fk_requisicionesMateriales_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="requisicionesMateriales" EntitySet="requisicionesMateriales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisicionesMateriales_idMaterial" Association="Self.fk_requisicionesMateriales_idMaterial">
+            <End Role="catalogoMateriales" EntitySet="catalogoMateriales" />
+            <End Role="requisicionesMateriales" EntitySet="requisicionesMateriales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisicionesParciales_idConcepto" Association="Self.fk_requisicionesParciales_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="requisicionesParciales" EntitySet="requisicionesParciales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisicionesParciales_idMaterial" Association="Self.fk_requisicionesParciales_idMaterial">
+            <End Role="catalogoMateriales" EntitySet="catalogoMateriales" />
+            <End Role="requisicionesParciales" EntitySet="requisicionesParciales" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="sgopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="sgopEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="archivosFotograficos" EntityType="sgopModel.archivosFotograficos" />
+          <EntitySet Name="catalogoConceptos" EntityType="sgopModel.catalogoConceptos" />
+          <EntitySet Name="catalogoEmpresas" EntityType="sgopModel.catalogoEmpresas" />
+          <EntitySet Name="catalogoEstatus" EntityType="sgopModel.catalogoEstatus" />
+          <EntitySet Name="catalogoMateriales" EntityType="sgopModel.catalogoMateriales" />
+          <EntitySet Name="catalogoMunicipios" EntityType="sgopModel.catalogoMunicipios" />
+          <EntitySet Name="catalogoRoles" EntityType="sgopModel.catalogoRoles" />
+          <EntitySet Name="catalogoSistemas" EntityType="sgopModel.catalogoSistemas" />
+          <EntitySet Name="controlCobros" EntityType="sgopModel.controlCobros" />
+          <EntitySet Name="controlPagos" EntityType="sgopModel.controlPagos" />
+          <EntitySet Name="ejecucionesMensuales" EntityType="sgopModel.ejecucionesMensuales" />
+          <EntitySet Name="estimaciones" EntityType="sgopModel.estimaciones" />
+          <EntitySet Name="licitaciones" EntityType="sgopModel.licitaciones" />
+          <EntitySet Name="proyectos" EntityType="sgopModel.proyectos" />
+          <EntitySet Name="rangos" EntityType="sgopModel.rangos" />
+          <EntitySet Name="relacionConceptosMateriales" EntityType="sgopModel.relacionConceptosMateriales" />
+          <EntitySet Name="relacionSistemasRoles" EntityType="sgopModel.relacionSistemasRoles" />
+          <EntitySet Name="requisiciones" EntityType="sgopModel.requisiciones" />
+          <EntitySet Name="requisicionesMateriales" EntityType="sgopModel.requisicionesMateriales" />
+          <EntitySet Name="requisicionesParciales" EntityType="sgopModel.requisicionesParciales" />
+          <EntitySet Name="sysdiagrams" EntityType="sgopModel.sysdiagrams" />
+          <EntitySet Name="usuarios" EntityType="sgopModel.usuarios" />
+          <AssociationSet Name="fk_archivosFotograficos_idConcepto" Association="sgopModel.fk_archivosFotograficos_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="archivosFotograficos" EntitySet="archivosFotograficos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ejecucionesMensuales_idConcepto" Association="sgopModel.fk_ejecucionesMensuales_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="ejecucionesMensuales" EntitySet="ejecucionesMensuales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_estimaciones_idConcepto" Association="sgopModel.fk_estimaciones_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="estimaciones" EntitySet="estimaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionConceptosMateriales_idConcepto" Association="sgopModel.fk_relacionConceptosMateriales_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="relacionConceptosMateriales" EntitySet="relacionConceptosMateriales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisiciones_idConcepto" Association="sgopModel.fk_requisiciones_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="requisiciones" EntitySet="requisiciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisicionesMateriales_idConcepto" Association="sgopModel.fk_requisicionesMateriales_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="requisicionesMateriales" EntitySet="requisicionesMateriales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisicionesParciales_idConcepto" Association="sgopModel.fk_requisicionesParciales_idConcepto">
+            <End Role="catalogoConceptos" EntitySet="catalogoConceptos" />
+            <End Role="requisicionesParciales" EntitySet="requisicionesParciales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_idEmpresa" Association="sgopModel.fk_licitaciones_idEmpresa">
+            <End Role="catalogoEmpresas" EntitySet="catalogoEmpresas" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_idEstatus" Association="sgopModel.fk_licitaciones_idEstatus">
+            <End Role="catalogoEstatus" EntitySet="catalogoEstatus" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_idEstatus" Association="sgopModel.fk_proyectos_idEstatus">
+            <End Role="catalogoEstatus" EntitySet="catalogoEstatus" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionConceptosMateriales_idMaterial" Association="sgopModel.fk_relacionConceptosMateriales_idMaterial">
+            <End Role="catalogoMateriales" EntitySet="catalogoMateriales" />
+            <End Role="relacionConceptosMateriales" EntitySet="relacionConceptosMateriales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisicionesMateriales_idMaterial" Association="sgopModel.fk_requisicionesMateriales_idMaterial">
+            <End Role="catalogoMateriales" EntitySet="catalogoMateriales" />
+            <End Role="requisicionesMateriales" EntitySet="requisicionesMateriales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_requisicionesParciales_idMaterial" Association="sgopModel.fk_requisicionesParciales_idMaterial">
+            <End Role="catalogoMateriales" EntitySet="catalogoMateriales" />
+            <End Role="requisicionesParciales" EntitySet="requisicionesParciales" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_idMunicipio" Association="sgopModel.fk_licitaciones_idMunicipio">
+            <End Role="catalogoMunicipios" EntitySet="catalogoMunicipios" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionSistemasRoles_idRol" Association="sgopModel.fk_relacionSistemasRoles_idRol">
+            <End Role="catalogoRoles" EntitySet="catalogoRoles" />
+            <End Role="relacionSistemasRoles" EntitySet="relacionSistemasRoles" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionSistemasRoles_idSistema" Association="sgopModel.fk_relacionSistemasRoles_idSistema">
+            <End Role="catalogoSistemas" EntitySet="catalogoSistemas" />
+            <End Role="relacionSistemasRoles" EntitySet="relacionSistemasRoles" />
+          </AssociationSet>
+          <AssociationSet Name="fk_controlCobros_usuarioCompensacion" Association="sgopModel.fk_controlCobros_usuarioCompensacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="controlCobros" EntitySet="controlCobros" />
+          </AssociationSet>
+          <AssociationSet Name="fk_controlCobros_usuarioCreacion" Association="sgopModel.fk_controlCobros_usuarioCreacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="controlCobros" EntitySet="controlCobros" />
+          </AssociationSet>
+          <AssociationSet Name="fk_controlPagos_usuarioCompensacion" Association="sgopModel.fk_controlPagos_usuarioCompensacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="controlPagos" EntitySet="controlPagos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_controlPagos_usuarioCreacion" Association="sgopModel.fk_controlPagos_usuarioCreacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="controlPagos" EntitySet="controlPagos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_usuarioCreacion" Association="sgopModel.fk_licitaciones_usuarioCreacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_licitaciones_usuarioModificacion" Association="sgopModel.fk_licitaciones_usuarioModificacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="licitaciones" EntitySet="licitaciones" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_idLicitacion" Association="sgopModel.fk_proyectos_idLicitacion">
+            <End Role="licitaciones" EntitySet="licitaciones" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_jefeObra" Association="sgopModel.fk_proyectos_jefeObra">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_usuarioCreacion" Association="sgopModel.fk_proyectos_usuarioCreacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_proyectos_usuarioModificacion" Association="sgopModel.fk_proyectos_usuarioModificacion">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="proyectos" EntitySet="proyectos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_relacionSistemasRoles_idUsuario" Association="sgopModel.fk_relacionSistemasRoles_idUsuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="relacionSistemasRoles" EntitySet="relacionSistemasRoles" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="archivosFotograficos">
+          <Key>
+            <PropertyRef Name="idArchFoto" />
+          </Key>
+          <Property Name="idArchFoto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="noEstimacion" Type="Int32" />
+          <Property Name="idRequisicion" Type="Int32" />
+          <Property Name="idConcepto" Type="Int32" />
+          <Property Name="foto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="catalogoConceptos" Relationship="sgopModel.fk_archivosFotograficos_idConcepto" FromRole="archivosFotograficos" ToRole="catalogoConceptos" />
+        </EntityType>
+        <EntityType Name="catalogoConceptos">
+          <Key>
+            <PropertyRef Name="idConcepto" />
+          </Key>
+          <Property Name="idConcepto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clave" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="160" FixedLength="false" Unicode="false" />
+          <Property Name="unidad" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="precioUnitario" Type="Double" />
+          <NavigationProperty Name="archivosFotograficos" Relationship="sgopModel.fk_archivosFotograficos_idConcepto" FromRole="catalogoConceptos" ToRole="archivosFotograficos" />
+          <NavigationProperty Name="ejecucionesMensuales" Relationship="sgopModel.fk_ejecucionesMensuales_idConcepto" FromRole="catalogoConceptos" ToRole="ejecucionesMensuales" />
+          <NavigationProperty Name="estimaciones" Relationship="sgopModel.fk_estimaciones_idConcepto" FromRole="catalogoConceptos" ToRole="estimaciones" />
+          <NavigationProperty Name="relacionConceptosMateriales" Relationship="sgopModel.fk_relacionConceptosMateriales_idConcepto" FromRole="catalogoConceptos" ToRole="relacionConceptosMateriales" />
+          <NavigationProperty Name="requisiciones" Relationship="sgopModel.fk_requisiciones_idConcepto" FromRole="catalogoConceptos" ToRole="requisiciones" />
+          <NavigationProperty Name="requisicionesMateriales" Relationship="sgopModel.fk_requisicionesMateriales_idConcepto" FromRole="catalogoConceptos" ToRole="requisicionesMateriales" />
+          <NavigationProperty Name="requisicionesParciales" Relationship="sgopModel.fk_requisicionesParciales_idConcepto" FromRole="catalogoConceptos" ToRole="requisicionesParciales" />
+        </EntityType>
+        <EntityType Name="catalogoEmpresas">
+          <Key>
+            <PropertyRef Name="idEmpresa" />
+          </Key>
+          <Property Name="idEmpresa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="razonSocial" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="licitaciones" Relationship="sgopModel.fk_licitaciones_idEmpresa" FromRole="catalogoEmpresas" ToRole="licitaciones" />
+        </EntityType>
+        <EntityType Name="catalogoEstatus">
+          <Key>
+            <PropertyRef Name="idEstatus" />
+          </Key>
+          <Property Name="idEstatus" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="perteneceA" Type="Int32" />
+          <NavigationProperty Name="licitaciones" Relationship="sgopModel.fk_licitaciones_idEstatus" FromRole="catalogoEstatus" ToRole="licitaciones" />
+          <NavigationProperty Name="proyectos" Relationship="sgopModel.fk_proyectos_idEstatus" FromRole="catalogoEstatus" ToRole="proyectos" />
+        </EntityType>
+        <EntityType Name="catalogoMateriales">
+          <Key>
+            <PropertyRef Name="idMaterial" />
+          </Key>
+          <Property Name="idMaterial" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="relacionConceptosMateriales" Relationship="sgopModel.fk_relacionConceptosMateriales_idMaterial" FromRole="catalogoMateriales" ToRole="relacionConceptosMateriales" />
+          <NavigationProperty Name="requisicionesMateriales" Relationship="sgopModel.fk_requisicionesMateriales_idMaterial" FromRole="catalogoMateriales" ToRole="requisicionesMateriales" />
+          <NavigationProperty Name="requisicionesParciales" Relationship="sgopModel.fk_requisicionesParciales_idMaterial" FromRole="catalogoMateriales" ToRole="requisicionesParciales" />
+        </EntityType>
+        <EntityType Name="catalogoMunicipios">
+          <Key>
+            <PropertyRef Name="idMunicipio" />
+          </Key>
+          <Property Name="idMunicipio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="licitaciones" Relationship="sgopModel.fk_licitaciones_idMunicipio" FromRole="catalogoMunicipios" ToRole="licitaciones" />
+        </EntityType>
+        <EntityType Name="catalogoRoles">
+          <Key>
+            <PropertyRef Name="idRol" />
+          </Key>
+          <Property Name="idRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="relacionSistemasRoles" Relationship="sgopModel.fk_relacionSistemasRoles_idRol" FromRole="catalogoRoles" ToRole="relacionSistemasRoles" />
+        </EntityType>
+        <EntityType Name="catalogoSistemas">
+          <Key>
+            <PropertyRef Name="idSistema" />
+          </Key>
+          <Property Name="idSistema" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="relacionSistemasRoles" Relationship="sgopModel.fk_relacionSistemasRoles_idSistema" FromRole="catalogoSistemas" ToRole="relacionSistemasRoles" />
+        </EntityType>
+        <EntityType Name="controlCobros">
+          <Key>
+            <PropertyRef Name="noDocumento" />
+          </Key>
+          <Property Name="noDocumento" Type="Int32" Nullable="false" />
+          <Property Name="idRequisicion" Type="Int32" />
+          <Property Name="noEstimacion" Type="Int32" />
+          <Property Name="clDocumento" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="importe" Type="Double" />
+          <Property Name="fechaDocumento" Type="DateTime" Precision="3" />
+          <Property Name="docCompensacion" Type="Int32" />
+          <Property Name="fechaCompensacion" Type="DateTime" Precision="3" />
+          <Property Name="factura" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="usuarioCreacion" Type="Int32" />
+          <Property Name="usuarioCompensacion" Type="Int32" />
+          <NavigationProperty Name="usuarios" Relationship="sgopModel.fk_controlCobros_usuarioCompensacion" FromRole="controlCobros" ToRole="usuarios" />
+          <NavigationProperty Name="usuarios1" Relationship="sgopModel.fk_controlCobros_usuarioCreacion" FromRole="controlCobros" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="controlPagos">
+          <Key>
+            <PropertyRef Name="noDocumento" />
+            <PropertyRef Name="clDocumento" />
+          </Key>
+          <Property Name="idRequisicionParcial" Type="Int32" Nullable="false" />
+          <Property Name="noDocumento" Type="Int32" Nullable="false" />
+          <Property Name="idRequisicion" Type="Int32" />
+          <Property Name="clDocumento" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="importe" Type="Double" />
+          <Property Name="fechaDocumento" Type="DateTime" Precision="3" />
+          <Property Name="docCompensacion" Type="Int32" />
+          <Property Name="fechaCompensacion" Type="DateTime" Precision="3" />
+          <Property Name="factura" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="usuarioCreacion" Type="Int32" />
+          <Property Name="usuarioCompensacion" Type="Int32" />
+          <NavigationProperty Name="usuarios" Relationship="sgopModel.fk_controlPagos_usuarioCompensacion" FromRole="controlPagos" ToRole="usuarios" />
+          <NavigationProperty Name="usuarios1" Relationship="sgopModel.fk_controlPagos_usuarioCreacion" FromRole="controlPagos" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="ejecucionesMensuales">
+          <Key>
+            <PropertyRef Name="idEjecucion" />
+          </Key>
+          <Property Name="idEjecucion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="periodo" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="idRequisicion" Type="Int32" />
+          <Property Name="idConcepto" Type="Int32" />
+          <Property Name="cantidad" Type="Double" />
+          <NavigationProperty Name="catalogoConceptos" Relationship="sgopModel.fk_ejecucionesMensuales_idConcepto" FromRole="ejecucionesMensuales" ToRole="catalogoConceptos" />
+        </EntityType>
+        <EntityType Name="estimaciones">
+          <Key>
+            <PropertyRef Name="idEstimacion" />
+          </Key>
+          <Property Name="idEstimacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="noEstimacion" Type="Int32" />
+          <Property Name="idRequisicion" Type="Int32" />
+          <Property Name="idConcepto" Type="Int32" />
+          <Property Name="cantidad" Type="Double" />
+          <NavigationProperty Name="catalogoConceptos" Relationship="sgopModel.fk_estimaciones_idConcepto" FromRole="estimaciones" ToRole="catalogoConceptos" />
+        </EntityType>
+        <EntityType Name="licitaciones">
+          <Key>
+            <PropertyRef Name="idLicitacion" />
+          </Key>
+          <Property Name="idLicitacion" Type="Int32" Nullable="false" />
+          <Property Name="idEmpresa" Type="Int32" />
+          <Property Name="noLicitacion" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="nombreObra" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="idMunicipio" Type="Int32" />
+          <Property Name="localidad" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="fechaVisita" Type="DateTime" Precision="3" />
+          <Property Name="fechaAclaraciones" Type="DateTime" Precision="3" />
+          <Property Name="fechaPropuesta" Type="DateTime" Precision="3" />
+          <Property Name="fechaFallo" Type="DateTime" Precision="3" />
+          <Property Name="actaVisita" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="actaAclaraciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="actaPropuesta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="actaFallo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="idEstatus" Type="Int32" />
+          <Property Name="idRequisicion" Type="Int32" />
+          <Property Name="fechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="usuarioCreacion" Type="Int32" />
+          <Property Name="fechaModificacion" Type="DateTime" Precision="3" />
+          <Property Name="usuarioModificacion" Type="Int32" />
+          <NavigationProperty Name="catalogoEmpresas" Relationship="sgopModel.fk_licitaciones_idEmpresa" FromRole="licitaciones" ToRole="catalogoEmpresas" />
+          <NavigationProperty Name="catalogoEstatus" Relationship="sgopModel.fk_licitaciones_idEstatus" FromRole="licitaciones" ToRole="catalogoEstatus" />
+          <NavigationProperty Name="catalogoMunicipios" Relationship="sgopModel.fk_licitaciones_idMunicipio" FromRole="licitaciones" ToRole="catalogoMunicipios" />
+          <NavigationProperty Name="usuarios" Relationship="sgopModel.fk_licitaciones_usuarioCreacion" FromRole="licitaciones" ToRole="usuarios" />
+          <NavigationProperty Name="usuarios1" Relationship="sgopModel.fk_licitaciones_usuarioModificacion" FromRole="licitaciones" ToRole="usuarios" />
+          <NavigationProperty Name="proyectos" Relationship="sgopModel.fk_proyectos_idLicitacion" FromRole="licitaciones" ToRole="proyectos" />
+        </EntityType>
+        <EntityType Name="proyectos">
+          <Key>
+            <PropertyRef Name="idProyecto" />
+          </Key>
+          <Property Name="idProyecto" Type="Int32" Nullable="false" />
+          <Property Name="idLicitacion" Type="Int32" />
+          <Property Name="idEstatus" Type="Int32" />
+          <Property Name="fechaContrato" Type="DateTime" Precision="3" />
+          <Property Name="polizaAnticipo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="polizaVicios" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="policaCumplimiento" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="plazoDias" Type="Int32" />
+          <Property Name="fechaInicioContrato" Type="DateTime" Precision="3" />
+          <Property Name="fechaFinalContrato" Type="DateTime" Precision="3" />
+          <Property Name="fechaInicioReal" Type="DateTime" Precision="3" />
+          <Property Name="fechaFinalReal" Type="DateTime" Precision="3" />
+          <Property Name="actaEntrega" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="jefeObra" Type="Int32" />
+          <Property Name="fechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="usuarioCreacion" Type="Int32" />
+          <Property Name="fechaModificacion" Type="DateTime" Precision="3" />
+          <Property Name="usuarioModificacion" Type="Int32" />
+          <NavigationProperty Name="catalogoEstatus" Relationship="sgopModel.fk_proyectos_idEstatus" FromRole="proyectos" ToRole="catalogoEstatus" />
+          <NavigationProperty Name="licitaciones" Relationship="sgopModel.fk_proyectos_idLicitacion" FromRole="proyectos" ToRole="licitaciones" />
+          <NavigationProperty Name="usuarios" Relationship="sgopModel.fk_proyectos_jefeObra" FromRole="proyectos" ToRole="usuarios" />
+          <NavigationProperty Name="usuarios1" Relationship="sgopModel.fk_proyectos_usuarioCreacion" FromRole="proyectos" ToRole="usuarios" />
+          <NavigationProperty Name="usuarios2" Relationship="sgopModel.fk_proyectos_usuarioModificacion" FromRole="proyectos" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="rangos">
+          <Key>
+            <PropertyRef Name="idRango" />
+          </Key>
+          <Property Name="idRango" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rangoInicial" Type="Int32" />
+          <Property Name="pertenceA" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="usuarioCreacion" Type="Int32" />
+          <Property Name="fechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="usuarioModificacion" Type="Int32" />
+          <Property Name="fechaModificacion" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="relacionConceptosMateriales">
+          <Key>
+            <PropertyRef Name="idRelacion" />
+          </Key>
+          <Property Name="idRelacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idConcepto" Type="Int32" />
+          <Property Name="idMaterial" Type="Int32" />
+          <Property Name="cantidad" Type="Double" />
+          <NavigationProperty Name="catalogoConceptos" Relationship="sgopModel.fk_relacionConceptosMateriales_idConcepto" FromRole="relacionConceptosMateriales" ToRole="catalogoConceptos" />
+          <NavigationProperty Name="catalogoMateriales" Relationship="sgopModel.fk_relacionConceptosMateriales_idMaterial" FromRole="relacionConceptosMateriales" ToRole="catalogoMateriales" />
+        </EntityType>
+        <EntityType Name="relacionSistemasRoles">
+          <Key>
+            <PropertyRef Name="idRelacion" />
+          </Key>
+          <Property Name="idRelacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idUsuario" Type="Int32" />
+          <Property Name="idSistema" Type="Int32" />
+          <Property Name="idRol" Type="Int32" />
+          <NavigationProperty Name="catalogoRoles" Relationship="sgopModel.fk_relacionSistemasRoles_idRol" FromRole="relacionSistemasRoles" ToRole="catalogoRoles" />
+          <NavigationProperty Name="catalogoSistemas" Relationship="sgopModel.fk_relacionSistemasRoles_idSistema" FromRole="relacionSistemasRoles" ToRole="catalogoSistemas" />
+          <NavigationProperty Name="usuarios" Relationship="sgopModel.fk_relacionSistemasRoles_idUsuario" FromRole="relacionSistemasRoles" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="requisiciones">
+          <Key>
+            <PropertyRef Name="idRequisicion" />
+          </Key>
+          <Property Name="idRequisicion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idRequisicionRango" Type="Int32" />
+          <Property Name="idConcepto" Type="Int32" />
+          <Property Name="cantidad" Type="Double" />
+          <Property Name="total" Type="Double" />
+          <NavigationProperty Name="catalogoConceptos" Relationship="sgopModel.fk_requisiciones_idConcepto" FromRole="requisiciones" ToRole="catalogoConceptos" />
+        </EntityType>
+        <EntityType Name="requisicionesMateriales">
+          <Key>
+            <PropertyRef Name="idRequisicionMaterial" />
+          </Key>
+          <Property Name="idRequisicionMaterial" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idRequisicion" Type="Int32" />
+          <Property Name="idConcepto" Type="Int32" />
+          <Property Name="idMaterial" Type="Int32" />
+          <Property Name="total" Type="Double" />
+          <NavigationProperty Name="catalogoConceptos" Relationship="sgopModel.fk_requisicionesMateriales_idConcepto" FromRole="requisicionesMateriales" ToRole="catalogoConceptos" />
+          <NavigationProperty Name="catalogoMateriales" Relationship="sgopModel.fk_requisicionesMateriales_idMaterial" FromRole="requisicionesMateriales" ToRole="catalogoMateriales" />
+        </EntityType>
+        <EntityType Name="requisicionesParciales">
+          <Key>
+            <PropertyRef Name="idRequisicionParcial" />
+          </Key>
+          <Property Name="idRequisicionParcial" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idRequisicion" Type="Int32" />
+          <Property Name="noRequisicion" Type="Int32" />
+          <Property Name="idConcepto" Type="Int32" />
+          <Property Name="idMaterial" Type="Int32" />
+          <Property Name="cantidad" Type="Double" />
+          <Property Name="aprobada" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="catalogoConceptos" Relationship="sgopModel.fk_requisicionesParciales_idConcepto" FromRole="requisicionesParciales" ToRole="catalogoConceptos" />
+          <NavigationProperty Name="catalogoMateriales" Relationship="sgopModel.fk_requisicionesParciales_idMaterial" FromRole="requisicionesParciales" ToRole="catalogoMateriales" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="idUsuario" />
+          </Key>
+          <Property Name="idUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usuario" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="apellidoPaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="apellidoMaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="imagenPerfil" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="bloqueado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="primerAcceso" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="fechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="usuarioCreacion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="fechaModificacion" Type="DateTime" Precision="3" />
+          <Property Name="usuarioModificacion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="controlCobros" Relationship="sgopModel.fk_controlCobros_usuarioCompensacion" FromRole="usuarios" ToRole="controlCobros" />
+          <NavigationProperty Name="controlCobros1" Relationship="sgopModel.fk_controlCobros_usuarioCreacion" FromRole="usuarios" ToRole="controlCobros" />
+          <NavigationProperty Name="controlPagos" Relationship="sgopModel.fk_controlPagos_usuarioCompensacion" FromRole="usuarios" ToRole="controlPagos" />
+          <NavigationProperty Name="controlPagos1" Relationship="sgopModel.fk_controlPagos_usuarioCreacion" FromRole="usuarios" ToRole="controlPagos" />
+          <NavigationProperty Name="licitaciones" Relationship="sgopModel.fk_licitaciones_usuarioCreacion" FromRole="usuarios" ToRole="licitaciones" />
+          <NavigationProperty Name="licitaciones1" Relationship="sgopModel.fk_licitaciones_usuarioModificacion" FromRole="usuarios" ToRole="licitaciones" />
+          <NavigationProperty Name="proyectos" Relationship="sgopModel.fk_proyectos_jefeObra" FromRole="usuarios" ToRole="proyectos" />
+          <NavigationProperty Name="proyectos1" Relationship="sgopModel.fk_proyectos_usuarioCreacion" FromRole="usuarios" ToRole="proyectos" />
+          <NavigationProperty Name="proyectos2" Relationship="sgopModel.fk_proyectos_usuarioModificacion" FromRole="usuarios" ToRole="proyectos" />
+          <NavigationProperty Name="relacionSistemasRoles" Relationship="sgopModel.fk_relacionSistemasRoles_idUsuario" FromRole="usuarios" ToRole="relacionSistemasRoles" />
+        </EntityType>
+        <Association Name="fk_archivosFotograficos_idConcepto">
+          <End Type="sgopModel.catalogoConceptos" Role="catalogoConceptos" Multiplicity="0..1" />
+          <End Type="sgopModel.archivosFotograficos" Role="archivosFotograficos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="archivosFotograficos">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ejecucionesMensuales_idConcepto">
+          <End Type="sgopModel.catalogoConceptos" Role="catalogoConceptos" Multiplicity="0..1" />
+          <End Type="sgopModel.ejecucionesMensuales" Role="ejecucionesMensuales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="ejecucionesMensuales">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_estimaciones_idConcepto">
+          <End Type="sgopModel.catalogoConceptos" Role="catalogoConceptos" Multiplicity="0..1" />
+          <End Type="sgopModel.estimaciones" Role="estimaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="estimaciones">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionConceptosMateriales_idConcepto">
+          <End Type="sgopModel.catalogoConceptos" Role="catalogoConceptos" Multiplicity="0..1" />
+          <End Type="sgopModel.relacionConceptosMateriales" Role="relacionConceptosMateriales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="relacionConceptosMateriales">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisiciones_idConcepto">
+          <End Type="sgopModel.catalogoConceptos" Role="catalogoConceptos" Multiplicity="0..1" />
+          <End Type="sgopModel.requisiciones" Role="requisiciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="requisiciones">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisicionesMateriales_idConcepto">
+          <End Type="sgopModel.catalogoConceptos" Role="catalogoConceptos" Multiplicity="0..1" />
+          <End Type="sgopModel.requisicionesMateriales" Role="requisicionesMateriales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="requisicionesMateriales">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisicionesParciales_idConcepto">
+          <End Type="sgopModel.catalogoConceptos" Role="catalogoConceptos" Multiplicity="0..1" />
+          <End Type="sgopModel.requisicionesParciales" Role="requisicionesParciales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoConceptos">
+              <PropertyRef Name="idConcepto" />
+            </Principal>
+            <Dependent Role="requisicionesParciales">
+              <PropertyRef Name="idConcepto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_idEmpresa">
+          <End Type="sgopModel.catalogoEmpresas" Role="catalogoEmpresas" Multiplicity="0..1" />
+          <End Type="sgopModel.licitaciones" Role="licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoEmpresas">
+              <PropertyRef Name="idEmpresa" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="idEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_idEstatus">
+          <End Type="sgopModel.catalogoEstatus" Role="catalogoEstatus" Multiplicity="0..1" />
+          <End Type="sgopModel.licitaciones" Role="licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoEstatus">
+              <PropertyRef Name="idEstatus" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="idEstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_idEstatus">
+          <End Type="sgopModel.catalogoEstatus" Role="catalogoEstatus" Multiplicity="0..1" />
+          <End Type="sgopModel.proyectos" Role="proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoEstatus">
+              <PropertyRef Name="idEstatus" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="idEstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionConceptosMateriales_idMaterial">
+          <End Type="sgopModel.catalogoMateriales" Role="catalogoMateriales" Multiplicity="0..1" />
+          <End Type="sgopModel.relacionConceptosMateriales" Role="relacionConceptosMateriales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="relacionConceptosMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisicionesMateriales_idMaterial">
+          <End Type="sgopModel.catalogoMateriales" Role="catalogoMateriales" Multiplicity="0..1" />
+          <End Type="sgopModel.requisicionesMateriales" Role="requisicionesMateriales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="requisicionesMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_requisicionesParciales_idMaterial">
+          <End Type="sgopModel.catalogoMateriales" Role="catalogoMateriales" Multiplicity="0..1" />
+          <End Type="sgopModel.requisicionesParciales" Role="requisicionesParciales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoMateriales">
+              <PropertyRef Name="idMaterial" />
+            </Principal>
+            <Dependent Role="requisicionesParciales">
+              <PropertyRef Name="idMaterial" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_idMunicipio">
+          <End Type="sgopModel.catalogoMunicipios" Role="catalogoMunicipios" Multiplicity="0..1" />
+          <End Type="sgopModel.licitaciones" Role="licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoMunicipios">
+              <PropertyRef Name="idMunicipio" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="idMunicipio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionSistemasRoles_idRol">
+          <End Type="sgopModel.catalogoRoles" Role="catalogoRoles" Multiplicity="0..1" />
+          <End Type="sgopModel.relacionSistemasRoles" Role="relacionSistemasRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoRoles">
+              <PropertyRef Name="idRol" />
+            </Principal>
+            <Dependent Role="relacionSistemasRoles">
+              <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionSistemasRoles_idSistema">
+          <End Type="sgopModel.catalogoSistemas" Role="catalogoSistemas" Multiplicity="0..1" />
+          <End Type="sgopModel.relacionSistemasRoles" Role="relacionSistemasRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catalogoSistemas">
+              <PropertyRef Name="idSistema" />
+            </Principal>
+            <Dependent Role="relacionSistemasRoles">
+              <PropertyRef Name="idSistema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_controlCobros_usuarioCompensacion">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.controlCobros" Role="controlCobros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="controlCobros">
+              <PropertyRef Name="usuarioCompensacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_controlCobros_usuarioCreacion">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.controlCobros" Role="controlCobros" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="controlCobros">
+              <PropertyRef Name="usuarioCreacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_controlPagos_usuarioCompensacion">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.controlPagos" Role="controlPagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="controlPagos">
+              <PropertyRef Name="usuarioCompensacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_controlPagos_usuarioCreacion">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.controlPagos" Role="controlPagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="controlPagos">
+              <PropertyRef Name="usuarioCreacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_usuarioCreacion">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.licitaciones" Role="licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="usuarioCreacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_licitaciones_usuarioModificacion">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.licitaciones" Role="licitaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="licitaciones">
+              <PropertyRef Name="usuarioModificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_idLicitacion">
+          <End Type="sgopModel.licitaciones" Role="licitaciones" Multiplicity="0..1" />
+          <End Type="sgopModel.proyectos" Role="proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="licitaciones">
+              <PropertyRef Name="idLicitacion" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="idLicitacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_jefeObra">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.proyectos" Role="proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="jefeObra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_usuarioCreacion">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.proyectos" Role="proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="usuarioCreacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_proyectos_usuarioModificacion">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.proyectos" Role="proyectos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="proyectos">
+              <PropertyRef Name="usuarioModificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_relacionSistemasRoles_idUsuario">
+          <End Type="sgopModel.usuarios" Role="usuarios" Multiplicity="0..1" />
+          <End Type="sgopModel.relacionSistemasRoles" Role="relacionSistemasRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="relacionSistemasRoles">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="sgopModelStoreContainer" CdmEntityContainer="sgopEntities">
+          <EntitySetMapping Name="archivosFotograficos">
+            <EntityTypeMapping TypeName="sgopModel.archivosFotograficos">
+              <MappingFragment StoreEntitySet="archivosFotograficos">
+                <ScalarProperty Name="foto" ColumnName="foto" />
+                <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+                <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+                <ScalarProperty Name="noEstimacion" ColumnName="noEstimacion" />
+                <ScalarProperty Name="idArchFoto" ColumnName="idArchFoto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalogoConceptos">
+            <EntityTypeMapping TypeName="sgopModel.catalogoConceptos">
+              <MappingFragment StoreEntitySet="catalogoConceptos">
+                <ScalarProperty Name="precioUnitario" ColumnName="precioUnitario" />
+                <ScalarProperty Name="unidad" ColumnName="unidad" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="clave" ColumnName="clave" />
+                <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalogoEmpresas">
+            <EntityTypeMapping TypeName="sgopModel.catalogoEmpresas">
+              <MappingFragment StoreEntitySet="catalogoEmpresas">
+                <ScalarProperty Name="razonSocial" ColumnName="razonSocial" />
+                <ScalarProperty Name="idEmpresa" ColumnName="idEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalogoEstatus">
+            <EntityTypeMapping TypeName="sgopModel.catalogoEstatus">
+              <MappingFragment StoreEntitySet="catalogoEstatus">
+                <ScalarProperty Name="perteneceA" ColumnName="perteneceA" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="idEstatus" ColumnName="idEstatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalogoMateriales">
+            <EntityTypeMapping TypeName="sgopModel.catalogoMateriales">
+              <MappingFragment StoreEntitySet="catalogoMateriales">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalogoMunicipios">
+            <EntityTypeMapping TypeName="sgopModel.catalogoMunicipios">
+              <MappingFragment StoreEntitySet="catalogoMunicipios">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="idMunicipio" ColumnName="idMunicipio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalogoRoles">
+            <EntityTypeMapping TypeName="sgopModel.catalogoRoles">
+              <MappingFragment StoreEntitySet="catalogoRoles">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="idRol" ColumnName="idRol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catalogoSistemas">
+            <EntityTypeMapping TypeName="sgopModel.catalogoSistemas">
+              <MappingFragment StoreEntitySet="catalogoSistemas">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="idSistema" ColumnName="idSistema" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="controlCobros">
+            <EntityTypeMapping TypeName="sgopModel.controlCobros">
+              <MappingFragment StoreEntitySet="controlCobros">
+                <ScalarProperty Name="usuarioCompensacion" ColumnName="usuarioCompensacion" />
+                <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+                <ScalarProperty Name="factura" ColumnName="factura" />
+                <ScalarProperty Name="fechaCompensacion" ColumnName="fechaCompensacion" />
+                <ScalarProperty Name="docCompensacion" ColumnName="docCompensacion" />
+                <ScalarProperty Name="fechaDocumento" ColumnName="fechaDocumento" />
+                <ScalarProperty Name="importe" ColumnName="importe" />
+                <ScalarProperty Name="clDocumento" ColumnName="clDocumento" />
+                <ScalarProperty Name="noEstimacion" ColumnName="noEstimacion" />
+                <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+                <ScalarProperty Name="noDocumento" ColumnName="noDocumento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="controlPagos">
+            <EntityTypeMapping TypeName="sgopModel.controlPagos">
+              <MappingFragment StoreEntitySet="controlPagos">
+                <ScalarProperty Name="usuarioCompensacion" ColumnName="usuarioCompensacion" />
+                <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+                <ScalarProperty Name="factura" ColumnName="factura" />
+                <ScalarProperty Name="fechaCompensacion" ColumnName="fechaCompensacion" />
+                <ScalarProperty Name="docCompensacion" ColumnName="docCompensacion" />
+                <ScalarProperty Name="fechaDocumento" ColumnName="fechaDocumento" />
+                <ScalarProperty Name="importe" ColumnName="importe" />
+                <ScalarProperty Name="clDocumento" ColumnName="clDocumento" />
+                <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+                <ScalarProperty Name="noDocumento" ColumnName="noDocumento" />
+                <ScalarProperty Name="idRequisicionParcial" ColumnName="idRequisicionParcial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ejecucionesMensuales">
+            <EntityTypeMapping TypeName="sgopModel.ejecucionesMensuales">
+              <MappingFragment StoreEntitySet="ejecucionesMensuales">
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+                <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+                <ScalarProperty Name="periodo" ColumnName="periodo" />
+                <ScalarProperty Name="idEjecucion" ColumnName="idEjecucion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="estimaciones">
+            <EntityTypeMapping TypeName="sgopModel.estimaciones">
+              <MappingFragment StoreEntitySet="estimaciones">
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+                <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+                <ScalarProperty Name="noEstimacion" ColumnName="noEstimacion" />
+                <ScalarProperty Name="idEstimacion" ColumnName="idEstimacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="licitaciones">
+            <EntityTypeMapping TypeName="sgopModel.licitaciones">
+              <MappingFragment StoreEntitySet="licitaciones">
+                <ScalarProperty Name="usuarioModificacion" ColumnName="usuarioModificacion" />
+                <ScalarProperty Name="fechaModificacion" ColumnName="fechaModificacion" />
+                <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+                <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+                <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+                <ScalarProperty Name="idEstatus" ColumnName="idEstatus" />
+                <ScalarProperty Name="actaFallo" ColumnName="actaFallo" />
+                <ScalarProperty Name="actaPropuesta" ColumnName="actaPropuesta" />
+                <ScalarProperty Name="actaAclaraciones" ColumnName="actaAclaraciones" />
+                <ScalarProperty Name="actaVisita" ColumnName="actaVisita" />
+                <ScalarProperty Name="fechaFallo" ColumnName="fechaFallo" />
+                <ScalarProperty Name="fechaPropuesta" ColumnName="fechaPropuesta" />
+                <ScalarProperty Name="fechaAclaraciones" ColumnName="fechaAclaraciones" />
+                <ScalarProperty Name="fechaVisita" ColumnName="fechaVisita" />
+                <ScalarProperty Name="localidad" ColumnName="localidad" />
+                <ScalarProperty Name="idMunicipio" ColumnName="idMunicipio" />
+                <ScalarProperty Name="nombreObra" ColumnName="nombreObra" />
+                <ScalarProperty Name="noLicitacion" ColumnName="noLicitacion" />
+                <ScalarProperty Name="idEmpresa" ColumnName="idEmpresa" />
+                <ScalarProperty Name="idLicitacion" ColumnName="idLicitacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="proyectos">
+            <EntityTypeMapping TypeName="sgopModel.proyectos">
+              <MappingFragment StoreEntitySet="proyectos">
+                <ScalarProperty Name="usuarioModificacion" ColumnName="usuarioModificacion" />
+                <ScalarProperty Name="fechaModificacion" ColumnName="fechaModificacion" />
+                <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+                <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+                <ScalarProperty Name="jefeObra" ColumnName="jefeObra" />
+                <ScalarProperty Name="actaEntrega" ColumnName="actaEntrega" />
+                <ScalarProperty Name="fechaFinalReal" ColumnName="fechaFinalReal" />
+                <ScalarProperty Name="fechaInicioReal" ColumnName="fechaInicioReal" />
+                <ScalarProperty Name="fechaFinalContrato" ColumnName="fechaFinalContrato" />
+                <ScalarProperty Name="fechaInicioContrato" ColumnName="fechaInicioContrato" />
+                <ScalarProperty Name="plazoDias" ColumnName="plazoDias" />
+                <ScalarProperty Name="policaCumplimiento" ColumnName="policaCumplimiento" />
+                <ScalarProperty Name="polizaVicios" ColumnName="polizaVicios" />
+                <ScalarProperty Name="polizaAnticipo" ColumnName="polizaAnticipo" />
+                <ScalarProperty Name="fechaContrato" ColumnName="fechaContrato" />
+                <ScalarProperty Name="idEstatus" ColumnName="idEstatus" />
+                <ScalarProperty Name="idLicitacion" ColumnName="idLicitacion" />
+                <ScalarProperty Name="idProyecto" ColumnName="idProyecto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rangos">
+            <EntityTypeMapping TypeName="sgopModel.rangos">
+              <MappingFragment StoreEntitySet="rangos">
+                <ScalarProperty Name="fechaModificacion" ColumnName="fechaModificacion" />
+                <ScalarProperty Name="usuarioModificacion" ColumnName="usuarioModificacion" />
+                <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+                <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+                <ScalarProperty Name="pertenceA" ColumnName="pertenceA" />
+                <ScalarProperty Name="rangoInicial" ColumnName="rangoInicial" />
+                <ScalarProperty Name="idRango" ColumnName="idRango" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="relacionConceptosMateriales">
+            <EntityTypeMapping TypeName="sgopModel.relacionConceptosMateriales">
+              <MappingFragment StoreEntitySet="relacionConceptosMateriales">
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+                <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+                <ScalarProperty Name="idRelacion" ColumnName="idRelacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="relacionSistemasRoles">
+            <EntityTypeMapping TypeName="sgopModel.relacionSistemasRoles">
+              <MappingFragment StoreEntitySet="relacionSistemasRoles">
+                <ScalarProperty Name="idRol" ColumnName="idRol" />
+                <ScalarProperty Name="idSistema" ColumnName="idSistema" />
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+                <ScalarProperty Name="idRelacion" ColumnName="idRelacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="requisiciones">
+            <EntityTypeMapping TypeName="sgopModel.requisiciones">
+              <MappingFragment StoreEntitySet="requisiciones">
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+                <ScalarProperty Name="idRequisicionRango" ColumnName="idRequisicionRango" />
+                <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="requisicionesMateriales">
+            <EntityTypeMapping TypeName="sgopModel.requisicionesMateriales">
+              <MappingFragment StoreEntitySet="requisicionesMateriales">
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+                <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+                <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+                <ScalarProperty Name="idRequisicionMaterial" ColumnName="idRequisicionMaterial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="requisicionesParciales">
+            <EntityTypeMapping TypeName="sgopModel.requisicionesParciales">
+              <MappingFragment StoreEntitySet="requisicionesParciales">
+                <ScalarProperty Name="aprobada" ColumnName="aprobada" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+                <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+                <ScalarProperty Name="noRequisicion" ColumnName="noRequisicion" />
+                <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+                <ScalarProperty Name="idRequisicionParcial" ColumnName="idRequisicionParcial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="sgopModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuarios">
+            <EntityTypeMapping TypeName="sgopModel.usuarios">
+              <MappingFragment StoreEntitySet="usuarios">
+                <ScalarProperty Name="usuarioModificacion" ColumnName="usuarioModificacion" />
+                <ScalarProperty Name="fechaModificacion" ColumnName="fechaModificacion" />
+                <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+                <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+                <ScalarProperty Name="primerAcceso" ColumnName="primerAcceso" />
+                <ScalarProperty Name="bloqueado" ColumnName="bloqueado" />
+                <ScalarProperty Name="imagenPerfil" ColumnName="imagenPerfil" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="apellidoMaterno" ColumnName="apellidoMaterno" />
+                <ScalarProperty Name="apellidoPaterno" ColumnName="apellidoPaterno" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

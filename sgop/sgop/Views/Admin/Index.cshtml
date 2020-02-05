@@ -1,0 +1,103 @@
+﻿@model sgop.Models.ViewModels.UserViewModel
+@{
+    ViewBag.Title = "Usuarios";
+    Layout = "~/Views/Shared/layout_admin.cshtml";
+}
+
+<br><br>
+<div class="card shadow-lg m-5 mx-auto w-50 border border-0">
+    <!--Inicia el CARD-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="card-header text-right">
+        <!--Inicia la cabecera del CARD-->
+        <h2 class="text-muted font-weight-bolder">Buscador de Usuarios</h2><!--Titulo-->
+    </div><!--Termina la cabecera del CARD-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="card-body border border-right-0 border-left-0 border-info">
+        <!--Inicia el cuerpo del CARD-->
+        <div class="row p-1 ml-5 mr-5 mb-4 mx-auto" style="border-style: solid; width:50%;">
+
+            <div class="col-2">
+                <a href="#" name="op" id="1" title="Nuevo" class="admin"><i class="fas fa-file fa-lg "></i></a>
+            </div>
+            <div class="col-2">
+                <a href="#" name="op" id="2" title="Editar" class="admin"><i class="fas fa-edit fa-lg"></i></a>
+            </div>
+            <div class="col-2">
+                <a href="#" name="op" id="3" title="Visualizar" class="admin"><i class="fas fa-glasses fa-lg"></i></a>
+            </div>
+            <div class="col-2">
+                <a href="#" name="op" id="4" title="Bloquear/Desbloquear" class="admin"><i class="fas fa-unlock-alt fa-lg"></i></a>
+            </div>
+            <div class="col-2">
+                <a href="#" name="op" id="5" title="Cambiar Contraseña" class="admin"><i class="fas fa-key fa-lg"></i></a>
+            </div>
+            <div class="col-2">
+                <a href="#" name="op" id="6" title="Buscar por Nombre/Usuario" class="admin"><i class="fas fa-address-card fa-lg"></i></a>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 my-3">
+                <div class="input-group input-group-lg w-75 mx-auto">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text fas fa-user-tie"></span>
+                    </div>
+                    <input type="text" class="form-control" id="user" name="user" autocomplete="off" placeholder="Usuario">
+                    <!--Campo para introducir el usuario, tabla usuarios -> campo usuario-->
+                </div>
+            </div>
+        </div><!--Termina el row con los campos-->
+        <div class="row">
+            <div id="temp" class="mx-auto" style="cursor: pointer"></div>
+        </div>
+    </div><!--Termina el body del card-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="card-footer bg-dark">
+        <!--Inicia el footer con la marca de agua propia de la empresa-->
+        <div class="row">
+            <div class="col-12 text-center">
+                <h6 class="text-muted font-weight-bold">PineAPPs</h6>
+            </div>
+        </div>
+    </div><!--Termina el fotter con la marca de agua propia de la empresa-->
+    <!---------------------------------------------------------------------------------------------------------------->
+</div><!--Termina el card completo-->
+<!-- Modal para el Cambio de Contraseña -->
+<button type="button" id="ChangePass" data-toggle="modal" data-target="#exampleModal" style="visibility:hidden;"></button>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cambiar Contraseña</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="Fchange_pass">
+                <div class="modal-body mx-auto">
+                    <label>Contraseña</label><br>
+                    <input type="password" class="form-control form-control-sm" name="pass" id="pass" required placeholder="Contraseña"><br>
+                    <label>Confirmar contraseña</label><br>
+                    <input type="password" class="form-control form-control-sm" name="Cpass" id="Cpass" required placeholder="Confirmar Contraseña"><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm("VisualizarUser", "Admin", FormMethod.Post))
+{
+    @Html.Hidden("userN")
+    <input type="submit" id="btnId" style="visibility:hidden;" />
+}
+@using (Html.BeginForm("Modificar_User", "Admin", FormMethod.Post))
+{
+    @Html.Hidden("userX")
+    <input type="submit" id="btn2Id" style="visibility:hidden;" />
+}
+
+<!---------------------------------------------------------------------------- FIN --------------------------------------------------------------->

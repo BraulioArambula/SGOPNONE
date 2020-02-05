@@ -1,0 +1,290 @@
+﻿@model  sgop.Models.ViewModels.EditarProyectoViewModel
+@{
+    ViewBag.Title = "VisualizarProyecto";
+}
+
+
+<!---------------------------------------------------------------------------------------------------------------->
+
+<div class="container-fluid w-75 p-0" style="margin-top: 5%">
+    @{
+        @Html.AntiForgeryToken()
+
+        <!--Inicia el container del card-->
+        <div class="col-12">
+            <div class="card border border-0 p-0 h-100">
+                <!--Inicia el card-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="card-header bg-dark">
+                    <!--Inicia la cabecera del card-->
+                    <h3 class="text-muted text-right">
+                        Visualización de datos de proyecto.
+                    </h3>
+                </div><!--Termina la cabecera del card-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="card-body">
+                    <!--Inician los renglones por registro encontrado, 2 renglones por cada uno-->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h5 class="text-muted">@Model.nombreObra</h5>
+                            <!--Tabla proyectos inner join licitaciones -> campo nombreObra-->
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <div class="col-6 px-3">
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="noLicitacion">Numero de Licitacion:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    @Html.TextBoxFor(d => d.noLicitacion, new { @class = "form-control form-control-sm form-control-plaintext", @readonly = "true" })
+                                    <!--Tabla proyectos inner join licitaciones -> campo noLicitacion-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="municipio">Municipio:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    @Html.TextBoxFor(d => d.Municipio, new { @class = "form-control form-control-sm form-control-plaintext", @readonly = "true" })
+                                    <!--Tabla proyectos inner join licitaciones inner join catalogoMunicipios-> campo descripcion-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="localidad">Localidad:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    @Html.TextBoxFor(d => d.localidad, new { @class = "form-control form-control-sm form-control-plaintext", @readonly = "true" })
+                                    <!--Tabla proyectos inner join licitaciones -> campo localidad-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="propuesta">Propuesta:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    @Html.TextBoxFor(d => d.TotalRequisicion, new { @class = "form-control form-control-sm form-control-plaintext", @readonly = "true" })
+
+                                    <!--Tabla proyectos inner join licitaciones inner join requisicion-> sumar el valor de todos los conceptos-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="idRequisicion">No. de Requisicion:</label>
+                                </div>
+                                <div class="col-3 p-1">
+                                    @Html.TextBoxFor(d => d.idRequisicion, new { @class = "form-control form-control-sm form-control-plaintext text-center", @readonly = "true" })
+
+                                    <!--Tabla proyectos inner join licitaciones -> campo idRequisicion-->
+                                </div>
+                                <div class="col-3 p-1 text-center">
+                                    <label for="avance">Avance:</label>
+                                </div>
+                                <div class="col-3 p-1">
+                                    <input type="text" class="form-control form-control-sm form-control-plaintext" id="avance" value="15%" disabled>
+                                    <!--Porcentaje de estimaciones respecto a lo requerido-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="estatus">Estatus:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    @Html.TextBoxFor(d => d.Status, new { @class = "form-control form-control-sm form-control-plaintext", @readonly = "true" })
+                                    <!--Se llena con base en una consulta a la tabla de catalogoEstatus-->
+                                    <!--Tabla proyectos -> campo idEstatus-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="empresa">Empresa:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    @Html.TextBoxFor(d => d.Empresa, new { @class = "form-control form-control-sm form-control-plaintext", @readonly = "true" })
+                                    <!--Tabla proyectos inner join licitaciones inner join catalogoEmpresa-> campo descripcion-->
+                                </div>
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="col-6 px-3">
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-3">
+                                    <label for="fechaVisita">Fecha contrato:</label>
+                                </div>
+                                <div class="col-7">
+                                    @Html.TextBoxFor(d => d.fechaContrato, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm form-control-plaintext", type = "date", @readonly = "true" })
+
+                                    <!--Tabla proyectos -> campo fechaContrato-->
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-5">
+                                    <label for="fechaVisita">Inicio contrato:</label>
+                                </div>
+                                <div class="col-5">
+                                    <label for="fechaVisita">Final contrato:</label>
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-5">
+                                    @Html.TextBoxFor(d => d.fechaInicioContrato, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm form-control-plaintext", type = "date", @readonly = "true" })
+
+                                    <!--Tabla proyectos -> campo fechaInicioContrato-->
+                                </div>
+                                <div class="col-5">
+                                    @Html.TextBoxFor(d => d.fechaFinalContrato, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm form-control-plaintext", type = "date", @readonly = "true" })
+
+                                    <!--Tabla proyectos -> campo fechaFinalContrato-->
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row pt-3">
+                                <div class="col-1"></div>
+                                <div class="col-5">
+                                    <label for="fechaVisita">Inicio real:</label>
+                                </div>
+                                <div class="col-5">
+                                    <label for="fechaVisita">Final real:</label>
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-5">
+                                    @Html.TextBoxFor(d => d.fechaInicioReal, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm form-control-plaintext", type = "date", @readonly = "true" })
+
+                                    <!--Tabla proyectos -> campo fechaInicioReal-->
+                                </div>
+                                <div class="col-5">
+                                    @Html.TextBoxFor(d => d.fechaFinalReal, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm form-control-plaintext", type = "date", @readonly = "true" })
+
+                                    <!--Tabla proyectos -> campo fechaFinalReal-->
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row pt-3">
+                                <div class="col-1"></div>
+                                <div class="col-5 small">
+                                    <div class="custom-control custom-checkbox">
+
+                                        @Html.CheckBox("PolizaAnticipoCheck2", Model.polizaAnticipo, new { @class = "custom-control-input", @disabled = true })
+                                        <label class="custom-control-label" for="PolizaAnticipoCheck">Poliza Anticipo</label>
+                                        <!--Tabla proyectos -> campo polizaAnticipo que no sea NULL-->
+                                    </div>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <label for="avance">Req. Parcial:</label>
+                                </div>
+                                <div class="col-2">
+                                    @Html.TextBoxFor(d => d.reqParcial, new { @class = "form-control form-control-sm form-control-plaintext text-center", @readonly = "true" })
+
+                                    <!--Tabla requisicionParcial buscar por idRequisicion, campo noRequisicion ordenado de mayor a menor el primer registro-->
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-5 small">
+                                    <div class="custom-control custom-checkbox">
+                                        @Html.CheckBox("PolizaViciosCheck2", Model.polizaVicios, new { @class = "custom-control-input", @disabled = true })
+                                        <label class="custom-control-label" for="PolizaViciosCheck">Poliza Vicios</label>
+
+                                        <!--Tabla proyectos -> campo polizaVicios que no sea NULL-->
+                                    </div>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <label for="avance">Estimacion:</label>
+                                </div>
+                                <div class="col-2">
+                                    @Html.TextBoxFor(d => d.noEstimacion, new { @class = "form-control form-control-sm form-control-plaintext text-center", @readonly = "true" })
+
+                                    <!--Tabla estimaciones buscar por idRequisicion, campo noEstimacion ordenado de mayor a menor el primer registro-->
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-5 small">
+                                    <div class="custom-control custom-checkbox">
+                                        @Html.CheckBox("PolizaCumplimientoCheck2", Model.polizaCumplimiento, new { @class = "custom-control-input", @disabled = true })
+                                        <label class="custom-control-label" for="PolizaCumplimientoCheck">Poliza Cumplimiento</label>
+
+                                        <!--Tabla licitaciones -> campo polizaCumplimiento que no sea NULL-->
+                                    </div>
+                                </div>
+                                <div class="col-5">
+                                    @using (Html.BeginForm("Estimacion", "Estimacion", FormMethod.Post, new { id = "formCambiaVistaEstimacion" }))
+                                    {
+                                        <input type="hidden" id="idLicitacion" name="idLicitacion" value="@Model.idLicitacion" />
+                                        <button type="submit" class="btn btn-outline-success btn-block btn-sm">Estimaciones<span class="fas fa-money-check mx-1"></span></button>
+                                    }
+                                    <!--Manda el idLicitacion y muestra el formulario para edicion de estimaciones-->
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <div class="col-3 mt-5 mb-3">
+                            <button type="button" onclick="history.back();" class="btn btn-outline-danger btn-block btn-sm">Atras<span class="fas fa-arrow-left mx-1"></span></button>
+                        </div>
+                        <div class="col-3 mt-5 mb-3">
+                            @using (Html.BeginForm("Modificar_Proyecto", "Constructora", FormMethod.Post))
+                            {
+                                @Html.HiddenFor(d => d.idProyecto)
+                                @Html.HiddenFor(d => d.idLicitacion)
+                                <button type="submit" class="btn btn-outline-primary btn-block btn-sm">Modificar<span class="fas fa-pen-square mx-1"></span></button>
+
+                            }
+                        </div>
+                        <div class="col-3 mt-5 mb-3">
+                            @using (Html.BeginForm("Modificar_Proyecto", "Constructora", FormMethod.Post))
+                            {
+                                @Html.HiddenFor(d => d.idLicitacion)
+                                <button type="submit" class="btn btn-outline-warning btn-block btn-sm">Ejecucion Mensual<span class="fas fa-external-link-square-alt mx-1"></span></button>
+
+                            }
+                        </div>
+                        <div class="col-3 mt-5 mb-3">
+                            @using (Html.BeginForm("Index", "RequisicionesParciales", FormMethod.Post, new { id = "formCambiaVista" }))
+                            {
+                                <div class="">
+                                    <input type="hidden" id="idLicitacion" name="idLicitacion" value="@Model.idLicitacion" />
+                                    <button type="submit" class="btn btn-outline-info btn-block btn-sm" id="btn">Requisiciones Parciales<span class="fas fa-th-list mx-1"></span></button>
+                                    <!--Manda el idLicitacion y muestra el formulario para las requisiciones parciales-->
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div><!--Terminan los renglones por registro encontrado-->
+                <!---------------------------------------------------------------------------------------------------------------->
+            </div><!--Termina el card de los datos-->
+        </div><!--Termina el col que contiene todo el card-->
+    }
+</div><!--Termina el espacio para meter todo el container-->
+<!---------------------------------------------------------------------------------------------------------------->
+<div id="formsAux">
+
+</div>

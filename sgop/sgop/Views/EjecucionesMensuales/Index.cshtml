@@ -1,0 +1,243 @@
+﻿@model sgop.Models.LicitacionesRequisicionesViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<script>
+    function getNameMonth(mes) {
+        if (mes == 1)
+            return "Enero";
+        else if (mes == 2)
+            return "Febrero";
+        else if (mes == 3)
+            return "Marzo";
+        else if (mes == 4)
+            return "Abril";
+        else if (mes == 5)
+            return "Mayo";
+        else if (mes == 6)
+            return "Junio";
+        else if (mes == 7)
+            return "Julio";
+        else if (mes == 8)
+            return "Agosto";
+        else if (mes == 9)
+            return "Septiembre";
+        else if (mes == 10)
+            return "Octubre";
+        else if (mes == 11)
+            return "Noviembre";
+        else
+            return "Diciembre";
+    }
+
+    function getAnio(mes, anio) {
+        if (mes == 12) {
+            return parseInt(anio + 1);
+        }
+        else {
+            return anio;
+        }
+    }
+
+    var agregados = [];
+    var ultimoMes = 0;
+    @foreach(var ejec in ViewBag.lstEjecuciones)
+    {
+        @:var objTemp = new Object();
+        @:objTemp["idConcepto"] = "@ejec.idConcepto";
+        @:objTemp["periodoMes"] = "@ejec.periodoMes";
+        @:objTemp["periodoAnio"] = "@ejec.periodoAnio";
+        @:objTemp["cantidad"] = "@ejec.cantidad";
+        @:agregados.push(objTemp);
+    }
+</script>
+
+<div class="container-fluid" style="margin-top: 5%">
+    <!--Inicia el container del card-->
+    <div class="col-12">
+        <div class="card border border-0 p-0 h-100">
+            <!--Inicia el card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-header bg-dark rounded-lg">
+                <!--Inicia la cabecera del card-->
+                <div class="row mb-1">
+                    <!--Inician los campos del primer renglon-->
+                    <div class="col-12 text-center">
+                        <h4 class="text-muted">Plan de ejecucion mensual.</h4>
+                    </div>
+                </div><!--Termina el primer renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inicia el segundo renglon de campos-->
+                    <div class="col-10">
+                        <h6 class="text-light">@Model.nombreObra</h6>
+                    </div>
+
+                </div><!--Termina el segundo renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inicia el segundo renglon de campos-->
+                    <div class="col-5">
+                        <h6 class="text-light">Licitacion: @Model.noLicitacion</h6>
+                        <!--Tabla licitaciones -> campo noLicitacion-->
+                    </div>
+                    <div class="col-5">
+                        <h6 class="text-light">Municipio: @Model.nombreMunicipio</h6>
+                        <!--Tabla licitaciones inner join catalogoMunicipios -> campo descripcion-->
+                    </div>
+                    <div class="col-2 px-1">
+                        <button type="button" class="btn btn-outline-success btn-block btn-sm">Guardar<span class="far fa-save mx-1"></span></button>
+                        <!--Manda el submit del form crearRequisicion con cada linea de la tabla-->
+                    </div>
+                </div><!--Termina el segundo renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inicia el segundo renglon de campos-->
+                    <div class="col-5">
+                        <h6 class="text-light">Localidad: @Model.localidad</h6>
+                        <!--Tabla licitaciones -> campo localidad-->
+                    </div>
+                    <div class="col-5">
+                        <h6 class="text-light">Requisicion: @Model.idRequisicionRango</h6>
+                        <!--Tabla licitaciones -> campo idRequisicion-->
+                    </div>
+                    <div class="col-2 px-1">
+                        <button type="button" class="btn btn-outline-danger btn-block btn-sm">Regresar<span class="fas fa-sign-out-alt mx-1"></span></button>
+                        <!--Manda la visualizacion de la licitacion-->
+                    </div>
+                </div><!--Termina el segundo renglon de campos-->
+            </div><!--Termina la cabecera del card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-body">
+                <div style="width:100%; overflow-x:scroll">
+                    <table id="tablaAddPlan" class="table table-striped table-bordered table-sm table-responsive-xl">
+                        <thead>
+                            <tr id="headTablaAddPlan">
+                                <th class="text-muted font-weight-bolder text-center"></th>
+                                <th class="text-muted font-weight-bolder text-center">Clave</th>
+                                <th class="text-muted font-weight-bolder text-center">Descripción</th>
+                                <th class="text-muted font-weight-bolder text-center">Cantidad</th>
+                                <th class="text-muted font-weight-bolder text-center">Total</th>
+                                <th class="text-muted font-weight-bolder text-center">Restante</th>
+                                @{ 
+                                    int mesContrato = ViewBag.mesContrato;
+                                    int anioContrato = ViewBag.anioContrato;
+                                }
+                                @for (int i = 0; i < ViewBag.cantColumnas; i++)
+                                {
+                                <script>
+                                        var nameMonth = getNameMonth(@mesContrato);
+                                        var anio = '@anioContrato';
+                                        document.getElementById('headTablaAddPlan').innerHTML += "<th class='text-muted font-weight-bolder text-center'>" + nameMonth + " " + anio + "</th>";
+                                        @{mesContrato += 1;
+                                            if (mesContrato > 12) {
+                                                mesContrato = 1;
+                                                anioContrato += 1;
+                                            }
+                                        }
+                                </script>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody id="contenidoTablaAddPlan">
+                            @{
+                                double total = 0;
+                                double restante = 0;
+                            }
+                            @foreach (var conc in ViewBag.lstConceptosEnRequisicion)
+                            {
+                                total += conc.total;
+                                restante = conc.cantidad;
+                                foreach (var ejec in ViewBag.lstEjecuciones)
+                                {
+                                    if (conc.idConcepto == ejec.idConcepto)
+                                    {
+                                        restante -= ejec.cantidad;
+                                    }
+                                }
+                                <tr id="fila.@conc.clave">
+                                    <td style="min-width:3rem;" id="campoBtn.@conc.clave"><button type="button" class="btn btn-outline-success" onclick="agregaMes('@ViewBag.mesContrato', '@ViewBag.anioContrato', @conc.cantidad, '@conc.clave');">Agregar</button></td>
+                                    <td style="min-width:4rem;">@conc.clave</td>
+                                    <td style="min-width:12rem;">@conc.descripcion</td>
+                                    <td style="min-width:6rem;">@conc.cantidad</td>
+                                    <td style="min-width:6rem;">@conc.total</td>
+                                    <td id="campoRestante.@conc.clave" style="min-width:6rem;">@restante</td>
+                                @foreach (var ejec in ViewBag.lstEjecuciones)
+                                {
+                                    if (conc.idConcepto == ejec.idConcepto)
+                                    {
+                                        <script>
+                                            document.getElementById("campoBtn.@conc.clave").innerHTML = "<button type='button' class='btn btn-outline-success' onclick='agregaMes(\"" + parseInt(parseInt(@ejec.periodoMes)) + "\", \"@ViewBag.anioContrato\", @conc.cantidad, \"@conc.clave\");'>Agregar</button>";
+                                        </script>
+                                        <td>@ejec.cantidad</td>
+                                    }
+                                }
+                            </tr>
+                            }
+                            </tbody>
+                            <tfoot id="footerTablaAddConceptos">
+                                <tr id="footerTablaAddPlan">
+                                    <td colspan="4" class="text-muted font-weight-bolder text-center">TOTAL</td>
+                                    <td class="text-muted font-weight-bolder" id="total">@total</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                </div>
+            </div><!--Terminan body del card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+        </div><!--Termina el card de los datos-->
+    </div><!--Termina el col que contiene todo el card-->
+</div><!--Termina el espacio para meter todo el container-->
+<!---------------------------------------------------------------------------------------------------------------->
+<div class="row fixed-bottom">
+    <!--Inicia el footer con la marca de agua propia de la empresa-->
+    <div class="col-12 text-center">
+        <h6 class="text-muted font-weight-bold">PineAPPs</h6>
+    </div>
+</div><!--Termina el fotter con la marca de agua propia de la empresa-->
+<!---------------------------------------------------------------------------------------------------------------->
+
+@section scripts{
+    <script>
+        function agregaMes(mesInicio, anioInicio, cantidad, claveConc) {
+            jQuery.ajax({
+                url: "@Url.Content("~/EjecucionesMensuales/getNameMonth")",
+                data: {
+                    'mes': mesInicio
+                },
+                type: "POST",
+                success: function (nombreMes) {
+                    Swal.fire({
+                        title: 'Cantidad a realizar para ' + nombreMes,
+                        input: 'number',
+                        inputAttributes: {
+                            min: 1,
+                            max: cantidad
+                        },
+                        inputValue: 1,
+                        showCancelButton: true,
+                        confirmButtonText: 'Agregar',
+                        cancelButtonText: 'Cancelar',
+                        showCloseButton: true,
+                        inputValidator: (value) => {
+                            if (!value || value < 0) {
+                                return 'Agregue la cantidad a realizar';
+                            }
+                            if (value > cantidad) {
+                                return 'Agregue una cantidad menor o igual a la restante';
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.value) {
+                            document.getElementById('headTablaAddPlan').innerHTML += '<th class="text-muted font-weight-bolder text-center">' + nombreMes + '</th>';
+                            document.getElementById('fila.' + claveConc).innerHTML += '<td style="min-width:4rem;">' + result.value + '</td>';
+                            document.getElementById('campoRestante.' + claveConc).innerHTML = parseFloat(parseFloat(cantidad) - parseFloat(result.value));
+                        }
+                    });
+                },
+                error: function () { }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,356 @@
+﻿@model  sgop.Models.licitacionesViewModel
+<div class="container-fluid w-75 p-0" style="margin-top: 10%">
+    <!--Inicia el container del card-->
+    <div class="col-12">
+        <div class="card border border-0 p-0 h-100">
+            <!--Inicia el card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-header bg-dark">
+                <!--Inicia la cabecera del card-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inician los campos del primer renglon-->
+                    <div class="col-12 text-center">
+                        <h4 class="text-muted">Control de cobros.</h4>
+                    </div>
+                </div><!--Termina el primer renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inicia el segundo renglon de campos-->
+                    <div class="col-12">
+                        <h5 class="text-light">@Model.nombreObra</h5>
+                    </div>
+                </div><!--Termina el segundo renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inicia el segundo renglon de campos-->
+                    <div class="col-5">
+                        <h6 class="text-light">Licitacion: @Model.noLicitacion</h6>
+                        <!--Tabla licitaciones -> campo noLicitacion-->
+                    </div>
+                    <div class="col-5">
+                        <h6 class="text-light">Municipion: @Model.municipio</h6>
+                        <!--Tabla licitaciones inner join catalogoMunicipios -> campo descripcion-->
+                    </div>
+                    <div class="col-2 px-1">
+                        <button type="button" class="btn btn-outline-success btn-block btn-sm">Guardar<span class="far fa-save mx-1"></span></button>
+                        <!--Manda el submit del form crearRequisicion con cada linea de la tabla-->
+                    </div>
+                </div><!--Termina el segundo renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inicia el segundo renglon de campos-->
+                    <div class="col-5">
+                        <h6 class="text-light">Localidad: @Model.localidad</h6>
+                        <!--Tabla licitaciones -> campo localidad-->
+                    </div>
+                    <div class="col-2">
+                        <h6 class="text-light">Estimacion:</h6>
+                    </div>
+                    <div class="col-3">
+                        <input type="hidden" id="idLicitacion" value="@Model.idLicitacion" />
+                        <select class="form-control form-control-sm w-50" onchange="actualizarTabla(document.getElementById('idLicitacion').value, this.value);">
+                            <option value="0" selected>Todo</option>
+                            @{
+                            foreach (var noEstimacion in Model.lstEstimaciones)
+                            {
+                            <option value="@noEstimacion">@noEstimacion</option><!--aqui te quedaste mai-->
+                            }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-2 px-1">
+                        <button type="button" class="btn btn-outline-danger btn-block btn-sm">Regresar<span class="fas fa-sign-out-alt mx-1"></span></button>
+                        <!--Manda la visualizacion de la licitacion-->
+                    </div>
+                </div><!--Termina el segundo renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+            </div><!--Termina la cabecera del card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Doc.</th>
+                                <th class="text-left">Estimacion</th>
+                                <th class="text-center">Importe</th>
+                                <th class="text-center">Cl.Doc</th>
+                                <th class="text-center">Creado</th>
+                                <th class="text-center">Com.</th>
+                                <th class="text-center">Pagado</th>
+                                <th class="text-center">Factura</th>
+                                <th class="text-center">Arch.</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="cuerpoTabla">
+                            @{
+                            int contador = 0;
+                            foreach (var registro in ViewBag.lstControlCobros)
+                            {
+                            contador = contador + 1;
+
+                            <tr>
+                                @if (registro.docCompensacion != null)
+                                {
+                                <td class="text-muted text-center small align-middle" onclick="abrirModalCompensado();">@registro.noDocumento</td>
+                                }
+                                else
+                                {
+                                <td class="text-muted text-center small align-middle" onclick="abrirModalCompensar(@registro.importe);">@registro.noDocumento</td>
+                                }
+
+                                <td class="text-muted text-left small align-middle">Estimacion No. @registro.noEstimacion</td>
+                                <td class="text-muted text-center small align-middle">@registro.importe</td>
+                                <td class="text-muted text-center small align-middle">@registro.clDocumento</td>
+                                @if (registro.fechaDocumento != null)
+                                {
+                                <td class="text-muted text-center small align-middle">@registro.fechaDocumento.ToString("MM/dd/yyyy")</td>
+                                }
+                                else
+                                {
+                                <td class="text-muted text-center small align-middle">@registro.fechaDocumento)</td>
+                                }
+                                <td class="text-muted text-center small align-middle">@registro.docCompensacion</td>
+                                @if (registro.fechaCompensacion != null)
+                                {
+                                <td class="text-muted text-center small align-middle">@registro.fechaCompensacion.ToString("MM/dd/yyyy")</td>
+                                }
+                                else
+                                {
+                                <td class="text-muted text-center small align-middle">@registro.fechaCompensacion</td>
+                                }
+                                <td class="text-muted text-center small align-middle">
+                                    <div class="custom-control custom-checkbox">
+                                        @if (registro.factura != null)
+                                        {
+                                        <input type="checkbox" class="custom-control-input" id="@contador" name="@contador" checked disabled />
+
+                                        }
+                                        else
+                                        {
+                                        <input type="checkbox" class="custom-control-input" id="@contador" name="@contador" disabled />
+                                        }
+                                        <label class="custom-control-label" for="@contador"></label>
+                                    </div>
+                                </td>
+                                <td class="text-muted text-center small">
+                                    <a class="btn btn-sm text-sm-center text-primary" data-toggle="modal" data-target="#modalCargarFactura">
+                                        <i class="far fa-file"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div><!--Terminan body del card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+        </div><!--Termina el card de los datos-->
+    </div><!--Termina el col que contiene todo el card-->
+</div><!--Termina el espacio para meter todo el container-->
+
+<div class="modal fade" id="modalCargarFactura">
+    <!--Inicia el modal con las facturas digitales-->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border border-0">
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-header bg-dark">
+                <!--Inicia la cabecera del modal-->
+                <h4 class="modal-title text-muted">Facturas Digitales</h4>
+                <button type="button" class="close text-muted" data-dismiss="modal">&times;</button>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-body">
+
+                <div class="row mb-3">
+                    <div class="col-10"></div>
+                    <div class="col-2 text-center">
+                        <h6 class="text-muted">Ver</h6>
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-3">
+                    <div class="col-2 text-muted small">
+                        <label for="fechaVisita">Archivo</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control form-control-sm form-control-plaintext" id="fechavisita" value="ActaVisita.pdf" disabled>
+                        <!--Tabla licitaciones -> campo actaVisita-->
+                    </div>
+                    <div class="col-2 mx-auto">
+                        <a class="btn btn-block text-primary" href="#"><i class="far fa-file"></i></a>
+                        <!--Abre en una nueva pestaña el documento que fue cargado en el campo actaVisita-->
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-3">
+                    <div class="col-2 text-muted small">
+                        <label for="fechaAclaraciones">Acta Aclaracion</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control form-control-sm form-control-plaintext" id="fechaAclaraciones" value="ActaAclaraciones.pdf" disabled>
+                        <!--Tabla licitaciones -> campo actaAclaraciones-->
+                    </div>
+                    <div class="col-2 mx-auto">
+                        <a class="btn btn-block text-primary" href="#"><i class="far fa-file"></i></a>
+                        <!--Abre en una nueva pestaña el documento que fue cargado en el campo actaAclaraciones-->
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-3">
+                    <div class="col-2 text-muted small">
+                        <label for="fechaPropuesta">Acta Propuesta</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control form-control-sm form-control-plaintext" id="fechaPropuesta" value="" disabled>
+                        <!--Tabla licitaciones -> campo actaPropuesta-->
+                    </div>
+                    <div class="col-2 mx-auto">
+                        <a class="btn btn-block text-primary" href="#" disabled><i class="far fa-file"></i></a>
+                        <!--Abre en una nueva pestaña el documento que fue cargado en el campo actaPropuesta-->
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-3">
+                    <div class="col-2 text-muted small">
+                        <label for="fechaFallo">Acta Fallo</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control form-control-sm form-control-plaintext" id="fechaFallo" value="" disabled>
+                        <!--Tabla licitaciones -> campo actaVisita-->
+                    </div>
+                    <div class="col-2 mx-auto">
+                        <a class="btn btn-block text-primary" href="#" disabled><i class="far fa-file"></i></a>
+                        <!--Abre en una nueva pestaña el documento que fue cargado-->
+                    </div>
+                </div>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-footer bg-dark">
+                <br>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+        </div>
+    </div>
+</div><!--Termina el modal con los campos para la visualizacion de actas digitales-->
+
+<div class="modal fade" id="modalCompensar">
+    <!--Inicia el modal con las facturas digitales-->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border border-0">
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-header bg-dark text-center">
+                <!--Inicia la cabecera del modal-->
+                <h4 class="modal-title text-muted">Compensar documento</h4>
+                <button type="button" class="close text-muted" data-dismiss="modal">&times;</button>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-body">
+
+                @using (Html.BeginForm("compensarCobros", "Accounting", FormMethod.Post, new { @id = "compensarPagos" }))
+                {
+                <div class="row mx-auto p-0">
+                    <div class="col-4 text-right text-primary">
+                        <label for="importe">Importe <i class="fas fa-dollar-sign"></i></label>
+                    </div>
+                    <div class="col-4">
+                        <input type="text" class="form-control form-control-sm" id="importe" readonly name="importe">
+                    </div>
+                </div>
+                <div class="row mx-auto p-0">
+                    <div class="col-4 text-right text-success">
+                        <label for="liquido">Liquido <i class="fas fa-dollar-sign"></i></label>
+                    </div>
+                    <div class="col-4">
+                        <input type="text" class="form-control form-control-sm" id="liquido" readonly name="liquido">
+                    </div>
+                </div>
+                <div class="row mx-auto p-0">
+                    <div class="col-4 text-right text-warning">
+                        <label for="amortizacion">Amortizacion <i class="fas fa-dollar-sign"></i></label>
+                    </div>
+                    <div class="col-4">
+                        <input type="text" class="form-control form-control-sm" id="amortizacion" readonly name="amortizacion">
+                    </div>
+                </div>
+                <div class="row mx-auto p-0">
+                    <div class="col-4 text-right text-warning">
+                        <label for="5almillar">5 al millar<i class="fas fa-dollar-sign"></i></label>
+                    </div>
+                    <div class="col-4">
+                        <input type="text" class="form-control form-control-sm" id="5almillar" readonly name="5almillar">
+                    </div>
+                </div>
+                }
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-footer bg-dark ">
+                <button type="button" class="btn btn-primary btn-sm w-50 mx-auto" onclick="compensarPagos.submit();">Compensar</button>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+        </div>
+    </div>
+</div><!--Termina el modal con los campos para la visualizacion de actas digitales-->
+
+<div class="modal fade" id="modalCompensado">
+    <!--Inicia el modal con las facturas digitales-->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border border-0">
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-header bg-dark text-center">
+                <!--Inicia la cabecera del modal-->
+                <h4 class="modal-title text-muted">Documento ya compensado</h4>
+                <button type="button" class="close text-muted" data-dismiss="modal">&times;</button>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-body text-center">
+                <h5 class="text-danger">Este Documento ya fue compensado</h5>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-footer bg-dark ">
+                <button type="button" class="btn btn-primary btn-sm w-50 mx-auto" onclick="">Aceptar</button>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+        </div>
+    </div>
+</div><!--Termina el modal con los campos para la visualizacion de actas digitales-->
+@section scripts{
+<script>
+    //Para que aparezca el nombre del archivo que seleccionamos en el campo FILE
+
+    function actualizarTabla(idRequisicion, noEstimacion) {
+        $("#cuerpoTabla").html("");
+        jQuery.ajax
+            ({
+                url: "@Url.Content("~/Accounting/controlCobrosString")",
+            data: {
+                'idLicitacion': idRequisicion,
+                'noEstimacion': noEstimacion
+            },
+            type: "POST",
+            success: function (data) {
+                $("#cuerpoTabla").html(data);
+            }
+                });
+        }
+
+    function abrirModalCompensar(importe) {
+        document.getElementById("importe").value = new Intl.NumberFormat().format(importe);
+        document.getElementById("amortizacion").value = importe * .30;
+        document.getElementById("5almillar").value = importe * .005;
+        document.getElementById("liquido").value = importe * .695;
+        $("#modalCompensar").modal()
+    }
+
+    function abrirModalCompensado() {
+        $("#modalCompensado").modal()
+    }
+</script>
+
+}

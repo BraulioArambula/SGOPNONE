@@ -1,0 +1,438 @@
+﻿
+@model sgop.Models.ViewModels.EditarLicitaciones
+@{
+    ViewBag.Title = "Editar Licitacion";
+}
+@using (Html.BeginForm("Guarda_Licitacion", "Licitaciones", FormMethod.Post, new { id = "Guarda_Licitacion" }))
+{
+    <input type="hidden" name="idLicitacion" value="@Model.idLicitacion" />
+    <div class="container-fluid w-65 p-0" style="margin-top: 2%">
+        <!--Inicia el container del card-->
+        <div class="col-12">
+            <div class="card border border-0 p-0 h-100">
+                <!--Inicia el card-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="card-header bg-dark">
+                    <!--Inicia la cabecera del card-->
+                    <h3 class="text-muted text-right">
+                        Modificacion de Datos
+                    </h3>
+                </div><!--Termina la cabecera del card-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="card-body">
+                    <!--Inician los renglones por registro encontrado, 2 renglones por cada uno-->
+                    <div class="row">
+                        <div class="col-12 text-center">
+
+                            <h5 class="text-muted" value="@Model.nombreObra" name="  nombreObra">@Model.nombreObra</h5>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <div class="col-6 px-3">
+                            <div class="row">
+                                <div class="col-3 p-0">
+                                    <label for="noLicitacion">  Numero de Licitacion:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    <input type="text" class="form-control form-control-sm form-control-plaintext" id="noLicitacion" name="noLicitacion" value="@Model.noLicitacion" disabled>
+                                    <!--Tabla licitaciones -> campo noLicitacion-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-0">
+                                    <label for="municipio">Municipio:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    <select name="idMunicipio" class="custom-select custom-select-sm" disabled>
+                                        <option selected value="@Model.idMunicipio">@Model.descripcion_muni</option>
+                                        @{foreach (var item in ViewBag.listMunicipios)
+                                            {
+                                                if (Model.idMunicipio != item.idMunicipio)
+                                                {
+                                                    <option value="@item.idMunicipio"> @item.descripcion</option>
+                                                }
+
+                                            }
+
+                                        }
+
+                                    </select>
+                                    <!--Se llena con base en una consulta a la tabla de catalogoMunicipios-->
+                                    <!--Tabla licitaciones -> campo idMunicipio  **FALATA LLENAR LISTADO MUNICIPIOS -->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="localidad">Localidad:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    <input type="text" class="form-control form-control-sm form-control-plaintext" id="localidad" name="localidad" value="@Model.localidad" disabled>
+                                    <!--Tabla licitaciones -> campo localidad-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="propuesta">Propuesta:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    <input type="text" class="form-control form-control-sm form-control-plaintext" id="propuesta" value="@Model.propuesta_licitacion" disabled>
+                                    <!--Tabla licitaciones inner join requisicion-> sumar el valor de todos los conceptos CONSULTAR A REQUISICION  -->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="idRequisicion">No. de Requisicion:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    <input type="text" class="form-control form-control-sm form-control-plaintext" id="idRequisicion" name="" value="@Model.idRequisicion" disabled>
+                                    <!--Tabla licitaciones -> campo idRequisicion-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="estatus">Estatus:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    <select name="idEstatus" class="custom-select custom-select-sm" disabled>
+                                        <option value="@Model.idEstatus">@Model.descripcion_estatus</option>
+                                        @{foreach (var item in ViewBag.listarEstatus)
+                                            {
+                                                if (Model.idEstatus != item.idEstatus)
+                                                {
+                                                    <option value="@item.idEstatus"> @item.descripcion</option>
+                                                }
+
+                                            }
+
+                                        }
+
+                                    </select>
+                                    <!--Se llena con base en una consulta a la tabla de catalogoEstatus-->
+                                    <!--Tabla licitaciones -> campo idEstatus-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-3 p-1">
+                                    <label for="empresa">Empresa:</label>
+                                </div>
+                                <div class="col-9 p-1">
+                                    <select name="idEmpresa" class="custom-select custom-select-sm" disabled>
+                                        <option selected value="@Model.idEmpresa">@Model.descripcion_empresa</option>
+                                        @{foreach (var item in ViewBag.listarEmpresas)
+                                            {
+                                                if (Model.idEmpresa != item.idEmpresa)
+                                                {
+                                                    <option value="@item.idEmpresa"> @item.razonSocial</option>
+                                                }
+                                            }
+
+                                        }
+                                    </select>
+                                    <!--Se llena con base en una consulta a la tabla de catalogoEstatus-->
+                                    <!--Tabla licitaciones -> campo idEstatus-->
+                                </div>
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="col-6 px-3">
+                            <div class="row">
+                                <div class="col-1 p-1"></div>
+                                <div class="col-3 p-1">
+                                    <label for="fechaVisita">Fecha visita:</label>
+                                </div>
+                                <div class="col-4 p-1">
+                                    <input type="date" class="form-control form-control-sm form-control-plaintext" id="fechaVisita" name="fechaVisita" value="@Model.fechaVisitaFomato" disabled>
+                                    <!--Tabla licitaciones -> campo fechaVisita-->
+                                </div>
+                                <div class="col-4 p-1">
+                                    @if (!Model.actaVisita.Equals(""))
+                                    {
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" value="" class="custom-control-input" name="actaVisita" checked disabled>
+                                            <label class="custom-control-label" for="actaVisita">Acta Visita</label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" value="" class="custom-control-input" name="actaVisita" disabled>
+                                            <label class="custom-control-label" for="actaVisita">Acta Visita</label>
+                                        </div>
+                                    }
+
+                                    <!--Tabla licitaciones -> campo actaVisita que no sea NULL-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-1 p-1"></div>
+                                <div class="col-3 p-1">
+                                    <label for="fechaVisita">Fecha Aclaraciones:</label>
+                                </div>
+                                <div class="col-4 p-1">
+                                    <input type="date" class="form-control form-control-sm form-control-plaintext" id="fechaAclaraciones" name="fechaAclaraciones" value="@Model.fechaAclaracionesFormato" disabled>
+                                    <!--Tabla licitaciones -> campo fechaAclaraciones-->
+                                </div>
+                                <div class="col-4 p-1">
+                                    <div class="custom-control custom-checkbox">
+                                        @if (!Model.actaAclaraciones.Equals(""))
+                                        {
+                                            <input type="checkbox" class="custom-control-input" name="actaAclaraciones" checked disabled>
+                                            <label class="custom-control-label" for="actaAclaraciones">Acta Aclaraciones</label>
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="custom-control-input" name="actaAclaraciones" disabled>
+                                            <label class="custom-control-label" for="actaAclaraciones">Acta Aclaraciones</label>
+                                        }
+
+                                    </div>
+                                    <!--Tabla licitaciones -> campo actaAclaraciones que no sea NULL-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-1 p-1"></div>
+                                <div class="col-3 p-1">
+                                    <label for="fechaVisita">Fecha Propuesta:</label>
+                                </div>
+                                <div class="col-4 p-1">
+                                    <input type="date" class="form-control form-control-sm form-control-plaintext" id="fechaPropuesta" name="fechaPropuesta" value="@Model.fechaPropuestaFormato" disabled>
+                                    <!--Tabla licitaciones -> campo fechaPropuesta-->
+                                </div>
+                                <div class="col-4 p-1">
+                                    <div class="custom-control custom-checkbox">
+                                        @if (!Model.actaPropuesta.Equals(""))
+                                        {
+                                            <input type="checkbox" class="custom-control-input" name="actaPropuesta" checked disabled>
+                                            <label class="custom-control-label" for="actaPropuesta">Acta Propuesta</label>
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="custom-control-input" name="actaPropuesta" disabled>
+                                            <label class="custom-control-label" for="actaPropuesta">Acta Propuesta</label>
+                                        }
+                                    </div>
+                                    <!--Tabla licitaciones -> campo actaPropuesta que no sea NULL-->
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row">
+                                <div class="col-1 p-1"></div>
+                                <div class="col-3 p-1">
+                                    <label for="fechaVisita">Fecha Fallo:</label>
+                                </div>
+                                <div class="col-4 p-1">
+                                    <input type="date" class="form-control form-control-sm form-control-plaintext" id="fechaFallo" name="fechaFallo" value="@Model.fechaFalloFormato" disabled>
+                                    <!--Tabla licitaciones -> campo fechaFallo-->
+                                </div>
+                                <div class="col-4 p-1">
+                                    <div class="custom-control custom-checkbox">
+                                        @if (!Model.actaFallo.Equals(""))
+                                        {
+                                            <input type="checkbox" class="custom-control-input" name="actaFallo" checked disabled>
+                                            <label class="custom-control-label" for="actaFallo">Acta Fallo</label>
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="custom-control-input" name="actaFallo" disabled>
+                                            <label class="custom-control-label" for="actaFallo">Acta Fallo</label>
+                                        }
+
+                                    </div>
+                                    <!--Tabla licitaciones -> campo actaFallo que no sea NULL-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <div class="col-3 mt-5 mb-3">
+                            <button type="submit" class="btn btn-outline-success btn-block btn-sm"> Modificar<span class="far fa-save mx-1"></span></button>
+                            <!--Manda el idLicitacion y muestra el formulario para edicion de licitaciones-->
+                        </div>
+                        <div class="col-3 mt-5 mb-3">
+
+                        </div>
+                        <div class="col-3 mt-5 mb-3">
+                            <button type="button" class="btn btn-outline-warning btn-block btn-sm" data-toggle="modal" data-target="#modalCargarActas">Actas Digitales<span class="far fa-file mx-1"></span></button>
+                            <!--Invoca modal para la carga de actas digitales-->
+                        </div>
+                        <div class="col-3 mt-5 mb-3">
+                            <button type="button" class="btn btn-outline-info btn-block btn-sm" onclick="document.formCambiaRequisiciones.submit();">Requisicion<span class="fas fa-th-list mx-1"></span></button>
+                            <!--Manda el idLicitacion y muestra el formulario para edicion de licitaciones-->
+                        </div>
+                    </div>
+                </div><!--Terminan los renglones por registro encontrado-->
+                <!---------------------------------------------------------------------------------------------------------------->
+            </div> <!--Termina el card de los datos-->
+        </div><!--Termina el col que contiene todo el card-->
+    </div><!--Termina el espacio para meter todo el container-->
+}
+
+<!-- Con este formulario cambia a la vista requisiciones -->
+@using (Html.BeginForm("Index", "Requisiciones", FormMethod.Post, new { @name = "formCambiaRequisiciones" }))
+{
+    <input type="hidden" name="idLicitacion" value="@Model.idLicitacion" />
+}
+<!---------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="modalCargarActas">
+    <!---->
+    <form method="post" action="Carga_Doc" id="Carga_Doc" enctype="multipart/form-data">
+        <input type="hidden" name="idLicitacion" value="@Model.idLicitacion" />
+
+        <!--Inicia el modal con los campos para la creacion de la licitacion-->
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border border-0">
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="modal-header bg-dark">
+                    <!--Inicia la cabecera del modal-->
+                    <h4 class="modal-title text-muted">Carga de actas digitales</h4>
+                    <button type="button" class="close text-muted" data-dismiss="modal">&times;</button>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="modal-body">
+
+                    <div class="row mb-3">
+                        <div class="col-10"></div>
+                        <div class="col-2">
+                            <h6>Accion</h6>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-10">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input custom-file-input-sm" name="doc1">
+                                <label class="custom-file-label" for="actaVisita">Acta de visita.pdf</label>
+                                <!--Tabla usuarios -> campo actaVisita, extraer nombre del archivo-->
+                            </div>
+                        </div>
+                        <div class="col-2 d-flex align-items-center">
+                            <div class="custom-control custom-checkbox mx-auto">
+                                <input type="checkbox" class="custom-control-input" id="actaVisitaModal" name="actaVisitaModal">
+                                <label class="custom-control-label" for="actaVisitaModal"></label>
+                                <!--Si se chequea este check ejecutariamos la accion el campo actaVisita-->
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row mb-3">
+                        <div class="col-10">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input custom-file-input-sm" name="doc2">
+                                <label class="custom-file-label" for="actaAclaraciones">Acta de Aclaraciones.pdf</label>
+                                <!--Tabla usuarios -> campo actaAclaraciones, extraer nombre del archivo-->
+                            </div>
+                        </div>
+                        <div class="col-2 d-flex align-items-center">
+                            <div class="custom-control custom-checkbox mx-auto">
+                                <input type="checkbox" class="custom-control-input" id="actaAclaracionesModal" name="actaAclaracionesModal">
+                                <label class="custom-control-label" for="actaAclaracionesModal"></label>
+                                <!--Si se chequea este check cargariamos o borrariamos el campo actaAclaraciones-->
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row mb-3">
+                        <div class="col-10">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input custom-file-input-sm" name="doc3">
+                                <label class="custom-file-label" for="actaPropuesta">Pendiente acta de Propuesta</label>
+                                <!--Tabla usuarios -> campo actaPropuesta, si es vacio-->
+                            </div>
+                        </div>
+                        <div class="col-2 d-flex align-items-center">
+                            <div class="custom-control custom-checkbox mx-auto">
+                                <input type="checkbox" class="custom-control-input" id="actaPropuestaModal" name="actaPropuestaModal">
+                                <label class="custom-control-label" for="actaPropuestaModal"></label>
+                                <!--Si se chequea este check cargariamos o borrariamos el campo actaAclaraciones-->
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row mb-3">
+                        <div class="col-10">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input custom-file-input-sm" name="doc4">
+                                <label class="custom-file-label" for="actaFallo">Pendiente acta de Fallo</label>
+                                <!--Tabla usuarios -> campo actaFallo, si es vacio-->
+                            </div>
+                        </div>
+                        <div class="col-2 d-flex align-items-center">
+                            <div class="custom-control custom-checkbox mx-auto">
+                                <input type="checkbox" class="custom-control-input" id="actaFalloModal" name="actaPropuestaModal">
+                                <label class="custom-control-label" for="actaFalloModal"></label>
+                                <!--Si se chequea este check visualizariamos el campo actaFallo-->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-outline-primary w-100 btn-sm">Cargar</button>
+                    <!--Boton que carga los archivos al servidor de archivos y guarda la direccion en la base de datos-->
+                    <button type="button" class="btn btn-outline-danger w-100 btn-sm" data-dismiss="modal">Borrar</button>
+                    <!--Boton que elimina los archivos del servidor de archivos y borra la direccion en la base de datos-->
+                </div>
+            </div>
+        </div>
+    </form>
+</div><!--Termina el modal con los campos para la creacion de la licitacion-->
+
+
+@section scripts{
+    <script>
+    //Para que aparezca el nombre del archivo que seleccionamos en el campo FILE
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+         //Script para que aparezcan los tooltips en los campos date
+        $(document).ready(function () {
+            //LLenar Licitacion
+
+            $('[data-toggle="tooltip"]').tooltip();
+            $("#Guarda_Licitacion").submit(function (e) {
+                e.preventDefault();
+               // alert('Hola');
+                url = "@Url.Content("~/Licitaciones/Guarda_Licitacion")";
+                parametros = $(this).serialize();
+                $.post(url, parametros, function (data) {
+                    if (data.a == true) {
+                        alert(data.b);
+                        window.location.href = "@Url.Content("~/Licitaciones")";
+                    }
+                });
+            });
+
+            });
+            //Scrip pata Guardar los Documentos
+               $(document).ready(function () {
+
+            $('[data-toggle="tooltip"]').tooltip();
+                   $("").submit(function (e) {
+                e.preventDefault();
+                //alert('Entraste ascrip de cargadoc'); Carga_Doc
+                url = "@Url.Content("~/Licitaciones/")";
+                parametros = $(this).serialize();
+                $.post(url, parametros, function (data) {
+                    if (data.a == true) {
+                        alert(data.b);
+                        window.location.href = "@Url.Content("~/Licitaciones/Licitaciones")";
+                    }
+                });
+            });
+
+        });
+    </script>
+}

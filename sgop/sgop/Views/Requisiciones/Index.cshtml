@@ -1,0 +1,560 @@
+﻿@model sgop.Models.LicitacionesRequisicionesViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<script>
+    var agregados = [];
+    @foreach(var req in ViewBag.lstRequisiciones)
+    {
+        @:var objTemp = new Object();
+        @:objTemp["idConcepto"] = "@req.idConcepto";
+        @:objTemp["cantidad"] = "@req.cantidad";
+        @:agregados.push(objTemp);
+    }
+</script>
+
+<div class="container-fluid" style="margin-top: 5%">
+    <!--BRAULIO-->
+    <div class="col-12">
+        <div class="card border border-0 p-0 h-100">
+            <!--Inicia el card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-header bg-dark rounded-lg">
+                <!--Inicia la cabecera del card-->
+                <div class="row mb-1">
+                    <!--Inician los campos del primer renglon-->
+                    <div class="col-12 text-center">
+                        <h4 class="text-muted">Catalogo de conceptos, cantidades y unidades de medicion.</h4>
+                    </div>
+                </div><!--Termina el primer renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inicia el segundo renglon de campos-->
+                    <div class="col-10">
+                        <h6 class="text-light">@Model.nombreObra</h6>
+                    </div>
+                    <div class="col-2 px-1">
+                        @if (Model.fechaPropuesta >= DateTime.Now && Model.idEstatus == 1)
+                        {
+                            <button id="btnGuardar" type="button" class="btn btn-outline-success btn-block btn-sm">Guardar <i class="far fa-save mx-1"></i></button>
+                        }
+                        <!--Manda el submit del form crearRequisicion con cada linea de la tabla-->
+                    </div>
+                </div><!--Termina el segundo renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inicia el segundo renglon de campos-->
+                    <div class="col-5">
+                        <h6 class="text-light">Licitacion: @Model.noLicitacion</h6>
+                        <!--Tabla licitaciones -> campo noLicitacion-->
+                    </div>
+                    <div class="col-5">
+                        <h6 class="text-light">Municipio: @Model.nombreMunicipio</h6>
+                        <!--Tabla licitaciones inner join catalogoMunicipios -> campo descripcion-->
+                    </div>
+                    <div class="col-2 px-1">
+                        <button type="button" class="btn btn-outline-danger btn-block btn-sm" onclick="document.formRegresaVista.submit();">Regresar<span class="fas fa-sign-out-alt mx-1"></span></button>
+                        <!--Manda la visualizacion de la licitacion-->
+                    </div>
+                </div><!--Termina el segundo renglon de campos-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mb-1">
+                    <!--Inicia el segundo renglon de campos-->
+                    <div class="col-5">
+                        <h6 class="text-light">Localidad: @Model.localidad</h6>
+                        <!--Tabla licitaciones -> campo localidad-->
+                    </div>
+                    <div class="col-3">
+                        @if (Model.idRequisicion == 0)
+                        {
+                            <h6 class="text-light">Requisicion: S/N</h6>
+                        }
+                        else
+                        {
+                            <h6 class="text-light">Requisicion: @Model.idRequisicion</h6>
+                        }
+                        <!--Tabla licitaciones -> campo idRequisicion-->
+                    </div>
+                    <div class="col-2 px-1">
+                        <button type="button" class="btn btn-outline-info btn-block btn-sm" data-toggle="modal" data-target="#modalAgregarMaterial" disabled>Ejecucion Mensual<span class="fas fa-list mx-1"></span></button>
+                        <!--Manda a llamar al plan de ejecucionMensual-->
+                    </div>
+                    <div class="col-2 px-1">
+                        @if (Model.fechaPropuesta >= DateTime.Now && Model.idEstatus == 1)
+                        {
+                            <button type="button" class="btn btn-outline-warning btn-block btn-sm" data-toggle="modal" data-target="#modalAgregarMaterial">Añadir<span class="fas fa-list mx-1"></span></button>
+                        }
+                        <!--Abre el modal para agregar un material de la lista de materiales-->
+                    </div>
+                </div><!--Termina el segundo renglon de campos-->
+            </div><!--Termina la cabecera del card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-body">
+                <!-- Con este formulario cambia a la misma vista cuando se haga una actualizacion o eliminacion -->
+                @using (Html.BeginForm("Index", "Requisiciones", FormMethod.Post, new { @name = "formCambiaVista" }))
+                {
+                    <input type="hidden" name="idLicitacion" value="@Model.idLicitacion" />
+                }
+                @using (Html.BeginForm("Editar_Licitacion", "Licitaciones", FormMethod.Post, new { @name = "formRegresaVista" }))
+                {
+                    <input type="hidden" name="id_Licitacion" value="@Model.idLicitacion" />
+                }
+                <table id="tablaAddConceptos" class="table table-striped table-bordered table-responsive-xl">
+                    <thead>
+                        <tr>
+                            <th class="text-muted font-weight-bolder text-center">Clave</th>
+                            <th class="text-muted font-weight-bolder text-center">Descripción</th>
+                            <th class="text-muted font-weight-bolder text-center">Unidad</th>
+                            <th class="text-muted font-weight-bolder text-center">Cantidad</th>
+                            <th class="text-muted font-weight-bolder text-center">P. Unitario</th>
+                            <th class="text-muted font-weight-bolder text-center">Subtotal</th>
+                            @if (Model.fechaPropuesta >= DateTime.Now && Model.idEstatus == 1)
+                            {
+                                <th class="text-center"></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody id="contenidoTablaAddConceptos">
+                        @{
+                            double total = 0;
+                        }
+                        @foreach (var req in ViewBag.lstRequisiciones)
+                        {
+                            double subtotal = req.cantidad * req.precioUnitario;
+                            total += subtotal;
+                            <tr id="fila.@req.idConceptoEncrypt">
+                                <td>@req.clave</td>
+                                <td>@req.descripcion</td>
+                                <td>@req.unidad</td>
+                                <td id="cantConcepto.@req.idConceptoEncrypt">@req.cantidad</td>
+                                <td>@req.precioUnitario</td>
+                                <td id="subtotal.@req.idConceptoEncrypt">@subtotal</td>
+                                @if (Model.fechaPropuesta >= DateTime.Now && Model.idEstatus == 1)
+                                {
+                                    <td class="text-center">
+                                        <button onclick="editarCantidad('@req.idConceptoEncrypt', '@req.cantidad', '@req.descripcion');" class="btn btn-success">Editar <i class="fa fa-edit"></i></button>
+                                        <button onclick="quitarConcepto('@req.idConceptoEncrypt', '@req.descripcion')" class="btn btn-danger">Quitar <i class="fa fa-trash"></i></button>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot id="footerTablaAddConceptos">
+                        <tr>
+                            <td colspan="5" class="text-muted font-weight-bolder">TOTAL</td>
+                            <td class="text-muted font-weight-bolder" id="total">@total</td>
+                            @if (Model.fechaPropuesta >= DateTime.Now && Model.idEstatus == 1)
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                    </tfoot>
+                </table>
+                <!---------------------------------------------------------------------------------------------------------------->
+            </div><!--Terminan body del card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+        </div><!--Termina el card de los datos-->
+    </div><!--Termina el col que contiene todo el card-->
+</div><!--Termina el espacio para meter todo el container-->
+<!---------------------------------------------------------------------------------------------------------------->
+
+<div class="modal fade" id="modalAgregarMaterial" role="dialog" aria-labelledby="modalAgregarMaterial" aria-hidden="true">
+    <!--Inicia el modal con los campos para la creacion de la licitacion-->
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border border-0">
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-header bg-dark text-center border border-0 p-0 px-3">
+                <!--Inicia la cabecera del modal-->
+                <h5 class="modal-title text-muted">Lista de Materiales</h5>
+                <button type="button" class="close text-muted" data-dismiss="modal">&times;</button>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="bg-dark text-center p-3">
+                <!--Inicia la cabecera del modal-->
+                <form method="post" action="#" id="crearLicitacion">
+                    <div class="row mb-3">
+                        <div class="col-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Buscar</span>
+                                </div>
+                                <input name="busqueda" value="" id="IDBusqueda" class="form-control" placeholder="Clave o Descripción" onkeyup="getPageData(1, document.getElementById('selectedId').value, $(this).val(), document.getElementById('IDBuscarPor').value, agregados);">
+                                <!--Tabla catalogoConceptos -> campo clave-->
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group input-group-sm">
+                                <select id="IDBuscarPor" name="idMunicipio" class="custom-select custom-select-sm" onchange="getPageData(1, document.getElementById('selectedId').value, document.getElementById('IDBusqueda').value, $(this).val(), agregados);">
+                                    <option selected value="todas">Todas Unidades</option>
+                                    @foreach (var item in ViewBag.lstUnidades)
+                                    {
+                                        <option value="@item.unidad">@item.unidad</option>
+                                    }
+                                </select>
+                                <!--Tabla catalogoConceptos -> campo unidad uno de cada tipo-->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-xl-12">
+                        <div class="input-group mb-3 justify-content-end">
+                            <label class="input-group-text" for="selectedId">Mostrar</label>
+                            <select style="max-width:4rem;" class="custom-select" ng-model="pageSize" id="selectedId" onchange="getPageData(1, $(this).val(), document.getElementById('IDBusqueda').value, document.getElementById('IDBuscarPor').value, agregados);">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <table id="tablaConceptos" class="table table-striped table-bordered table-responsive-xl">
+                    <thead>
+                        <tr>
+                            <th class="text-muted font-weight-bolder text-center">Clave</th>
+                            <th class="text-muted font-weight-bolder text-center">Descripción</th>
+                            <th class="text-muted font-weight-bolder text-center">Unidad</th>
+                            <th class="text-muted font-weight-bolder text-center">P. Unitario</th>
+                            @if (Model.idEstatus == 1)
+                            {
+                                <th class="text-center"></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody id="contenidoTablaConceptos"></tbody>
+                </table>
+                <div class="row">
+                    <div class="col col-xl-12" style="text-align:center;">
+                        <div id="paged"></div>
+                    </div>
+                </div>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+        </div>
+    </div>
+</div><!--Termina el modal con los campos para la creacion de la licitacion-->
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            getPageData(1, 10);
+            $('#modalAgregarMaterial').on('show.bs.modal', function (e) {
+                getPageData(1, document.getElementById('selectedId').value, document.getElementById('IDBusqueda').value, document.getElementById('IDBuscarPor').value, agregados);
+            });
+
+            $("#btnGuardar").click(function () {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡ESPERE!',
+                    text: 'Guardando...',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    showCloseButton: false
+                });
+                jQuery.ajax({
+                    url: "@Url.Content("~/Requisiciones/GuardaRequisicion")",
+                    data: {
+                        'idLicitacionEncrypt': '@Model.idLicitacionEncrypt',
+                        'conceptosAgregar': JSON.stringify(agregados)
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if (data == "noExisteLicitacion") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: '¡ERROR!',
+                                text: '!No se encuentra la licitación'
+                            });
+                        }
+                        else if (data == "requisicionGuardada") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡REQUISICIÓN ACTUALIZADA!',
+                                text: '',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                confirmButtonText: 'OK',
+                                showCancelButton: false,
+                                showCloseButton: false
+                            }).then((result) => {
+                                document.formCambiaVista.submit();
+                            });
+                        }
+                    },
+                    error: function () { }
+                });
+            });
+
+        });
+    </script>
+
+    <script>
+        function agregarConcepto(idConceptoEncrypt) {
+            Swal.fire({
+                title: 'Cantidad de unidades',
+                input: 'number',
+                inputAttributes: {
+                    min: 1
+                },
+                inputValue: '1',
+                showCancelButton: true,
+                confirmButtonText: 'Agregar',
+                cancelButtonText: 'Cancelar',
+                showCloseButton: true,
+                inputValidator: (value) => {
+                    if (!value || value <= 0) {
+                        return 'Agregue el número de unidades a utilizar'
+                    }
+                }
+            }).then((result) => {
+                if (result.value) {
+                    jQuery.ajax({
+                        url: "@Url.Content("~/Requisiciones/AddConceptoTablaTemp")",
+                        data: {
+                            'idConceptoEncrypt': idConceptoEncrypt,
+                            'cantidad': result.value,
+                            'conceptosAgregados': JSON.stringify(agregados),
+                            'fechaPropuesta': '@Model.fechaPropuesta'
+                        },
+                        type: "POST",
+                        success: function (data) {
+                            document.getElementById("contenidoTablaAddConceptos").innerHTML += data[0];
+                            document.getElementById("footerTablaAddConceptos").innerHTML = data[1];
+                            $('#modalAgregarMaterial').modal('hide');
+
+                            var objTmp = new Object();
+                            objTmp["idConcepto"] = data[2];
+                            objTmp["cantidad"] = data[3];
+                            agregados.push(objTmp);
+                        },
+                        error: function () { }
+                    });
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {}
+            });
+        }
+
+        function editarCantidad(idConceptoEncrypt, cantidad, concepto) {
+            Swal.fire({
+                title: 'Cantidad de unidades para ' + concepto,
+                input: 'number',
+                inputAttributes: {
+                    min: 1
+                },
+                inputValue: cantidad,
+                showCancelButton: true,
+                confirmButtonText: 'Agregar',
+                cancelButtonText: 'Cancelar',
+                showCloseButton: true,
+                inputValidator: (value) => {
+                    if (!value || value <= 0) {
+                        return 'Agregue el número de unidades a utilizar'
+                    }
+                }
+            }).then((result) => {
+                if (result.value) {
+                    jQuery.ajax({
+                        url: "@Url.Content("~/Requisiciones/DesencriptaIDConcepto")",
+                        data: {
+                            'idConceptoEncrypt': idConceptoEncrypt,
+                            'cantidad': result.value
+                        },
+                        type: "POST",
+                        success: function (data) {
+                            var agregadosTemp = [];
+                            for (i = 0; i < agregados.length; i++) {
+                                if (agregados[i]['idConcepto'] != data[0]) {
+                                    agregadosTemp.push(agregados[i]);
+                                }
+                            }
+                            var objTmp = new Object();
+                            objTmp["idConcepto"] = data[0];
+                            objTmp["cantidad"] = result.value;
+                            agregadosTemp.push(objTmp);
+                            agregados = agregadosTemp;
+
+                            document.getElementById("cantConcepto." + idConceptoEncrypt).innerHTML = result.value;
+                            document.getElementById("subtotal." + idConceptoEncrypt).innerHTML = data[1];
+
+                            jQuery.ajax({
+                                url: "@Url.Content("~/Requisiciones/getTotalRequisicion")",
+                                data: {
+                                    'conceptosAgregados': JSON.stringify(agregados)
+                                },
+                                type: "POST",
+                                success: function (data2) {
+                                    document.getElementById("total").innerHTML = data2;
+                                },
+                                error: function () { }
+                            });
+                        },
+                        error: function () { }
+                    });
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {}
+            });
+        }
+
+        function quitarConcepto(idConceptoEncrypt, concepto) {
+            Swal.fire({
+                title: '¿Deseas quitar el concepto ' + concepto + '?',
+                text: '',
+                icon: 'question',
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Quitar',
+                cancelButtonText: 'Cancelar',
+            }).then((result) => {
+                if (result.value) {
+                    jQuery.ajax({
+                        url: "@Url.Content("~/Requisiciones/DesencriptaIDConcepto")",
+                        data: {
+                            'idConceptoEncrypt': idConceptoEncrypt,
+                        },
+                        type: "POST",
+                        success: function (data) {
+                            var agregadosTemp = [];
+                            for (i = 0; i < agregados.length; i++) {
+                                if (agregados[i]['idConcepto'] != data[0]) {
+                                    agregadosTemp.push(agregados[i]);
+                                }
+                            }
+                            agregados = agregadosTemp;
+
+                            document.getElementById("fila." + idConceptoEncrypt).innerHTML = "";
+
+                            jQuery.ajax({
+                                url: "@Url.Content("~/Requisiciones/getTotalRequisicion")",
+                                data: {
+                                    'conceptosAgregados': JSON.stringify(agregados)
+                                },
+                                type: "POST",
+                                success: function (data2) {
+                                    document.getElementById("total").innerHTML = data2;
+                                },
+                                error: function () { }
+                            });
+                        },
+                        error: function () { }
+                    });
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {}
+            });
+        }
+    </script>
+
+    <!--Script para la paginación-->
+    <script>
+        function getPageData(pageNum, pageSize, busqueda, buscarPor, conceptosAgregados) {
+            $("#contenidoTablaConceptos").html('<tr>' +
+                '<td colspan = "5" class="text-center" >' +
+                    '<img width="8%" height="5%" src="@Url.Content("~/Res/img/layouts/loader.gif")" />' +
+                    '<br />' +
+                    '<h6>Un momento, cargando...</h6>' +
+                '</td>' +
+            '</tr>');
+            $.getJSON("@Url.Content("~/Requisiciones/getPaggedDataConceptos")", { pageNumber: pageNum, pageSize: pageSize, busqueda: busqueda, buscarPor: buscarPor, conceptosAgregados: JSON.stringify(conceptosAgregados) }, function (response) {
+                var rowData = "";
+                if (response.Data.length > 0) {
+                    for (var i = 0; i < response.Data.length; i++) {
+                        rowData += '<tr> ';
+                        rowData += '<td style="text-muted font-weight-bolder">' + response.Data[i].clave + '</td>';
+                        rowData += '<td style="text-muted font-weight-bolder">' + response.Data[i].descripcion + '</td>';
+                        rowData += '<td style="text-muted font-weight-bolder">' + response.Data[i].unidad + '</td>';
+                        rowData += '<td style="text-muted font-weight-bolder">' + response.Data[i].precioUnitario + '</td>';
+                        @if (Model.idEstatus == 1) {
+                            @:rowData += '<td>';
+                            @:rowData += '<div class="input-group">';
+                            @:rowData += '<a href="#" style="min-width:7rem;" class="btn btn-success form-control" data-toggle="modal" onclick="agregarConcepto(\'' + response.Data[i].idConceptoEncrypt + '\');" title="AGREGAR CONCEPTO"><i class="fa fa-plus-circle"></i> Agregar</a>';
+                            @:rowData += '</div>';
+                            @:rowData += '</td>';
+                        }
+                        rowData += '</tr>';
+                    }
+                }
+                else {
+                    @if (Model.idEstatus == 1)
+                    {
+                        @:rowData = '<tr><td colspan="5" style="text-align:center;">NO SE ENCONTRARON CONCEPTOS</td></tr>';
+                    }
+                    else
+                    {
+                        @:rowData = '<tr><td colspan="4" style="text-align:center;">NO SE ENCONTRARON CONCEPTOS</td></tr>';
+                    }
+                }
+                $("#contenidoTablaConceptos").html(rowData);
+                paggingTemplate(response.totalPages, response.currentPage);
+            });
+        }
+
+        function paggingTemplate(totalPage, currentPage) {
+            var pageSize = document.getElementById("selectedId").value;
+            var template = "";
+            var pageNumberArray = Array();
+
+            var countIncr = 1;
+            for (var i = currentPage; i <= totalPage; i++) {
+                pageNumberArray[0] = currentPage;
+                if (totalPage != currentPage && pageNumberArray[countIncr - 1] != totalPage) {
+                    pageNumberArray[countIncr] = i + 1;
+                }
+                countIncr++;
+            }
+            //pageNumberArray = pageNumberArray.slice(0, 5);
+            var firstPage = 1;
+            var lastPage = totalPage;
+            if (totalPage != currentPage) {
+                var forwardOne = currentPage + 1;
+            }
+            var backwardOne = 1;
+            if (currentPage > 1) {
+                backwardOne = currentPage - 1;
+            }
+
+            if (totalPage == 0) {
+                template = "<p>Sin registros</p>";
+            }
+            else {
+                template = "<p>Página " + currentPage + " de " + totalPage + "</p>";
+            }
+            template += '<ul class="pagination justify-content-end">';
+            if (currentPage == 1 || totalPage == 0) {
+                template += '<li class="page-item disabled"><a class="page-link">Primera</a></li>';
+                template += '<li class="page-item disabled"><a class="page-link"><i class="fa fa-backward"></a></i>';
+            }
+            else {
+                template += '<li class="page-item"><a class="page-link" href="#" onclick="getPageData(' + firstPage + ',' + pageSize + ', \'' + document.getElementById("IDBusqueda").value + '\', \'' + document.getElementById("IDBuscarPor").value + '\');return false;">Primera</a></li>';
+                template += '<li class="page-item"><a class="page-link" href="#" onclick="getPageData(' + backwardOne + ',' + pageSize + ', \'' + document.getElementById("IDBusqueda").value + '\', \'' + document.getElementById("IDBuscarPor").value + '\');return false;"><i class="fa fa-backward"></a></i>';
+            }
+
+            var numberingLoop = "";
+            var yaentro = "no";
+            for (var i = 0; i < pageNumberArray.length; i++) {
+                if (yaentro == "no") {
+                    numberingLoop += '<li class="page-item active"><a class="page-link" onclick="return false;" href="#">' + pageNumberArray[i] + ' &nbsp;&nbsp;</a></li>'
+                    yaentro = "si;"
+                }
+                else {
+                    numberingLoop += '<li class="page-item"><a class="page-link" onclick="getPageData(' + pageNumberArray[i] + ', ' + pageSize + ', \'' + document.getElementById('IDBusqueda').value + '\', \'' + document.getElementById('IDBuscarPor').value + '\');return false;" href="#">' + pageNumberArray[i] + ' &nbsp;&nbsp;</a></li>'
+                }
+            }
+
+            if (currentPage == lastPage || totalPage == 0) {
+                template += numberingLoop + '<li class="page-item disabled"><a class="page-link"><i class="fa fa-forward"></i></a></li>';
+                template += '<li class="page-item disabled"><a class="page-link">Última</a></li></ul>';
+            }
+            else {
+                template += numberingLoop + '<li class="page-item"><a class="page-link" href="#" onclick="getPageData(' + forwardOne + ', ' + pageSize + ', \'' + document.getElementById('IDBusqueda').value + '\', \'' + document.getElementById("IDBuscarPor").value + '\');return false;" ><i class="fa fa-forward"></i></a></li>';
+                template += '<li class="page-item"><a class="page-link" href="#" onclick="getPageData(' + lastPage + ', ' + pageSize + ', \'' + document.getElementById("IDBusqueda").value + '\', \'' + document.getElementById("IDBuscarPor").value + '\');return false;">Última</a></li></ul>';
+            }
+            $("#paged").html(template);
+        }
+    </script>
+}

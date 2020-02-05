@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/layout_login.cshtml";
+}
+
+@if (ViewBag.message != null)
+{
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <div class="alert alert-dismissible fade show mt-5 @(ViewBag.status == "Error!" ? "alert-warning" : "alert-success")" role="alert">
+                <strong>@ViewBag.status</strong> @ViewBag.message
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div>
+}
+<div id="load" class="loader">
+</div>
+<div class="card shadow-lg m-5 mx-auto w-50 border border-0">
+    <!--Inicia el CARD-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="card-header text-right">
+        <!--Inicia la cabecera del CARD-->
+        <h2 class="text-muted font-weight-bolder">Control de Acceso</h2><!--Titulo-->
+    </div><!--Termina la cabecera del CARD-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="card-body border border-right-0 border-left-0 border-info">
+        <!--Inicia el cuerpo del CARD-->
+        <div class="row">
+            <div class="col-6">
+                <!--Inicia columna con los campos del lado izquierdo-->
+                <form id="ingresoUsuario">
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h3 class="text-muted font-weight-bold">Bienvenido</h3><!--Titulo del lado izquierdo-->
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <div class="col-12 my-3">
+                            <div class="input-group input-group-sm w-75 mx-auto">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fas fa-user-tie"></span>
+                                </div>
+                                <input type="text" class="form-control" id="user" name="user" autofocus placeholder="Usuario">
+                                <!--Campo para introducir el usuario, tabla usuarios -> campo usuario-->
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div class="input-group input-group-sm w-75 mx-auto">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fas fa-lock"></span>
+                                </div>
+                                <input type="password" class="form-control" id="pass" name="pass" placeholder="Password">
+                                <!--Campo para introducir la contraseña, tabla usuarios -> campo password-->
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="w-75 mx-auto my-3">
+                                <button type="submit" class="btn btn-primary btn-block btn-sm">INGRESAR<span class="fas fa-sign-in-alt mx-1"></span></button>
+                                <!--Boton que manda el formulario para comparar en la base de datos las coincidencias de usuario y password, asi como el estado del campo bloqueado de la tabla usuarios-->
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                </form>
+            </div><!--Termina columna con los campos del lado izquierdo-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <!--Inicia la columna con las opciones del lado derecho-->
+            <div class="col-6 border border-info border-right-0 border-top-0 border-bottom-0 " id="recuperarPassword">
+                <!---------------------------------------------------------------------------------------------------------------->
+                <br>
+                <div class="row">
+                    <div class="col-12 text-center mb-3">
+                        <h5 class="text-muted font-weight-bold">¿Olvido su contraseña?</h5><!--Titulo para el lado derecho-->
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="w-75 mx-auto my-3">
+                            <button type="button" id="idRecuperar" class="btn btn-success btn-block btn-sm">RECUPERAR<span class="fas fa-reply mx-1"></span></button>
+                            <!--Boton que invoca el cambio del contenido del div con id=recuperarPassword por el contenido de recuperarPassword-->
+                        </div>
+                    </div>
+                </div>
+
+                <!---------------------------------------------------------------------------------------------------------------->
+            </div><!--Termina la columna del lado derecho-->
+        </div><!--Termina el row con los campos-->
+    </div><!--Termina el body del card-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="card-footer bg-dark">
+        <!--Inicia el footer con la marca de agua propia de la empresa-->
+        <div class="row">
+            <div class="col-12 text-center">
+                <h6 class="text-muted font-weight-bold">PineAPPs</h6>
+            </div>
+        </div>
+    </div><!--Termina el fotter con la marca de agua propia de la empresa-->
+    <!---------------------------------------------------------------------------------------------------------------->
+</div><!--Termina el card completo-->
+@using (Html.BeginForm("Index", "Constructora", FormMethod.Post))
+{
+    @Html.Hidden("idUser")
+    <input type="submit" id="btn" style="visibility:hidden;" />
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#ingresoUsuario').submit(function (e) {
+                e.preventDefault();
+
+                url = "@Url.Content("~/Access/Enter")"
+                parametros = $('#ingresoUsuario').serialize();
+                $.post(url, parametros, function (data) {
+                    if (data.a == true) {
+                        $('#load').addClass("loader");
+                        $('#load').html('<img src="/Res/img/load.gif" />');
+
+                        if (data.b != "" || data.b != null) {
+                            $('#idUser').val(data.b);
+                            $('#btn').click();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                text: "Introduce un Usuario valido."
+                            })
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            text: data
+                        })
+                    }
+                })
+            })
+        })
+    </script>
+}

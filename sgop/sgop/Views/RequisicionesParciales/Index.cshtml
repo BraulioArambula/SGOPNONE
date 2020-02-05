@@ -1,0 +1,500 @@
+﻿@model sgop.Models.LicitacionesRequisicionesViewModel
+
+<script>
+    var reqAdd = [];
+    @foreach (var reqParc in ViewBag.lstReqParciales)
+    {
+        @:var objTemp = new Object();
+
+        @:objTemp["idConcepto"] = "@reqParc.idConcepto";
+        @:objTemp["idMaterial"] = "@reqParc.idMaterial";
+        @:objTemp["cantidad"] = "@reqParc.cantidad";
+        @:objTemp["disponible"] = "@reqParc.cantidadDisponible";
+        @:objTemp["agregado"] = "1";
+        @:reqAdd.push(objTemp);
+    }
+</script>
+
+<div class="container-fluid" style="margin-top: 5%">
+    <!--Inicia el container del card-->
+    <div class="col-12">
+        <div class="card border border-0 p-0 h-100">
+            <!--Inicia el card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-header bg-dark">
+                <!--Inicia la cabecera del card-->
+                <form method="post" action="#" id="buscarLicitaciones">
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row mb-1">
+                        <!--Inician los campos del primer renglon-->
+                        <div class="col-12 text-center">
+                            <h4 class="text-muted">Creacion de requisicion parcial.</h4>
+                        </div>
+                    </div><!--Termina el primer renglon de campos-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row mb-1">
+                        <!--Inicia el segundo renglon de campos-->
+                        <div class="col-10">
+                            <h6 class="text-light">@Model.nombreObra</h6>
+                        </div>
+
+                    </div><!--Termina el segundo renglon de campos-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row mb-1">
+                        <!--Inicia el segundo renglon de campos-->
+                        <div class="col-5">
+                            <h6 class="text-light">Licitacion: @Model.noLicitacion</h6>
+                            <!--Tabla licitaciones -> campo noLicitacion-->
+                        </div>
+                        <div class="col-5">
+                            <h6 class="text-light">Municipio: @Model.nombreMunicipio</h6>
+                            <!--Tabla licitaciones inner join catalogoMunicipios -> campo descripcion-->
+                        </div>
+                        <div class="col-2 px-1">
+                            <button id="btnGuardar" type="button" class="btn btn-outline-success btn-block btn-sm">Guardar<span class="far fa-save mx-1"></span></button>
+                            <!--Manda el submit del form crearRequisicion con cada linea de la tabla-->
+                        </div>
+                    </div><!--Termina el segundo renglon de campos-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row mb-1">
+                        <!--Inicia el segundo renglon de campos-->
+                        <div class="col-5">
+                            <h6 class="text-light">Localidad: @Model.localidad</h6>
+                            <!--Tabla licitaciones -> campo localidad-->
+                        </div>
+                        <div class="col-3">
+                            <h6 class="text-light">Requisicion: @Model.idRequisicionRango</h6>
+                            <!--Tabla licitaciones -> campo idRequisicion-->
+                        </div>
+                        <div class="col-2">
+                            <div class="form-row">
+                                <div class="col">
+                                    <h6 class="text-light">Parcial: </h6>
+                                </div>
+                                <div class="col">
+                                    <select id="noRequisicion" name="noRequisicion" class="form-control form-control-sm" onchange="cambiaRequisicion();">
+                                        @foreach (var item in ViewBag.lstReqParcialesDistinct)
+                                        {
+                                            <option value="@item.noRequisicion">@item.noRequisicion</option>
+                                        }
+                                        <option value="nueva">Nueva</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--Tabla licitaciones -> campo idRequisicion-->
+                        </div>
+                        <div class="col-2 px-1">
+                            <button type="button" class="btn btn-outline-danger btn-block btn-sm" onclick="document.formRegresaVista.submit();">Regresar<span class="fas fa-sign-out-alt mx-1"></span></button>
+                            <!--Manda la visualizacion del proyecto-->
+                        </div>
+                    </div><!--Termina el segundo renglon de campos-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                </form><!--Termina el formulario para la busqueda de licitaciones-->
+            </div><!--Termina la cabecera del card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-body">
+                @using (Html.BeginForm("Index", "RequisicionesParciales", FormMethod.Post, new { @name = "formCambiaVista" }))
+                {
+                    <input type="hidden" name="idLicitacion" value="@Model.idLicitacion" />
+                }
+                @using (Html.BeginForm("VisualizarProyecto", "Constructora", FormMethod.Post, new { @name = "formRegresaVista" }))
+                {
+                    <input type="hidden" name="idProyecto" value="@Model.idProyecto" />
+                }
+                <table id="tablaAddConceptos" class="table table-striped table-responsive-xl">
+                    <thead>
+                        <tr>
+                            <th class="text-muted font-weight-bolder">Clave</th>
+                            <th class="text-muted font-weight-bolder">Descripción</th>
+                            <th class="text-muted font-weight-bolder text-center">Cantidad</th>
+                            <th class="text-muted font-weight-bolder text-center">Disponible</th>
+                            <th class="text-muted font-weight-bolder text-center">Requisicion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contenidoTablaRequisiciones">
+                        @{ int idMaterialAdd = 0;}
+                        @foreach (var item in ViewBag.lstRequisicionesDistinct)
+                        {
+                            <!-- PINTA EL CONCEPTO-->
+                            foreach (var item2 in ViewBag.lstRequisiciones)
+                            {
+                                if (item.idConcepto == item2.idConcepto)
+                                {
+                                    <tr class="bg-dark" style="color:white;">
+                                        <td>@item2.clave</td>
+                                        <td colspan="5">@item2.descripcion</td>
+                                    </tr>
+                                    break;
+                                }
+                            }
+
+                            <!-- PINTA LOS MATERIALES-->
+                            foreach (var item2 in ViewBag.lstRequisiciones)
+                            {
+                                if (item.idConcepto == item2.idConcepto)
+                                {
+                                    foreach (var reqParc in ViewBag.lstReqParciales)
+                                    {
+                                        if (item2.idConcepto == reqParc.idConcepto && item2.idMaterial == reqParc.idMaterial)
+                                        {
+                                            idMaterialAdd = item2.idMaterial;
+                                            <tr class="bg-light">
+                                                <td>
+                                                    @if (!reqParc.aprobada.Equals("1"))
+                                                    {
+                                                        <div class="btn-group">
+                                                            @if (reqParc.cantidad != 0)
+                                                            {
+                                                                <button title="Aprobar la requisición" class="btn btn-primary btn-sm rounded te" type="button" id="btnAprobar.@reqParc.idConcepto.@reqParc.idMaterial" onclick="aprobarReq('@reqParc.idConcepto','@reqParc.idMaterial', '@reqParc.descripcionMaterial', @reqParc.cantidad);"><i class="fa fa-check-circle"></i> Aprobar</button>
+                                                                <button title="Agregar cantidad de material" class="btn btn-success btn-sm rounded" type="button" style="display:none;" id="btnAgregar.@reqParc.idConcepto.@reqParc.idMaterial" onclick="agregaRequisicionTabla('@reqParc.idConcepto','@reqParc.idMaterial', '@reqParc.descripcionMaterial', @reqParc.cantidadDisponible);"><i class="fa fa-plus-circle"></i> Agregar</button>
+                                                                <button title="Quitar la cantidad de material" class="btn btn-danger btn-sm rounded" type="button" id="btnQuitar.@reqParc.idConcepto.@reqParc.idMaterial" onclick="quitaRequisicionTabla('@reqParc.idConcepto','@reqParc.idMaterial');"><i class="fa fa-times-circle"></i> Quitar</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button title="Agregar cantidad de material" class="btn btn-success btn-sm rounded" type="button" id="btnAgregar.@reqParc.idConcepto.@reqParc.idMaterial" onclick="agregaRequisicionTabla('@reqParc.idConcepto','@reqParc.idMaterial', '@reqParc.descripcionMaterial', @reqParc.cantidadDisponible);"><i class="fa fa-plus-circle"></i> Agregar</button>
+                                                                <button title="Quitar la cantidad de material" class="btn btn-danger btn-sm rounded" type="button" style="display:none;" id="btnQuitar.@reqParc.idConcepto.@reqParc.idMaterial" onclick="quitaRequisicionTabla('@reqParc.idConcepto','@reqParc.idMaterial');"><i class="fa fa-times-circle"></i> Quitar</button>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <strong><a href="#" style="color:black;" title="Ver N° Documento">REQUISICIÓN APROBADA</a></strong>
+                                                    }
+                                                </td>
+                                                <td>@reqParc.descripcionMaterial</td>
+                                                <td class="text-center">@reqParc.cantReqXcantMat</td>
+                                                @if (reqParc.cantidadDisponible > 0)
+                                                {
+                                                    <td class="text-center" id="campoDisponible.@reqParc.idConcepto.@reqParc.idMaterial">@reqParc.cantidadDisponible</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-center text-danger" id="campoDisponible.@reqParc.idConcepto.@reqParc.idMaterial">@reqParc.cantidadDisponible</td>
+                                                }
+                                                <td class="text-center" id="campoRequisicion.@reqParc.idConcepto.@reqParc.idMaterial">@reqParc.cantidad</td>
+                                            </tr>
+                                            break;
+                                        }
+                                    }
+
+                                    if (item2.idMaterial != idMaterialAdd)
+                                    {
+                                        <tr class="bg-light">
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-success btn-sm rounded" type="button" id="btnAgregar.@item2.idConcepto.@item2.idMaterial" onclick="agregaRequisicionTabla('@item2.idConcepto','@item2.idMaterial', '@item2.descripcionMaterial', @item2.cantReqXcantMat);"><i class="fa fa-plus-circle"></i> Agregar</button>
+                                                    <button class="btn btn-danger btn-sm rounded" type="button" id="btnQuitar.@item2.idConcepto.@item2.idMaterial" style="display:none;" onclick="quitaRequisicionTabla('@item2.idConcepto','@item2.idMaterial');"><i class="fa fa-times-circle"></i> Quitar</button>
+                                                </div>
+                                            </td>
+                                            <td>@item2.descripcionMaterial</td>
+                                            <td class="text-center">@item2.cantReqXcantMat</td>
+                                            @if (item2.cantReqXcantMat > 0)
+                                            {
+                                                <td class="text-center" id="campoDisponible.@item2.idConcepto.@item2.idMaterial">@item2.cantReqXcantMat</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center text-danger" id="campoDisponible.@item2.idConcepto.@item2.idMaterial">@item2.cantReqXcantMat</td>
+                                            }
+                                            <td class="text-center" id="campoRequisicion.@item2.idConcepto.@item2.idMaterial">0</td>
+                                        </tr>
+                                        idMaterialAdd = 0;
+                                    }
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div><!--Terminan body del card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+        </div><!--Termina el card de los datos-->
+    </div><!--Termina el col que contiene todo el card-->
+</div><!--Termina el espacio para meter todo el container-->
+<!---------------------------------------------------------------------------------------------------------------->
+
+@section scripts{
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+        $("#btnGuardar").click(function () {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡ESPERE!',
+                    text: 'Guardando...',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    showCloseButton: false
+                });
+                jQuery.ajax({
+                    url: "@Url.Content("~/RequisicionesParciales/GuardaRequisicion")",
+                    data: {
+                        'noRequisicion': document.getElementById('noRequisicion').value,
+                        'idLicitacion': '@Model.idLicitacion',
+                        'requisicionesAgregadas': JSON.stringify(reqAdd),
+                        'idRequisicion': '@Model.idRequisicionRango'
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if (data == "noExisteLicitacionReq") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: '¡ERROR!',
+                                text: 'No se encuentra la licitación o requisición'
+                            });
+                        }
+                        else if (data == "nadaParaGuardar") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: '¡ERROR!',
+                                text: 'No hay materiales seleccionados'
+                            });
+                        }
+                        else if (data == "requisicionGuardada") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡REQUISICIÓN GUARDADA!',
+                                text: '',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                confirmButtonText: 'OK',
+                                showCancelButton: false,
+                                showCloseButton: false
+                            }).then((result) => {
+                                document.formCambiaVista.submit();
+                            });
+                        }
+                    },
+                    error: function () { }
+                });
+            });
+    });
+</script>
+
+<script>
+    //Manda a llamar a la funcion para no tener código repetido
+    function agregarRequisicion(idConcepto, idMaterial, value, max) {
+        var reqAddTemp = [];
+        var objAddTmp = new Object();
+        var isOnJson = 0;
+        if (parseFloat(max - value) > 0) {
+            document.getElementById('campoDisponible.' + idConcepto + '.' + idMaterial).innerHTML = '<span class="text-dark">' + parseFloat(max - value) + '</span>';
+        }
+        else {
+            document.getElementById('campoDisponible.' + idConcepto + '.' + idMaterial).innerHTML = '<span class="text-danger">' + parseFloat(max - value) + '</span>';
+        }
+        document.getElementById('campoRequisicion.' + idConcepto + '.' + idMaterial).innerHTML = parseFloat(value);
+
+        document.getElementById('btnQuitar.' + idConcepto + '.' + idMaterial).style.display = "initial";
+        document.getElementById('btnAgregar.' + idConcepto + '.' + idMaterial).style.display = "none";
+
+        for (i = 0; i < reqAdd.length; i++) {
+            if (reqAdd[i]['idConcepto'] == idConcepto && reqAdd[i]['idMaterial'] == idMaterial) {
+                objAddTmp["idConcepto"] = reqAdd[i]['idConcepto'];
+                objAddTmp["idMaterial"] = reqAdd[i]['idMaterial'];
+                objAddTmp["cantidad"] = value;
+                objAddTmp["disponible"] = parseFloat(max - value);
+                objAddTmp["agregado"] = "1";
+                reqAddTemp.push(objAddTmp);
+                isOnJson = 1;
+            }
+            else {
+                reqAddTemp.push(reqAdd[i]);
+            }
+        }
+        if (isOnJson == 0) {
+            objAddTmp["idConcepto"] = idConcepto;
+            objAddTmp["idMaterial"] = idMaterial;
+            objAddTmp["cantidad"] = value;
+            objAddTmp["disponible"] = parseFloat(max - value);
+            objAddTmp["agregado"] = "1";
+            reqAddTemp.push(objAddTmp);
+        }
+
+        reqAdd = reqAddTemp;
+    }
+
+    function agregaRequisicionTabla(idConcepto, idMaterial, nombreMaterial, max) {
+
+        for (i = 0; i < reqAdd.length; i++) {
+            if (reqAdd[i]['idConcepto'] == idConcepto && reqAdd[i]['idMaterial'] == idMaterial /*&& reqAdd[i]['cantidad'] != 0*/) {
+                max = parseFloat(reqAdd[i]["disponible"]);
+            }
+        }
+        Swal.fire({
+            title: 'Cantidad a requerir de ' + nombreMaterial,
+            input: 'number',
+            inputAttributes: {
+                min: 1
+                //max: parseFloat(max)
+            },
+            inputValue: '1',
+            showCancelButton: true,
+            confirmButtonText: 'Agregar',
+            cancelButtonText: 'Cancelar',
+            showCloseButton: true,
+            inputValidator: (value) => {
+                if (!value || value <= 0 /*|| value > parseFloat(max)*/) {
+                    return 'Agregue el número de unidades a utilizar'
+                }
+            }
+        }).then((result) => {
+            if (result.value) {
+                if (result.value > parseFloat(max)) {
+                    Swal.fire({
+                        title: '<strong class="text-danger">¡FOCO ROJO!</strong>',
+                        html: 'Estás requiriendo más material del disponible. <br/>¿Deseas continuar?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        showCloseButton: true,
+                        confirmButtonText: 'SI',
+                        cancelButtonText: 'Cancelar',
+                    }).then((result2) => {
+                        if (result2.value) {
+                            agregarRequisicion(idConcepto, idMaterial, result.value, max);
+                        }
+                        else if (result.dismiss === Swal.DismissReason.cancel) {}
+                    });
+                }
+                else {
+                    agregarRequisicion(idConcepto, idMaterial, result.value, max);
+                }
+            }
+        });
+    }
+
+    function quitaRequisicionTabla(idConcepto, idMaterial) {
+
+        var reqAddTemp = [];
+        var objAddTmp = new Object();
+        var cantQuitar = 0;
+        var cantDisponible = 0;
+        for (i = 0; i < reqAdd.length; i++) {
+            if (reqAdd[i]['idConcepto'] == idConcepto && reqAdd[i]['idMaterial'] == idMaterial) {
+                objAddTmp["idConcepto"] = reqAdd[i]['idConcepto'];
+                objAddTmp["idMaterial"] = reqAdd[i]['idMaterial'];
+                objAddTmp["cantidad"] = "0";
+                objAddTmp["disponible"] = parseFloat(parseFloat(reqAdd[i]['disponible']) + parseFloat(reqAdd[i]['cantidad']));
+                objAddTmp["agregado"] = "0";
+                reqAddTemp.push(objAddTmp);
+
+                cantQuitar = reqAdd[i]['cantidad'];
+                cantDisponible = parseFloat(parseFloat(reqAdd[i]['disponible']));
+            }
+            else {
+                reqAddTemp.push(reqAdd[i]);
+            }
+        }
+        reqAdd = reqAddTemp;
+        if (parseFloat(parseFloat(cantDisponible) + parseFloat(cantQuitar)) > 0) {
+            document.getElementById('campoDisponible.' + idConcepto + '.' + idMaterial).innerHTML = '<span class="text-dark">' + parseFloat(parseFloat(cantDisponible) + parseFloat(cantQuitar)) + '<span/>';
+        }
+        else {
+            document.getElementById('campoDisponible.' + idConcepto + '.' + idMaterial).innerHTML = '<span class="text-danger">' + parseFloat(parseFloat(cantDisponible) + parseFloat(cantQuitar)) + '<span/>';
+        }
+        document.getElementById('campoRequisicion.' + idConcepto + '.' + idMaterial).innerHTML = parseFloat(0);
+
+        document.getElementById('btnQuitar.' + idConcepto + '.' + idMaterial).style.display = "none";
+        document.getElementById('btnAgregar.' + idConcepto + '.' + idMaterial).style.display = "initial";
+        if (document.getElementById('btnAprobar.' + idConcepto + '.' + idMaterial) != null) {
+            document.getElementById('btnAprobar.' + idConcepto + '.' + idMaterial).style.display = "none";
+        }
+    }
+
+    function cambiaRequisicion() {
+        document.getElementById('contenidoTablaRequisiciones').innerHTML = '<tr>' +
+            '<td colspan = "5" class="text-center" >' +
+                '<img width="8%" height="8%" src="@Url.Content("~/Res/img/layouts/loader.gif")" />' +
+                '<br />' +
+                '<h6>Un momento, cargando...</h6>' +
+            '</td>' +
+        '</tr>';
+        jQuery.ajax({
+            url: "@Url.Content("~/RequisicionesParciales/CambiaRequisicion")",
+            data: {
+                'noRequisicion': document.getElementById('noRequisicion').value,
+                'idLicitacion': '@Model.idLicitacion',
+                'idRequisicion': '@Model.idRequisicionRango'
+            },
+            type: "POST",
+            success: function (data) {
+                document.getElementById('contenidoTablaRequisiciones').innerHTML = data.contenido;
+                reqAdd = data.lista;
+            },
+            error: function () { }
+        });
+    }
+
+    function aprobarReq(idConcepto, idMaterial, nombreMaterial, cantidad) {
+        Swal.fire({
+            title: '¡CONFIRMACIÓN!',
+            html: '¿Aprobar la requisición del material <strong>' + nombreMaterial + '</strong> por <strong>' + cantidad + ' unidades</strong>?',
+            icon: 'question',
+            showCancelButton: true,
+            showCloseButton: true,
+            confirmButtonText: 'SI',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡ESPERE...!',
+                    html: '<img width="8%" height="8%" src="@Url.Content("~/Res/img/layouts/loader.gif")" />',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    showCloseButton: false
+                });
+                jQuery.ajax({
+                    url: "@Url.Content("~/RequisicionesParciales/AprobarRequisicion")",
+                    data: {
+                        'noRequisicion': document.getElementById('noRequisicion').value,
+                        'idLicitacion': '@Model.idLicitacion',
+                        'idRequisicion': '@Model.idRequisicionRango',
+                        'idConcepto': idConcepto,
+                        'idMaterial': idMaterial
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if (data == "error") {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: '¡ERROR!',
+                                html: 'Recargue la página para continuar',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                showConfirmButton: false,
+                                showCancelButton: false,
+                                showCloseButton: false
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡REQUISICIÓN APROBADA!',
+                                html: 'No° de documento creado: <strong>' + data + '</strong>',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                confirmButtonText: 'OK',
+                                showCancelButton: false,
+                                showCloseButton: false
+                            }).then((result) => {
+                                document.formCambiaVista.submit();
+                            });
+                        }
+                    },
+                    error: function () { }
+                });
+            }
+            else if (result.dismiss === Swal.DismissReason.cancel) { }
+        });
+    }
+</script>
+}

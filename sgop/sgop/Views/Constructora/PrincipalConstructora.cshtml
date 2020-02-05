@@ -1,0 +1,138 @@
+﻿@{
+    ViewBag.Title = "Licitaciones";
+}
+
+<!---------------------------------------------------------------------------------------------------------------->
+<div class="container-fluid w-75 p-0" style="margin-top: 5%">
+    <!--Inicia el mostrado de licitaciones que han sido actualizadas ultimamente, consulta la tabla licitaciones ordenando por fechaModificacion y muestra las primeras 4-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="row mx-auto">
+        <div class="col-12 bg-dark py-1" style="opacity: 1;">
+            <h4 class="text-light">Acceso rapido a licitaciones</h4><!--Titulo de la busqueda-->
+        </div>
+    </div>
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="row mx-auto py-3" style="background-color: rgba(0, 0, 0, 0.55);">
+        <!---------------------------------------------------------------------------------------------------------------->
+        @{ var array = ViewBag.licitacion; var cont = 0;}
+        @foreach (var oElement in array)
+        {
+        if (cont < 4)
+        {
+        <div class="col-3" style="opacity: 1;">
+            <!--Inicia el primer card de la busqueda de licitaciones-->
+            <div class="card border border-0 p-0 h-100">
+                <div class="card-header">
+                    <h5 class="text-center">@oElement.noLicitacion</h5><!--Tabla licitaciones -> campo noLicitacion-->
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted mt-0">@oElement.nombreObra</p><!--Tabla licitaciones -> campo nombreObra-->
+                    <p class="small text-muted mt-0">@oElement.Municipio</p><!--Tabla licitaciones inner join catalogoMunicipios -> campo descripcion-->
+                    <p class="small text-muted mt-0">@oElement.localidad</p><!--Tabla licitaciones -> campo localidad-->
+                    <p class="small text-muted mt-0">@oElement.Estatus</p><!--Tabla licitaciones inner join catalogoEstatus -> campo descripcion-->
+                    <p class="small text-muted my-0">@oElement.Empresa</p><!--Tabla licitaciones inner join catalogoEmpresas -> campo descripcion-->
+                </div>
+                <div class="card-footer bg-dark">
+                    @using (Html.BeginForm("Editar_Licitacion", "Licitaciones", FormMethod.Post))
+                    {
+
+                    <input type="hidden" name="id_Licitacion" value="@oElement.idLicitacion">
+                    <button type="submit" class="btn btn-outline-success w-100 h-100" value="">Visualizar</button><!--value=idLicitacion-->
+                    }   <!--Envia el idLicitacion a la visualizacion de licitacion-->
+                </div>
+            </div>
+        </div><!--Termina el primer card de la busqueda-->
+        <!---------------------------------------------------------------------------------------------------------------->
+        { cont++; }
+        }
+        }
+        @if (cont < 4)
+        {
+        while (cont < 4)
+        {
+        <div class="col-3" style="opacity: 1;">
+            <!--Inicia el cuarto card de la busqueda de proyectos-->
+            <div class="card border border-0 p-0 h-100">
+                <div class="card-header">
+                    <h5 class="text-center"></h5><!--Vacio si no hay mas resultados-->
+                </div>
+                <div class="card-body">
+                    <!--Vacio si no hay mas resultados-->
+                </div>
+                <div class="card-footer bg-dark">
+                    <button type="button" class="btn btn-outline-success w-100 h-100" disabled>Visualizar</button><!--disabled si no hay mas resultados-->
+                </div>
+            </div>
+        </div><!--Termina el cuarto card de la busqueda de proyectos-->
+        cont++;
+        }
+        }
+    </div><!--Termina el div del row que contiene el card-->
+</div><!--Termina el div del row que contiene el titulo y las cards-->
+<!---------------------------------------------------------------------------------------------------------------->
+
+<div class="container-fluid w-75 p-0 mb-5">
+    <!--Inicia el mostrado de proyectos que han sido actualizadss ultimamente, consulta la tabla proyectos ordenando por fechaModificacion y muestra los primeras 4-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="row mt-3 mx-auto">
+        <div class="col-12 bg-dark py-1" style="opacity: 1;">
+            <h4 class="text-light">Acceso rapido a proyectos</h4><!--Titulo de la busqueda de proyectos-->
+        </div>
+    </div>
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="row mx-auto py-3" style="background-color: rgba(0, 0, 0, 0.55);">
+        <!---------------------------------------------------------------------------------------------------------------->
+        @{ var array2 = ViewBag.proyecto; cont = 0;}
+        @foreach (var oElement in array2)
+        {
+        if (cont < 4) {
+        <div class="col-3" style="opacity: 1;">
+            <!--Inicia el primer card de la busqueda de proyectos-->
+            <div class="card border border-0 p-0 h-100">
+                <div class="card-header">
+                    <h5 class="text-center">@oElement.noLicitacion</h5><!--Tabla proyectos inner join licitaciones -> campo noLicitacion-->
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted mt-0">@oElement.nombreObra</p><!--Tabla proyectos inner join licitaciones -> campo nombreObra-->
+                    <p class="small text-muted mt-0">Estimacion No. 1</p><!--Tabla proyectos inner join licitacion inner join controlCobros -> campo noEstimacion ordenados de mayor a menos y escoger el primero-->
+                    <p class="small text-muted mt-0">45% avance total</p><!--Sacar porcentaje con base en el material total y el material gastado de las tablas requisicionMaterial(total) y requisicionParcial(gastado)-->
+                    <p class="small text-muted mt-0">@oElement.Estatus</p><!--Tabla proyectos inner join catalogoEstatus -> campo descripcion-->
+                    <p class="small text-muted my-0">Ing. Manuel Lopez Caramelo</p><!--Tabla licitaciones inner join usuarios -> campo nombre, apellidoPaterno, apellidoMaterno-->
+                </div>
+                <div class="card-footer bg-dark">
+                    @using (Html.BeginForm("VisualizarProyecto", "Constructora", FormMethod.Post))
+                    {
+                    <input type="hidden" name="idProyecto" value="@oElement.idProyecto">
+                    <button type="submit" class="btn btn-outline-success w-100 h-100" value="">Visualizar</button><!--value=idProyecto-->
+                    }  <!--Envia el idProyecto a la visualizacion de proyecto-->
+                </div>
+            </div>
+        </div><!--Termina el primer card de la busqueda de proyectos-->
+        <!---------------------------------------------------------------------------------------------------------------->
+        { cont++; }
+        }
+        }
+        @if (cont < 4)
+        {
+        while (cont < 4)
+        {
+        <div class="col-3" style="opacity: 1;">
+            <!--Inicia el cuarto card de la busqueda de proyectos-->
+            <div class="card border border-0 p-0 h-100">
+                <div class="card-header">
+                    <h5 class="text-center"></h5><!--Vacio si no hay mas resultados-->
+                </div>
+                <div class="card-body">
+                    <!--Vacio si no hay mas resultados-->
+                </div>
+                <div class="card-footer bg-dark">
+                    <button type="button" class="btn btn-outline-success w-100 h-100" disabled>Visualizar</button><!--disabled si no hay mas resultados-->
+                </div>
+            </div>
+        </div><!--Termina el cuarto card de la busqueda de proyectos-->
+        <!---------------------------------------------------------------------------------------------------------------->
+        cont++;
+        }
+        }
+    </div><!--Termina el div del row que contiene el card-->
+</div><!--Termina el div del row que contiene el titulo y las cards-->

@@ -1,0 +1,674 @@
+﻿@model List<sgop.Models.EstimacionInnerLicitacionViewModel>
+@{
+    /**/
+
+    /**/
+
+    ViewBag.Title = "Rollo Fotografico";
+}
+
+<h2>RolloFotografico</h2>
+@{ var fila = 0;}
+@foreach (var Elemento in Model)
+{
+    if (fila == 0)
+    {
+        fila++;
+
+        <div class="container-fluid w-75 p-0" style="margin-top: 5%">
+            <!--Inicia el container del card-->
+            <div class="col-12">
+                <div class="card border border-0 p-0 h-100">
+                    <!--Inicia el card-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="card-header bg-dark">
+                        <!--Inicia la cabecera del card-->
+                        <form method="post" action="#" id="buscarLicitaciones">
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row mb-1">
+                                <!--Inician los campos del primer renglon-->
+                                <div class="col-12 text-center">
+                                    <h4 class="text-muted">Archivo Fotografico.</h4>
+                                </div>
+                            </div><!--Termina el primer renglon de campos-->
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row mb-1">
+                                <!--Inicia el segundo renglon de campos-->
+                                <div class="col-10">
+                                    <h6 class="text-light">@Elemento.NombreObra</h6>
+                                </div>
+                                <div class="col-2 px-1">
+                                    <button type="button" class="btn btn-outline-success btn-block btn-sm" onclick="guardarFoto()">Guardar<span class="far fa-save mx-1"></span></button>
+                                    <!--Manda el submit del form crearRequisicion con cada linea de la tabla-->
+                                </div>
+                            </div><!--Termina el segundo renglon de campos-->
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row mb-1">
+                                <!--Inicia el segundo renglon de campos-->
+                                <div class="col-5">
+                                    <h6 class="text-light">Licitacion: @Elemento.NoLicitacion</h6>
+                                    <!--Tabla licitaciones -> campo noLicitacion-->
+                                </div>
+                                <div class="col-2 text-right">
+                                    <h6 class="text-light">Municipion:</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h6 class="text-light">@Elemento.IdMunicipio</h6>
+                                    <!--Tabla licitaciones inner join catalogoMunicipios -> campo descripcion-->
+                                </div>
+
+                                @using (Html.BeginForm("RolloFotografico", "Rollo", FormMethod.Post, new { @id = "rolloFoto" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="text" name="licitacion1" id="licitacion1" value="@Elemento.IdLicitacion" hidden />
+                                }
+                                @using (Html.BeginForm("Estimacion", "Estimacion", FormMethod.Post, new { @id = "estimacion1" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="text" name="idLicitacion" id="idLicitacion" value="@Elemento.IdLicitacion" hidden />
+                                }
+                                <div class="col-2 px-1">
+                                    <button type="button" class="btn btn-outline-danger btn-block btn-sm" name="regreso" id="regreso">Regresar<span class="fas fa-sign-out-alt mx-1"></span></button>
+                                    <!--Manda la visualizacion de la licitacion-->
+                                </div>
+                            </div><!--Termina el segundo renglon de campos-->
+                            <!---------------------------------------------------------------------------------------------------------------->
+                            <div class="row mb-1">
+                                <!--Inicia el segundo renglon de campos-->
+                                <div class="col-5">
+                                    <h6 class="text-light">Localidad: @Elemento.Localidad</h6>
+                                    <!--Tabla licitaciones -> campo localidad-->
+                                </div>
+                                <div class="col-2">
+                                    <h6 class="text-light text-right">Estimacion:</h6>
+                                    <!--Tabla licitaciones -> campo idRequisicion-->
+                                </div>
+                                <div class="col-3">
+                                    <select id="est" name="est" class="custom-select custom-select-sm w-50">
+                                        @foreach (var item in ViewBag.estimaciones)
+                                        {
+                                            <option value="@item.NoEstimacion"> @item.NoEstimacion </option>
+                                        }
+                                    </select>
+                                    <!--Se llena con base en una consulta a la tabla de catalogoMunicipios-->
+                                    <!--Tabla licitaciones -> campo idMunicipio-->
+                                </div>
+                            </div><!--Termina el segundo renglon de campos-->
+                            <!---------------------------------------------------------------------------------------------------------------->
+                        </form><!--Termina el formulario para la busqueda de licitaciones-->
+                    </div><!--Termina la cabecera del card-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="card-body">
+                        <!--Inician los renglones por registro encontrado, 2 renglones por cada uno.-->
+                        <!---------------------------------------------------------------------------------------------------------------->
+
+                        <form action="/" method="post" name="formTotal" id="formTotal">
+                            @Html.AntiForgeryToken()
+                            <div name="total" id="total">
+
+                            </div>
+                        </form>
+                        <form action="" method="post" name="formNuevo" id="formNuevo">
+                            @Html.AntiForgeryToken()
+                            <input type="text" name="filas" id="filas" value="0" hidden />
+                            <input type="text" name="idReq" id="idReq" value="@Elemento.IdRequisicion" hidden />
+                        </form>
+
+                        @using (Html.BeginForm("CargaDocs", "Rollo", FormMethod.Post, new { @name = "cargaDocs", @id = "cargaDocs", @enctype = "multipart/form-data" }))
+                        {
+                            try
+                            {
+                                @Html.AntiForgeryToken()
+                            }
+                            catch (Exception)
+                            {
+
+                                throw;
+                            }
+                            <!--
+                            <input id="files" name="files" class="filein" type="file" multiple onchange="aumentar()"/>
+                            <button name="subfile" id="subfile" type="submit">save</button>-->
+                            <input type="number" id="noEstimacion" name="noEstimacion" value="1" hidden />
+                            <input type="number" id="idRequisicion" name="idRequisicion" value="@Elemento.IdRequisicion" hidden />
+                            <input type="number" id="contador" name="contador" value="" hidden />
+
+                            <div class="row" id="ad" name="ad">
+
+
+                            </div>
+                        }
+                        <!---------------------------------------------------------------------------------------------------------------->
+                    </div><!--Terminan body del card-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                </div><!--Termina el card de los datos-->
+            </div><!--Termina el col que contiene todo el card-->
+        </div><!--Termina el espacio para meter todo el container-->
+        <!---------------------------------------------------------------------------------------------------------------->
+    }
+}
+
+<!--MODAL PARA VER IMAGENES-->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Button to close the modal -->
+            <div><button type="button" class="close" data-dismiss="modal">&times;</button></div>
+
+            <!-- Carousel -->
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div name="cimagen" id="cimagen" class="carousel-inner">
+
+                </div>
+                <div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--TERMINA MODAL DE IMAGENES-->
+    <div class="row fixed-bottom">
+        <!--Inicia el footer con la marca de agua propia de la empresa-->
+        <div class="col-12 text-center">
+            <h6 class="text-muted font-weight-bold">PineAPPs</h6>
+        </div>
+    </div><!--Termina el fotter con la marca de agua propia de la empresa-->
+
+
+
+    @section scripts
+{
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script>
+
+
+        function guardarFoto() {
+            //$("#cargaDocs").submit();
+            //alert($("#files").get(0).files.length);
+            var concepto = $("#contador").val();
+            var idfile = "";
+            var idconc = "";
+            for (var j = 0; j < concepto; j++) {
+                idfile = "#files" + j;
+                idconc = "#idConcepto" + j;
+
+                if ($(idfile).get(0).files.length > 0) {
+                    jQuery.ajax({
+                        url: "@Url.Content("~/Rollo/CargaDocs")",
+                        data: function () {
+                                var data = new FormData();
+                                data.append("noEstimacion", $("#noEstimacion").val());
+                                data.append("idRequisicion", $("#idRequisicion").val());
+                            data.append("idConcepto", $(idconc).val());
+                                for (var i = 0; i < $(idfile).get(0).files.length; i++) {
+                                    data.append("files", $(idfile).get(0).files[i]);
+                                }
+                                return data;
+                        }(),
+                        type: "POST",
+                        contentType: false,
+                        processData: false,
+                        success: function (datas) {
+                            alert("Agregada correctamente");
+                        },
+                        error: function () {
+
+                            alert("hubo un error al agregar")
+                        }
+                    });
+
+                }
+            }
+            $("#rolloFoto").submit();
+        }
+
+        $("#regreso").click(function (e) {
+            e.preventDefault();
+            $("#estimacion1").submit();
+        });
+
+        //Para que aparezca el nombre del archivo que seleccionamos  en el campo FILE
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            alert(fileName);
+        });
+        //Script para que aparezcan los tooltips en los campos date
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+        $(document).ready(function ()
+        {
+        //Script para obtener el valor de la estimacion
+            $("#est").change(function (e)
+            {
+                $("#noEstimacion").val($("#est").val());
+                $("#total").html("");
+                $("#nuevo").html("");
+                e.preventDefault();
+                var token = $("[name='__RequestVerificationToken']").val();
+                url = "@Url.Content("~/Rollo/getEstimacion")";
+                parametros = { 'est': $(this).val(), '__RequestVerificationToken': token, 'idReq': $("#idReq").val() };
+
+                $.post(url, parametros, function (data) {
+                    //para leer dos arreglos de JSON
+                    $("#ad").html("");
+                    if (data.lstEst.length == 0) {
+                        var numConceptos = 0;
+                        var nomConceptos = "";
+                        for (var i = 0; i < data.lstEst2.length; i++) {
+                            //Creamos el titulo del concepto
+                            let preview = document.getElementById('ad'),
+                                titulo = document.createElement('h5');
+                            titulo.setAttribute("class", "text-muted col-12");
+                            titulo.setAttribute("id", data.lstEst2[i].IdConcepto);
+                            titulo.innerHTML = data.lstEst2[i].Descripcion;
+                            preview.append(titulo);
+                            //Creamos el input para idconcepto
+                            nomConceptos = "idConcepto" + numConceptos;
+                            concepto = document.createElement('input');
+                            concepto.setAttribute("id",nomConceptos);
+                            concepto.setAttribute("name", nomConceptos);
+                            concepto.setAttribute("type", "number");
+                            concepto.setAttribute("value", data.lstEst2[i].IdConcepto);
+                            concepto.setAttribute("hidden", "true");
+                            preview.append(concepto);
+
+                            //Creamos el input para cargar imagenes
+                            inp = document.createElement('input');
+                            inp.setAttribute("name", "files" + numConceptos);
+                            inp.setAttribute("id", "files" + numConceptos);
+                            inp.setAttribute("type", "file");
+                            inp.setAttribute("multiple", "true");
+                            preview.append(inp);
+                            zz = "#files" + numConceptos;
+                            $(zz).fileinput({
+                                theme: 'fas',
+                                showCaption: false,
+                                showRemove: false,
+                                showUpload: false,
+                                //uploadUrl: '/Rollo/CargaDocs', // you must set a valid URL here else you will get an error
+                                allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg'],
+                                showCaption: false,
+                                hideThumbnailContent: false,
+                                browseLabel: "",
+                                browseIcon: "<span class='fas fa-plus mx-1'></span>",
+                                overwriteInitial: false,
+                                dropZoneEnabled: false
+                            });
+                            numConceptos++;
+                        }
+                        $("#contador").val(numConceptos);
+
+                    }
+                    else {
+                        x = 1;
+                        indica = 0;
+                        var numConceptos = 0;
+                        var nomConceptos = "";
+                        for (var i = 0; i < data.lstEst.length; i++) {
+                            //Creamos el titulo del concepto
+                            if (x == 1) {
+                                let preview = document.getElementById('ad'),
+                                    titulo = document.createElement('h5');
+                                titulo.setAttribute("class", "text-muted col-12");
+                                titulo.setAttribute("id", data.lstEst[i].IdConcepto);
+                                titulo.innerHTML = data.lstEst[i].Descripcion;
+                                preview.append(titulo);
+                                //Creamos el input para idconcepto
+                                nomConceptos = "idConcepto" + numConceptos;
+                                concepto = document.createElement('input');
+                                concepto.setAttribute("id", nomConceptos);
+                                concepto.setAttribute("name", nomConceptos);
+                                concepto.setAttribute("type", "number");
+                                concepto.setAttribute("value", data.lstEst[i].IdConcepto);
+                                concepto.setAttribute("hidden", "true");
+                                preview.append(concepto);
+
+
+                                nombre = '"' + data.lstEst[i].Foto + '"';
+                                div = document.createElement('div');
+                                div.setAttribute("class", "row mx-4 ");
+                                div.setAttribute("style", "background-image: url('/Res/" + data.lstEst[i].Foto + "'); background-size: 10rem 8rem; background-repeat: no-repeat; width: 10rem; height: 8rem;");
+                                div.innerHTML = "<a onclick='abrirImg(" + data.lstEst[i].IdArchFoto + ")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-search-plus' ></span></a>"
+                                    + "<a onclick='eliminarArch(" + data.lstEst[i].IdArchFoto + "," + nombre +")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-trash'></span></a>";
+                                preview.append(div);
+                                x = 2;
+                                indica = data.lstEst[i].IdConcepto;
+                            } else {
+                                if (indica == data.lstEst[i].IdConcepto) {
+                                    let preview = document.getElementById('ad'),
+                                        div = document.createElement('div');
+                                    nombre = '"' + data.lstEst[i].Foto + '"';
+                                    div.setAttribute("class", "row  mx-4");
+                                    div.setAttribute("style", "background-image: url('/Res/" + data.lstEst[i].Foto + "'); background-size: 10rem 8rem; background-repeat: no-repeat; width: 10rem; height: 8rem;");
+                                    div.innerHTML = "<a onclick='abrirImg(" + data.lstEst[i].IdArchFoto + ")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-search-plus' ></span></a>"
+                                        + "<a onclick='eliminarArch(" + data.lstEst[i].IdArchFoto + "," + nombre +")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-trash'></span></a>";
+                                    preview.append(div);
+
+                                    indica = data.lstEst[i].IdConcepto;
+                                } else {
+                                    //Creamos el input para cargar imagenes
+                                    let preview = document.getElementById('ad'),
+                                        inp = document.createElement('input');
+                                    inp.setAttribute("name", "files" + numConceptos);
+                                    inp.setAttribute("id", "files" + numConceptos);
+                                    inp.setAttribute("type", "file");
+                                    inp.setAttribute("multiple", "true");
+                                    preview.append(inp);
+                                    zz = "#files" + numConceptos;
+                                    $(zz).fileinput({
+                                        theme: 'fas',
+                                        showCaption: false,
+                                        showRemove: false,
+                                        showUpload: false,
+                                        //uploadUrl: '/Rollo/CargaDocs', // you must set a valid URL here else you will get an error
+                                        allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg'],
+                                        showCaption: false,
+                                        hideThumbnailContent: false,
+                                        browseLabel: "",
+                                        browseIcon: "<span class='fas fa-plus mx-1'></span>",
+                                        overwriteInitial: false,
+                                        dropZoneEnabled: false
+                                    });
+                                    numConceptos++;
+                                    titulo = document.createElement('h5');
+                                    titulo.setAttribute("class", "text-muted col-12");
+                                    titulo.setAttribute("id", data.lstEst[i].IdConcepto);
+                                    titulo.innerHTML = data.lstEst[i].Descripcion;
+                                    preview.append(titulo);
+                                    //Creamos el input para idconcepto
+                                    nomConceptos = "idConcepto" + numConceptos;
+                                    concepto = document.createElement('input');
+                                    concepto.setAttribute("id", nomConceptos);
+                                    concepto.setAttribute("name", nomConceptos);
+                                    concepto.setAttribute("type", "number");
+                                    concepto.setAttribute("value", data.lstEst[i].IdConcepto);
+                                    concepto.setAttribute("hidden", "true");
+                                    preview.append(concepto);
+
+
+                                    nombre = '"' + data.lstEst[i].Foto + '"';
+                                    div = document.createElement('div');
+                                    div.setAttribute("class", "row  mx-4");
+                                    div.setAttribute("style", "background-image: url('/Res/" + data.lstEst[i].Foto + "'); background-size: 10rem 8rem; background-repeat: no-repeat; width: 10rem; height: 8rem;");
+                                    div.innerHTML = "<a onclick='abrirImg(" + data.lstEst[i].IdArchFoto + ")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-search-plus' ></span></a>"
+                                        + "<a onclick='eliminarArch(" + data.lstEst[i].IdArchFoto + "," + nombre +")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-trash'></span></a>";
+                                    preview.append(div);
+
+                                    indica = data.lstEst[i].IdConcepto;
+                                }
+                            }
+                            indica = data.lstEst[i].IdConcepto;
+
+                        }
+                        //Creamos el input para cargar imagenes
+                        let preview = document.getElementById('ad'),
+                            inp = document.createElement('input');
+                        inp.setAttribute("name", "files" + numConceptos);
+                        inp.setAttribute("id", "files" + numConceptos);
+                        inp.setAttribute("type", "file");
+                        inp.setAttribute("multiple", "true");
+                        preview.append(inp);
+                        zz = "#files" + numConceptos;
+                        $(zz).fileinput({
+                            theme: 'fas',
+                            showCaption: false,
+                            showRemove: false,
+                            showUpload: false,
+                            //uploadUrl: '/Rollo/CargaDocs', // you must set a valid URL here else you will get an error
+                            allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg'],
+                            showCaption: false,
+                            hideThumbnailContent: false,
+                            browseLabel: "",
+                            browseIcon: "<span class='fas fa-plus mx-1'></span>",
+                            overwriteInitial: false,
+                            dropZoneEnabled: false
+                        });
+                        numConceptos++;
+                        $("#contador").val(numConceptos);
+                    }
+                });
+            });
+        });
+
+
+
+        window.onload = function (e) {
+            $("#total").html("");
+            $("#nuevo").html("");
+            e.preventDefault();
+            var token = $("[name='__RequestVerificationToken']").val();
+            url = "@Url.Content("~/Rollo/getEstimacion")";
+            parametros = { 'est': $("#est").val(), '__RequestVerificationToken': token, 'idReq': $("#idReq").val() };
+
+            $.post(url, parametros, function (data) {
+
+                //para leer dos arreglos de JSON
+                $("#ad").html("");
+                if (data.lstEst.length == 0) {
+                    var numConceptos = 0;
+                    var nomConceptos = "";
+                    for (var i = 0; i < data.lstEst2.length; i++) {
+                        //Creamos el titulo del concepto
+                        let preview = document.getElementById('ad'),
+                            titulo = document.createElement('h5');
+                        titulo.setAttribute("class", "text-muted col-12");
+                        titulo.setAttribute("id", data.lstEst2[i].IdConcepto);
+                        titulo.innerHTML = data.lstEst2[i].Descripcion;
+                        preview.append(titulo);
+                        //Creamos el input para idconcepto
+                        nomConceptos = "idConcepto" + numConceptos;
+                        concepto = document.createElement('input');
+                        concepto.setAttribute("id", nomConceptos);
+                        concepto.setAttribute("name", nomConceptos);
+                        concepto.setAttribute("type", "number");
+                        concepto.setAttribute("value", data.lstEst2[i].IdConcepto);
+                        concepto.setAttribute("hidden", "true");
+                        preview.append(concepto);
+
+                        //Creamos el input para cargar imagenes
+                        inp = document.createElement('input');
+                        inp.setAttribute("name", "files" + numConceptos);
+                        inp.setAttribute("id", "files" + numConceptos);
+                        inp.setAttribute("type", "file");
+                        inp.setAttribute("multiple", "true");
+                        preview.append(inp);
+                        zz = "#files" + numConceptos;
+                        $(zz).fileinput({
+                            theme: 'fas',
+                            showCaption: false,
+                            showRemove: false,
+                            showUpload: false,
+                            //uploadUrl: '/Rollo/CargaDocs', // you must set a valid URL here else you will get an error
+                            allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg'],
+                            showCaption: false,
+                            hideThumbnailContent: false,
+                            browseLabel: "",
+                            browseIcon: "<span class='fas fa-plus mx-1'></span>",
+                            overwriteInitial: false,
+                            dropZoneEnabled: false
+                        });
+                        numConceptos++;
+                    }
+                    $("#contador").val(numConceptos);
+
+                }
+                else {
+                    x = 1;
+                    indica = 0;
+                    var numConceptos = 0;
+                    var nomConceptos = "";
+                    for (var i = 0; i < data.lstEst.length; i++) {
+                        //Creamos el titulo del concepto
+                        if (x == 1) {
+                            let preview = document.getElementById('ad'),
+                                titulo = document.createElement('h5');
+                            titulo.setAttribute("class", "text-muted col-12");
+                            titulo.setAttribute("id", data.lstEst[i].IdConcepto);
+                            titulo.innerHTML = data.lstEst[i].Descripcion;
+                            preview.append(titulo);
+                            //Creamos el input para idconcepto
+                            nomConceptos = "idConcepto" + numConceptos;
+                            concepto = document.createElement('input');
+                            concepto.setAttribute("id", nomConceptos);
+                            concepto.setAttribute("name", nomConceptos);
+                            concepto.setAttribute("type", "number");
+                            concepto.setAttribute("value", data.lstEst[i].IdConcepto);
+                            concepto.setAttribute("hidden", "true");
+                            preview.append(concepto);
+
+
+                            nombre = '"' + data.lstEst[i].Foto + '"';
+                            div = document.createElement('div');
+                            div.setAttribute("class", "row mx-4 ");
+                            div.setAttribute("style", "background-image: url('/Res/" + data.lstEst[i].Foto + "'); background-size: 10rem 8rem; background-repeat: no-repeat; width: 10rem; height: 8rem;");
+                            div.innerHTML = "<a onclick='abrirImg(" + data.lstEst[i].IdArchFoto + ")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-search-plus' ></span></a>"
+                                + "<a onclick='eliminarArch(" + data.lstEst[i].IdArchFoto + "," + nombre + ")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-trash'></span></a>";
+                            preview.append(div);
+                            x = 2;
+                            indica = data.lstEst[i].IdConcepto;
+                        } else {
+                            if (indica == data.lstEst[i].IdConcepto) {
+                                let preview = document.getElementById('ad'),
+                                    div = document.createElement('div');
+                                nombre = '"' + data.lstEst[i].Foto + '"';
+                                div.setAttribute("class", "row  mx-4");
+                                div.setAttribute("style", "background-image: url('/Res/" + data.lstEst[i].Foto + "'); background-size: 10rem 8rem; background-repeat: no-repeat; width: 10rem; height: 8rem;");
+                                div.innerHTML = "<a onclick='abrirImg(" + data.lstEst[i].IdArchFoto + ")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-search-plus' ></span></a>"
+                                    + "<a onclick='eliminarArch(" + data.lstEst[i].IdArchFoto + "," + nombre + ")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-trash'></span></a>";
+                                preview.append(div);
+
+                                indica = data.lstEst[i].IdConcepto;
+                            } else {
+                                //Creamos el input para cargar imagenes
+                                let preview = document.getElementById('ad'),
+                                    inp = document.createElement('input');
+                                inp.setAttribute("name", "files" + numConceptos);
+                                inp.setAttribute("id", "files" + numConceptos);
+                                inp.setAttribute("type", "file");
+                                inp.setAttribute("multiple", "true");
+                                preview.append(inp);
+                                zz = "#files" + numConceptos;
+                                $(zz).fileinput({
+                                    theme: 'fas',
+                                    showCaption: false,
+                                    showRemove: false,
+                                    showUpload: false,
+                                    //uploadUrl: '/Rollo/CargaDocs', // you must set a valid URL here else you will get an error
+                                    allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg'],
+                                    showCaption: false,
+                                    hideThumbnailContent: false,
+                                    browseLabel: "",
+                                    browseIcon: "<span class='fas fa-plus mx-1'></span>",
+                                    overwriteInitial: false,
+                                    dropZoneEnabled: false
+                                });
+                                numConceptos++;
+                                titulo = document.createElement('h5');
+                                titulo.setAttribute("class", "text-muted");
+                                titulo.setAttribute("id", data.lstEst[i].IdConcepto);
+                                titulo.innerHTML = data.lstEst[i].Descripcion;
+                                preview.append(titulo);
+                                //Creamos el input para idconcepto
+                                nomConceptos = "idConcepto" + numConceptos;
+                                concepto = document.createElement('input');
+                                concepto.setAttribute("id", nomConceptos);
+                                concepto.setAttribute("name", nomConceptos);
+                                concepto.setAttribute("type", "number");
+                                concepto.setAttribute("value", data.lstEst[i].IdConcepto);
+                                concepto.setAttribute("hidden", "true");
+                                preview.append(concepto);
+
+
+                                nombre = '"' + data.lstEst[i].Foto + '"';
+                                div = document.createElement('div');
+                                div.setAttribute("class", "row  mx-4");
+                                div.setAttribute("style", "background-image: url('/Res/" + data.lstEst[i].Foto + "'); background-size: 10rem 8rem; background-repeat: no-repeat; width: 10rem; height: 8rem;");
+                                div.innerHTML = "<a onclick='abrirImg(" + data.lstEst[i].IdArchFoto + ")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-search-plus' ></span></a>"
+                                    + "<a onclick='eliminarArch(" + data.lstEst[i].IdArchFoto + "," + nombre + ")' style='opacity: 0.5;' class='btn btn-primary align-self-end col mx-2'><span class='fa fa-trash'></span></a>";
+                                preview.append(div);
+
+                                indica = data.lstEst[i].IdConcepto;
+                            }
+                        }
+                        indica = data.lstEst[i].IdConcepto;
+
+                    }
+                    //Creamos el input para cargar imagenes
+                    let preview = document.getElementById('ad'),
+                        inp = document.createElement('input');
+                    inp.setAttribute("name", "files" + numConceptos);
+                    inp.setAttribute("id", "files" + numConceptos);
+                    inp.setAttribute("type", "file");
+                    inp.setAttribute("multiple", "true");
+                    preview.append(inp);
+                    zz = "#files" + numConceptos;
+                    $(zz).fileinput({
+                        theme: 'fas',
+                        showCaption: false,
+                        showRemove: false,
+                        showUpload: false,
+                        //uploadUrl: '/Rollo/CargaDocs', // you must set a valid URL here else you will get an error
+                        allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg'],
+                        showCaption: false,
+                        hideThumbnailContent: false,
+                        browseLabel: "",
+                        browseIcon: "<span class='fas fa-plus mx-1'></span>",
+                        overwriteInitial: false,
+                        dropZoneEnabled: false
+                    });
+                    numConceptos++;
+                    $("#contador").val(numConceptos);
+                }
+
+            });
+        }
+
+        function eliminarArch(num, name) {
+
+            var token = $("[name='__RequestVerificationToken']").val();
+            url = "@Url.Content("~/Rollo/EliminarArch")";
+            parametros = { 'num': num, '__RequestVerificationToken': token, 'name': name };
+
+            $.post(url, parametros, function (data) {
+                alert("Eliminado correctamente");
+                $("#rolloFoto").submit();
+            });
+        }
+
+        function abrirImg(num) {
+            $("#cimagen").html("");
+            ides = $("#noEstimacion").val();
+            idre = $("#idRequisicion").val();
+            imagen = "";
+            var token = $("[name='__RequestVerificationToken']").val();
+            url = "@Url.Content("~/Rollo/getFoto")";
+            parametros = { 'idreq': idre, '__RequestVerificationToken': token, 'est': ides };
+            $.post(url, parametros, function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    let preview = document.getElementById('cimagen'),
+                        div = document.createElement('div');
+                    imagen = '"/Res/' + data[i].Foto + '"';
+                    if (num == data[i].IdArchivo) {
+                        div.setAttribute("class", "carousel-item active");
+                    } else {
+                        div.setAttribute("class", "carousel-item");
+                    }
+
+                    div.innerHTML = "<img class='d-block w-100' src=" + imagen + " alt=' slide'>";
+                    preview.append(div);
+                }
+                $("#myModal").modal();
+            });
+        }
+
+        </script>
+    }

@@ -1,0 +1,181 @@
+﻿@model List<sgop.Models.ViewModels.ProyectoViewModel>
+@{
+    ViewBag.Title = "MenuProyectos";
+}
+
+
+<!---------------------------------------------------------------------------------------------------------------->
+<div class="container-fluid w-75 p-0" style="margin-top: 5%">
+    <!--Inicia el container del card-->
+    <div class="col-12">
+        <div class="card border border-0 p-0 h-100">
+            <!--Inicia el card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-header bg-dark">
+                <!--Inicia la cabecera del card-->
+                <div class="row">
+                    <!--Inician los campos del primer renglon-->
+                    <div class="col-12 text-right">
+                        <h4 class="text-muted">Busqueda de proyectos.</h4>
+                    </div>
+                </div>
+                <form method="post" action="#" id="buscarProyectos">
+                    <br>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <!--Inician los campos del primer renglon-->
+                        <div class="col-4">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Licitacion</span>
+                                </div>
+                                <input type="text" class="form-control example" autocomplete="off" id="noLicitacion">
+                                <!--Tabla proyectos inner join licitaciones -> campo noLicitacion-->
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="col-3">
+                            <select name="idMunicipio" id="idMunicipio" class="custom-select custom-select-sm example"></select>
+                            <!--Se llena con base en una consulta a la tabla de catalogoMunicipios-->
+                            <!--Tabla proyectos inner join licitaciones -> campo idMunicipio-->
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="col-3">
+                            <select id="Estatus" name="Estatus" class="custom-select custom-select-sm example"></select>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="col-2">
+                            <button type="button" class="btn btn-outline-success w-100 btn-sm" data-toggle="modal" data-target="#modalCrearProyecto">Nuevo</button>
+                            <!--Invoca modal para llenar los campos de una nuevo proyecto-->
+                        </div>
+                    </div><!--Termina el primer renglon de campos-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                </form><!--Termina el formulario para la busqueda de proyectos-->
+            </div><!--Termina la cabecera del card-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="card-body" id="card-body" style="cursor: pointer">
+                <!--Inician los renglones por registro encontrado, 2 renglones por cada uno.-->
+                <!--Al hacer doble click debe de abrir la visualisacion del proyecto-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                @{ var cont = 0;}
+                @foreach (var oElement in Model)
+                {
+                    if (cont < 4)
+                    {
+                        <div name="SelectProyecto" id="@oElement.idLicitacion">
+                            @using (Html.BeginForm("VisualizarProyecto", "Constructora", FormMethod.Post, new { @id = "Form" + oElement.idLicitacion }))
+                            {
+
+                                <input type="hidden" name="idProyecto" value="@oElement.idProyecto">
+                                <input type="hidden" name="idLicitacion" value="@oElement.idLicitacion">
+
+                                <input type="submit" style="visibility:hidden;" />
+                            }
+                            <div class="row px-3 border border-left-0 border-right-0 border-bottom-0 border-primary">
+                                <!--Inicia el primer renglon del registro-->
+
+                                <div class="col-3">
+                                    <p>@oElement.noLicitacion</p><!--Tabla proyectos inner join licitaciones -> campo noLicitacion-->
+                                </div>
+                                <div class="col-2">
+                                    <p>@oElement.Municipio</p><!--Tabla proyectos inner join licitaciones inner join catalogoMunicipio-> campo descripcion-->
+                                </div>
+                                <div class="col-2">
+                                    <p>@oElement.Estatus</p><!--Tabla proyectos inner join licitaciones inner join catalogoEstatus-> campo descripcion-->
+                                </div>
+                                <div class="col-3">
+                                    <p>@oElement.localidad</p><!--Tabla proyectos inner join licitaciones -> campo localidad-->
+                                </div>
+                                <div class="col-2">
+                                    <p>@oElement.fechaContrato.ToString("dd-MM-yyyy")</p><!--Tabla proyectos -> campo fechaCreacion-->
+                                </div>
+                            </div><br><!--Termina el primer renglon del registro-->
+                            <div class="row px-3 ">
+                                <!--Inicio el segundo renglon del registro-->
+                                <div class="col-8">
+                                    <p><b>@oElement.nombreObra</b></p><!--Tabla proyectos inner join licitaciones -> campo nombreObre-->
+                                </div>
+                                <div class="col-4">
+                                    <p>@oElement.Empresa</p><!--Tabla proyectos inner join licitaciones inner join catalogoEmpresas-> campo descripcion-->
+                                </div>
+                            </div><!--Termina el segundo renglon del registro-->
+                        </div>
+                    }
+                    { cont++; }
+                }
+                <!---------------------------------------------------------------------------------------------------------------->
+            </div><!--Terminan los renglones por registro encontrado-->
+        </div><!--Termina el card de los datos-->
+    </div><!--Termina el col que contiene todo el card-->
+</div><!--Termina el espacio para meter todo el container-->
+<!---------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="modalCrearProyecto">
+    <!--Inicia el modal con los campos para la creacion de la licitacion-->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border border-0">
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-header bg-dark border border-0">
+                <!--Inicia la cabecera del modal-->
+                <h4 class="modal-title text-muted">Nuevo Proyecto</h4>
+                <button type="button" class="close text-muted" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="bg-dark mx">
+
+                <div class="col-11 mx-auto">
+                    <form action="Crear_Proyecto" id="formNvoLic" method="POST" class="form-inline">
+                        <div class="input-group input-group-sm mb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">No. Licitacion</span>
+                            </div>
+                            <input type="text" class="form-control form-control-lg" id="no_Licitacion" name="noLicitacion" required>
+
+                            <!--Tabla proyectos inner join licitaciones -> campo noLicitacion-->
+                            <!--Onchange cambia el body con los resultados-->
+                        </div>
+                        <input type="hidden" id="id_lic" name="id_lic" />
+                        <button type="submit" id="btnNvoLic" class="btn btn-success btn-sm ml-3 mb-2">Nuevo</button>
+                    </form>
+                </div>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="modal-body">
+
+                <div id="temp2">
+
+                </div>
+            </div>
+            <!---------------------------------------------------------------------------------------------------------------->
+        </div>
+    </div>
+</div><!--Termina el modal con los campos para seleccionar proyecto a crear-->
+@section scripts
+    {
+    <script>
+        if ("@ViewBag.message" != null) {
+            if ("@ViewBag.status" == "Error!") {
+
+                Swal.fire({
+                    icon: 'error',
+                    text: "@ViewBag.message"
+                })
+
+            }
+            else if("@ViewBag.status" == "Exito!"){
+
+                Swal.fire({
+                    icon: 'success',
+                    text: "@ViewBag.message"
+                })
+
+            }
+            else if("@ViewBag.status" == "Info!"){
+
+                Swal.fire({
+                    icon: 'info',
+                    text: "@ViewBag.message"
+                })
+
+            }
+        }
+    </script>
+}

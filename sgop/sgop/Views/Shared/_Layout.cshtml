@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <!--Iconos-->
+    <link rel="stylesheet" href="~/Content/fontawesome5.9.0/css/all.min.css">
+    <link href="~/Content/fileinput/themes/explorer-fas/theme.css" media="all" rel="stylesheet" type="text/css" />
+
+    <!--Notificaciones sweet alert-->
+    <script src="~/Content/sweetalert2/sweetalert2.all.min.js"></script>
+
+    <link rel="stylesheet" href="~/Content/MiEstilo.css">
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.1/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+
+
+</head>
+<body style="background-image: url(@Url.Content("~/Res/img/layouts/backimage2.jpg"))">
+    <!-- style="background-image: url('backimage2.jpg');background-size: cover;"-->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark static-top">
+        <!--Inicia el menu de navegacion-->
+        <!---------------------------------------------------------------------------------------------------------------->
+        <ul class="navbar-nav col-4">
+            <!--Parte de los enlaces a los principales componentes-->
+            <a class="navbar-brand ml-5" href="@Url.Content("~/Constructora/PrincipalConstructora")">Constructora</a><!--Redirecciona al menu principal-->
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Content("~/Licitaciones")">Licitaciones</a><!--Redirecciona al menu de licitaciones-->
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Constructora/MenuProyectos">Proyectos</a><!--Redirecciona al menu de proyectos-->
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Reportes</a><!--Redirecciona al menu de reportes-->
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Content("~/Admin")">Usuarios</a><!--Redirecciona al menu de usuarios-->
+            </li>
+        </ul>
+        <!---------------------------------------------------------------------------------------------------------------->
+        <div class="col-5">
+            <!--Inicia el menu para buscar directamente un proyecto o licitacion-->
+
+        </div>
+        <!---------------------------------------------------------------------------------------------------------------->
+        <ul class="navbar-nav col-3 mx-auto">
+            <!--Inicia el menu para salir o ver tu informacion-->
+            <span class="navbar-text px-3 border border-top-0 border border-bottom-0 border border-left-0 border-success">
+                <!--tabla usuario -> campos nombre, apellidoPaterno, apellidoMaterno-->
+            </span>
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="/Access/Out">Salir</a><!--Redirecciona al menu de acceso, termina la sesion-->
+            </li>
+        </ul>
+    </nav><!--Termina el menu de navegacion-->
+
+    @RenderBody()
+
+    <div class="footer text-center bg-dark">
+        <h6 class="font-weight-bold" style="color:white;"><br />&copy; PineAPPs</h6>
+    </div>
+
+    <!-- jQuery library -->
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+    <script src="~/Content/fileinput/js/plugins/piexif.js" type="text/javascript"></script>
+    <script src="~/Content/fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
+    <script src="~/Content/fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+    <script src="~/Content/fileinput/js/fileinput.js" type="text/javascript"></script>
+    <script src="~/Content/fileinput/js/locales/es.js" type="text/javascript"></script>
+    <script src="~/Content/fileinput/themes/fas/theme.js" type="text/javascript"></script>
+    <script src="~/Content/fileinput/themes/explorer-fas/theme.js" type="text/javascript"></script>
+
+    <!-- Popper JS -->
+    <script src="~/Scripts/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/app.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

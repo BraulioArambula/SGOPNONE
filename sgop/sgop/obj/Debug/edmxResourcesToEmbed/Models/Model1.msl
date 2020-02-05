@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="sgopModelStoreContainer" CdmEntityContainer="sgopEntities">
+    <EntitySetMapping Name="archivosFotograficos">
+      <EntityTypeMapping TypeName="sgopModel.archivosFotograficos">
+        <MappingFragment StoreEntitySet="archivosFotograficos">
+          <ScalarProperty Name="foto" ColumnName="foto" />
+          <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+          <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+          <ScalarProperty Name="noEstimacion" ColumnName="noEstimacion" />
+          <ScalarProperty Name="idArchFoto" ColumnName="idArchFoto" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="catalogoConceptos">
+      <EntityTypeMapping TypeName="sgopModel.catalogoConceptos">
+        <MappingFragment StoreEntitySet="catalogoConceptos">
+          <ScalarProperty Name="precioUnitario" ColumnName="precioUnitario" />
+          <ScalarProperty Name="unidad" ColumnName="unidad" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="clave" ColumnName="clave" />
+          <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="catalogoEmpresas">
+      <EntityTypeMapping TypeName="sgopModel.catalogoEmpresas">
+        <MappingFragment StoreEntitySet="catalogoEmpresas">
+          <ScalarProperty Name="razonSocial" ColumnName="razonSocial" />
+          <ScalarProperty Name="idEmpresa" ColumnName="idEmpresa" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="catalogoEstatus">
+      <EntityTypeMapping TypeName="sgopModel.catalogoEstatus">
+        <MappingFragment StoreEntitySet="catalogoEstatus">
+          <ScalarProperty Name="perteneceA" ColumnName="perteneceA" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="idEstatus" ColumnName="idEstatus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="catalogoMateriales">
+      <EntityTypeMapping TypeName="sgopModel.catalogoMateriales">
+        <MappingFragment StoreEntitySet="catalogoMateriales">
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="catalogoMunicipios">
+      <EntityTypeMapping TypeName="sgopModel.catalogoMunicipios">
+        <MappingFragment StoreEntitySet="catalogoMunicipios">
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="idMunicipio" ColumnName="idMunicipio" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="catalogoRoles">
+      <EntityTypeMapping TypeName="sgopModel.catalogoRoles">
+        <MappingFragment StoreEntitySet="catalogoRoles">
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="catalogoSistemas">
+      <EntityTypeMapping TypeName="sgopModel.catalogoSistemas">
+        <MappingFragment StoreEntitySet="catalogoSistemas">
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="idSistema" ColumnName="idSistema" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="controlCobros">
+      <EntityTypeMapping TypeName="sgopModel.controlCobros">
+        <MappingFragment StoreEntitySet="controlCobros">
+          <ScalarProperty Name="usuarioCompensacion" ColumnName="usuarioCompensacion" />
+          <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+          <ScalarProperty Name="factura" ColumnName="factura" />
+          <ScalarProperty Name="fechaCompensacion" ColumnName="fechaCompensacion" />
+          <ScalarProperty Name="docCompensacion" ColumnName="docCompensacion" />
+          <ScalarProperty Name="fechaDocumento" ColumnName="fechaDocumento" />
+          <ScalarProperty Name="importe" ColumnName="importe" />
+          <ScalarProperty Name="clDocumento" ColumnName="clDocumento" />
+          <ScalarProperty Name="noEstimacion" ColumnName="noEstimacion" />
+          <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+          <ScalarProperty Name="noDocumento" ColumnName="noDocumento" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="controlPagos">
+      <EntityTypeMapping TypeName="sgopModel.controlPagos">
+        <MappingFragment StoreEntitySet="controlPagos">
+          <ScalarProperty Name="usuarioCompensacion" ColumnName="usuarioCompensacion" />
+          <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+          <ScalarProperty Name="factura" ColumnName="factura" />
+          <ScalarProperty Name="fechaCompensacion" ColumnName="fechaCompensacion" />
+          <ScalarProperty Name="docCompensacion" ColumnName="docCompensacion" />
+          <ScalarProperty Name="fechaDocumento" ColumnName="fechaDocumento" />
+          <ScalarProperty Name="importe" ColumnName="importe" />
+          <ScalarProperty Name="clDocumento" ColumnName="clDocumento" />
+          <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+          <ScalarProperty Name="noDocumento" ColumnName="noDocumento" />
+          <ScalarProperty Name="idRequisicionParcial" ColumnName="idRequisicionParcial" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ejecucionesMensuales">
+      <EntityTypeMapping TypeName="sgopModel.ejecucionesMensuales">
+        <MappingFragment StoreEntitySet="ejecucionesMensuales">
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+          <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+          <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+          <ScalarProperty Name="periodo" ColumnName="periodo" />
+          <ScalarProperty Name="idEjecucion" ColumnName="idEjecucion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="estimaciones">
+      <EntityTypeMapping TypeName="sgopModel.estimaciones">
+        <MappingFragment StoreEntitySet="estimaciones">
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+          <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+          <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+          <ScalarProperty Name="noEstimacion" ColumnName="noEstimacion" />
+          <ScalarProperty Name="idEstimacion" ColumnName="idEstimacion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="licitaciones">
+      <EntityTypeMapping TypeName="sgopModel.licitaciones">
+        <MappingFragment StoreEntitySet="licitaciones">
+          <ScalarProperty Name="usuarioModificacion" ColumnName="usuarioModificacion" />
+          <ScalarProperty Name="fechaModificacion" ColumnName="fechaModificacion" />
+          <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+          <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+          <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+          <ScalarProperty Name="idEstatus" ColumnName="idEstatus" />
+          <ScalarProperty Name="actaFallo" ColumnName="actaFallo" />
+          <ScalarProperty Name="actaPropuesta" ColumnName="actaPropuesta" />
+          <ScalarProperty Name="actaAclaraciones" ColumnName="actaAclaraciones" />
+          <ScalarProperty Name="actaVisita" ColumnName="actaVisita" />
+          <ScalarProperty Name="fechaFallo" ColumnName="fechaFallo" />
+          <ScalarProperty Name="fechaPropuesta" ColumnName="fechaPropuesta" />
+          <ScalarProperty Name="fechaAclaraciones" ColumnName="fechaAclaraciones" />
+          <ScalarProperty Name="fechaVisita" ColumnName="fechaVisita" />
+          <ScalarProperty Name="localidad" ColumnName="localidad" />
+          <ScalarProperty Name="idMunicipio" ColumnName="idMunicipio" />
+          <ScalarProperty Name="nombreObra" ColumnName="nombreObra" />
+          <ScalarProperty Name="noLicitacion" ColumnName="noLicitacion" />
+          <ScalarProperty Name="idEmpresa" ColumnName="idEmpresa" />
+          <ScalarProperty Name="idLicitacion" ColumnName="idLicitacion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="proyectos">
+      <EntityTypeMapping TypeName="sgopModel.proyectos">
+        <MappingFragment StoreEntitySet="proyectos">
+          <ScalarProperty Name="usuarioModificacion" ColumnName="usuarioModificacion" />
+          <ScalarProperty Name="fechaModificacion" ColumnName="fechaModificacion" />
+          <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+          <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+          <ScalarProperty Name="jefeObra" ColumnName="jefeObra" />
+          <ScalarProperty Name="actaEntrega" ColumnName="actaEntrega" />
+          <ScalarProperty Name="fechaFinalReal" ColumnName="fechaFinalReal" />
+          <ScalarProperty Name="fechaInicioReal" ColumnName="fechaInicioReal" />
+          <ScalarProperty Name="fechaFinalContrato" ColumnName="fechaFinalContrato" />
+          <ScalarProperty Name="fechaInicioContrato" ColumnName="fechaInicioContrato" />
+          <ScalarProperty Name="plazoDias" ColumnName="plazoDias" />
+          <ScalarProperty Name="policaCumplimiento" ColumnName="policaCumplimiento" />
+          <ScalarProperty Name="polizaVicios" ColumnName="polizaVicios" />
+          <ScalarProperty Name="polizaAnticipo" ColumnName="polizaAnticipo" />
+          <ScalarProperty Name="fechaContrato" ColumnName="fechaContrato" />
+          <ScalarProperty Name="idEstatus" ColumnName="idEstatus" />
+          <ScalarProperty Name="idLicitacion" ColumnName="idLicitacion" />
+          <ScalarProperty Name="idProyecto" ColumnName="idProyecto" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="rangos">
+      <EntityTypeMapping TypeName="sgopModel.rangos">
+        <MappingFragment StoreEntitySet="rangos">
+          <ScalarProperty Name="fechaModificacion" ColumnName="fechaModificacion" />
+          <ScalarProperty Name="usuarioModificacion" ColumnName="usuarioModificacion" />
+          <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+          <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+          <ScalarProperty Name="pertenceA" ColumnName="pertenceA" />
+          <ScalarProperty Name="rangoInicial" ColumnName="rangoInicial" />
+          <ScalarProperty Name="idRango" ColumnName="idRango" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="relacionConceptosMateriales">
+      <EntityTypeMapping TypeName="sgopModel.relacionConceptosMateriales">
+        <MappingFragment StoreEntitySet="relacionConceptosMateriales">
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+          <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+          <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+          <ScalarProperty Name="idRelacion" ColumnName="idRelacion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="relacionSistemasRoles">
+      <EntityTypeMapping TypeName="sgopModel.relacionSistemasRoles">
+        <MappingFragment StoreEntitySet="relacionSistemasRoles">
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+          <ScalarProperty Name="idSistema" ColumnName="idSistema" />
+          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+          <ScalarProperty Name="idRelacion" ColumnName="idRelacion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="requisiciones">
+      <EntityTypeMapping TypeName="sgopModel.requisiciones">
+        <MappingFragment StoreEntitySet="requisiciones">
+          <ScalarProperty Name="total" ColumnName="total" />
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+          <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+          <ScalarProperty Name="idRequisicionRango" ColumnName="idRequisicionRango" />
+          <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="requisicionesMateriales">
+      <EntityTypeMapping TypeName="sgopModel.requisicionesMateriales">
+        <MappingFragment StoreEntitySet="requisicionesMateriales">
+          <ScalarProperty Name="total" ColumnName="total" />
+          <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+          <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+          <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+          <ScalarProperty Name="idRequisicionMaterial" ColumnName="idRequisicionMaterial" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="requisicionesParciales">
+      <EntityTypeMapping TypeName="sgopModel.requisicionesParciales">
+        <MappingFragment StoreEntitySet="requisicionesParciales">
+          <ScalarProperty Name="aprobada" ColumnName="aprobada" />
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+          <ScalarProperty Name="idMaterial" ColumnName="idMaterial" />
+          <ScalarProperty Name="idConcepto" ColumnName="idConcepto" />
+          <ScalarProperty Name="noRequisicion" ColumnName="noRequisicion" />
+          <ScalarProperty Name="idRequisicion" ColumnName="idRequisicion" />
+          <ScalarProperty Name="idRequisicionParcial" ColumnName="idRequisicionParcial" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="sgopModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="definition" ColumnName="definition" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="usuarios">
+      <EntityTypeMapping TypeName="sgopModel.usuarios">
+        <MappingFragment StoreEntitySet="usuarios">
+          <ScalarProperty Name="usuarioModificacion" ColumnName="usuarioModificacion" />
+          <ScalarProperty Name="fechaModificacion" ColumnName="fechaModificacion" />
+          <ScalarProperty Name="usuarioCreacion" ColumnName="usuarioCreacion" />
+          <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+          <ScalarProperty Name="primerAcceso" ColumnName="primerAcceso" />
+          <ScalarProperty Name="bloqueado" ColumnName="bloqueado" />
+          <ScalarProperty Name="imagenPerfil" ColumnName="imagenPerfil" />
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="apellidoMaterno" ColumnName="apellidoMaterno" />
+          <ScalarProperty Name="apellidoPaterno" ColumnName="apellidoPaterno" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="usuario" ColumnName="usuario" />
+          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

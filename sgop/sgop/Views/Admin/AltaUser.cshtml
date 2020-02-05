@@ -1,0 +1,280 @@
+﻿@model sgop.Models.ViewModels.UserViewModel
+@{
+    ViewBag.Title = "AltaUser";
+    Layout = "~/Views/Shared/layout_admin.cshtml";
+}
+
+<div class="container mt-5">
+    @if (ViewBag.message != null)
+    {
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="alert alert-dismissible fade show mt-5 @(ViewBag.status == "Error!" ? "alert-warning" : "alert-success")" role="alert">
+                    <strong>@ViewBag.status</strong> @ViewBag.message
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    }
+
+</div>
+
+<div class="card shadow-lg m-5 mx-auto w-75 border border-0">
+    <!--Inicia el CARD-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="card-header text-right">
+        <!--Inicia la cabecera del CARD-->
+        <h2 class="text-muted font-weight-bolder">Creacion de Usuarios</h2><!--Titulo de la cabecera del card-->
+    </div><!--Termina la cabecera del CARD-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="card-body border border-right-0 border-left-0 border-info">
+        <!--Inicia el cuerpo del CARD-->
+        <div class="row">
+
+            <div class="col-6">
+                <!--Inicia columna con los campos del lado izquierdo-->
+
+                <form method="post" action="@Url.Content("~/Admin/AltaUser")" id="crearUsuario" enctype="multipart/form-data">
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h3 class="text-muted font-weight-bold">Crear Usuario</h3><!--Titulo para la columna del lado derecho-->
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    @{
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationMessage("error", new { @class = "text-danger" })
+
+                        <div class="row">
+                            <div class="col-6 mx-auto my-1">
+                                @Html.TextBoxFor(d => d.nombre, new { @class = "form-control form-control-sm", placeholder = "Nombre(s)" })
+                                <!--Tabla usuarios -> campo nombre. Limitar a 20 caracteres-->
+                                @Html.ValidationMessage("nombre", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row">
+                            <div class="col-6 mx-auto my-1">
+                                @Html.TextBoxFor(d => d.apellidoPaterno, new { @class = "form-control form-control-sm", placeholder = "Apellido Paterno" })
+                                <!--Tabla usuarios -> campo apellidoPaterno. Limitar a 20 caracteres-->
+                                @Html.ValidationMessage("apellidoPaterno", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row">
+                            <div class="col-6 mx-auto my-1">
+                                @Html.TextBoxFor(d => d.apellidoMaterno, new { @class = "form-control form-control-sm", placeholder = "Apellido Materno" })
+                                <!--Tabla usuarios -> campo apellidoMaterno. Limitar a 20 caracteres-->
+                                @Html.ValidationMessage("apellidoMaterno", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row">
+                            <div class="col-6 mx-auto my-1">
+                                @Html.TextBoxFor(d => d.correo, new { @class = "form-control form-control-sm", placeholder = "Correo" })
+                                <!--Tabla usuarios -> campo correo. Limitar a 30 caracteres-->
+                                @Html.ValidationMessage("correo", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row">
+                            <div class="col-6 mx-auto my-1">
+                                @Html.TextBoxFor(d => d.usuario, new { @class = "form-control form-control-sm", placeholder = "Usuario" })
+                                <!--Tabla usuarios -> campo usuario. Limitar a 20 caracteres-->
+                                @Html.ValidationMessage("usuario", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row">
+                            <div class="col-6 mx-auto my-1">
+                                @Html.PasswordFor(d => d.password, new { @class = "form-control form-control-sm", placeholder = "Contraseña" })
+                                <!-- <input type="password" class="form-control form-control-sm" required id="pass" name="form" placeholder="Password">
+                                    Tabla usuarios -> campo password. Limitar a 20 caracteres-->
+                                @Html.ValidationMessage("password", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row">
+                            <div class="col-6 mx-auto my-1">
+                                @Html.PasswordFor(d => d.ConfirmPass, new { @class = "form-control form-control-sm", placeholder = "Confirmar Contraseña" })
+                                <!--Comparar este campo con el capo anterior antes de hacer submit del form-->
+
+                                @Html.ValidationMessage("ConfirmPass", new { @class = "text-danger" })
+
+                                <!--Html.Validate("ConfirmPass", new { class = "border border-danger" }) -->
+                            </div>
+                        </div>
+                    }
+            </div><!--Termina columna con los campos del lado izquierdo-->
+            <!---------------------------------------------------------------------------------------------------------------->
+            <div class="col-6 border border-info border-right-0 border-top-0 border-bottom-0">
+                <!--Inician los campos de la columna derecha-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h3 class="text-muted font-weight-bold">Permisos</h3><!--Titulo de la columna derecha-->
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row">
+                    <div class="col-12 pl-3">
+                        <table class="table table-borderless table-sm table-hover">
+                            <tbody>
+                                <!---------------------------------------------------------------------------------------------------------------->
+                                <tr class="text-center text-info lead font-weight-bold">
+                                    <td><br></td>
+                                    <td>Contador</td>
+                                    <td>Administrador</td><!--Cabeceras de la tabla-->
+                                    <td>Otro</td>
+                                </tr>
+                                <!---------------------------------------------------------------------------------------------------------------->
+                                <tr class="text-center">
+                                    <td class="text-left text-info font-weight-bold">Constructora</td>
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            @Html.RadioButton("Constructora", 1, new { @class = "form-check-input" })
+
+                                            <!--Si se chequea este check insertariamos en la tabla relacionSistemaRol idUsuario, idSistema (2), idRol (1)-->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            @Html.RadioButton("Constructora", 2, new { @class = "form-check-input" })
+
+                                            <!--Si se chequea este check insertariamos en la tabla relacionSistemaRol idUsuario, idSistema (2), idRol (2)-->
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <div class="form-check form-check-inline">
+                                            @Html.RadioButton("Constructora", 3, new { @class = "form-check-input" })
+
+                                            <!--Si se chequea este check insertariamos en la tabla relacionSistemaRol idUsuario, idSistema (2), idRol (3)-->
+                                        </div>
+                                    </td>
+                                </tr>
+                                @Html.ValidationMessage("Constructora", new { @class = "text-danger" })
+
+                                <!---------------------------------------------------------------------------------------------------------------->
+                                <tr class="text-center">
+                                    <td class="text-left text-info font-weight-bold">Comercializadora</td>
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            @Html.RadioButton("Comercializadora", 1, new { @class = "form-check-input" })
+
+                                            <!--Si se chequea este check insertariamos en la tabla relacionSistemaRol idUsuario, idSistema (2), idRol (1)-->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            @Html.RadioButton("Comercializadora", 2, new { @class = "form-check-input" })
+
+                                            <!--Si se chequea este check insertariamos en la tabla relacionSistemaRol idUsuario, idSistema (2), idRol (2)-->
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <div class="form-check form-check-inline">
+                                            @Html.RadioButton("Comercializadora", 3, new { @class = "form-check-input" })
+
+                                            <!--Si se chequea este check insertariamos en la tabla relacionSistemaRol idUsuario, idSistema (2), idRol (3)-->
+                                        </div>
+                                    </td>
+                                </tr>
+                                @Html.ValidationMessage("Comercializadora", new { @class = "text-danger" })
+                                <!---------------------------------------------------------------------------------------------------------------->
+                                <tr class="text-center">
+                                    <td class="text-left text-info font-weight-bold">Inmobiliaria</td>
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            @Html.RadioButton("Inmobiliaria", 1, new { @class = "form-check-input" })
+
+                                            <!--Si se chequea este check insertariamos en la tabla relacionSistemaRol idUsuario, idSistema (2), idRol (1)-->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            @Html.RadioButton("Inmobiliaria", 2, new { @class = "form-check-input" })
+
+                                            <!--Si se chequea este check insertariamos en la tabla relacionSistemaRol idUsuario, idSistema (2), idRol (2)-->
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <div class="form-check form-check-inline">
+                                            @Html.RadioButton("Inmobiliaria", 3, new { @class = "form-check-input" })
+
+                                            <!--Si se chequea este check insertariamos en la tabla relacionSistemaRol idUsuario, idSistema (2), idRol (3)-->
+                                        </div>
+                                    </td>
+                                </tr>
+                                @Html.ValidationMessage("Inmobiliaria", new { @class = "text-danger" })
+                                <!---------------------------------------------------------------------------------------------------------------->
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--Termina la la fila de la tabla-->
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="imagen" name="imagen" accept="image/*">
+                            <label class="custom-file-label" for="imagen">Imagen de perfil</label>
+
+
+                            <!--Tabla usuarios -> campo imagenPerfil-->
+                        </div>
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------------->
+                <script>
+                    //Para que aparezca el nombre del archivo que seleccionamos en el campo FILE
+                    $(".custom-file-input").on("change", function () {
+                        var fileName = $(this).val().split("\\").pop();
+                        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                    });
+                </script>
+                <!---------------------------------------------------------------------------------------------------------------->
+                <div class="row mt-3">
+                    <div class="col-4">
+                        <div class=" mx-auto my-3">
+                            <button type="button" class="btn btn-warning btn-block btn-sm" onclick=" document.location.href = '@Url.Content("~/Admin/Index")';">ATRAS<span class="fas fa-arrow-left mx-1"></span></button>
+                            <!--Boton que hace el submit del formulario crearUsuario-->
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class=" mx-auto my-3">
+                            <button type="submit" class="btn btn-success btn-block btn-sm">GUARDAR<span class="far fa-save mx-1"></span></button>
+                            <!--Boton que hace el submit del formulario crearUsuario-->
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="col-4">
+                        <div class=" mx-auto my-3">
+                            <button type="button" class="btn btn-danger btn-block btn-sm" onclick=" document.location.href = '@Url.Content("~/Admin/AltaUser")';">LIMPIAR<span class="fas fa-broom mx-1"></span></button>
+                            <!--Boton que limpia todos los campos del formulario-->
+                        </div>
+                    </div>
+                </div>
+                <!---------------------------------------------------------------------------------------------------------------->
+                </form>
+            </div><!--Termina la columna derecha-->
+        </div><!--Termina el renglon de los campos-->
+    </div><!--Termina el card body-->
+    <!---------------------------------------------------------------------------------------------------------------->
+    <div class="card-footer bg-dark">
+        <!--Inicia el footer con la marca de agua propia de la empresa-->
+        <div class="row">
+            <div class="col-12 text-center">
+                <h6 class="text-muted font-weight-bold">PineAPPs</h6>
+            </div>
+        </div>
+    </div><!--Termina el fotter con la marca de agua propia de la empresa-->
+    <!---------------------------------------------------------------------------------------------------------------->
+</div><!--Termina el card completo-->

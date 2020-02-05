@@ -1,0 +1,469 @@
+﻿@model List<sgop.Models.EstimacionInnerLicitacionViewModel>
+@{
+    /**/
+
+    ViewBag.Title = "Estimacion";
+
+}
+
+<h2>Estimacion</h2>
+@{ var fila = 0;}
+
+@foreach (var Elemento in Model)
+{
+    var max = "0";
+    if (fila == 0)
+    {
+        fila = 1;
+
+        <!---------------------------------------------------------------------------------------------------------------->
+        <div class="container-fluid w-75 p-0" style="margin-top: 5%">
+            <!--Inicia el container del card-->
+            <div class="col-12">
+                <div class="card border border-0 p-0 h-100">
+                    <!--Inicia el card-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="card-header bg-dark">
+                        <!--Inicia la cabecera del card-->
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row mb-1">
+                            <!--Inician los campos del primer renglon-->
+                            <div class="col-12 text-center">
+                                <h4 class="text-muted">Control de estimaciones.</h4>
+                            </div>
+                        </div><!--Termina el primer renglon de campos-->
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row mb-1">
+                            <!--Inicia el segundo renglon de campos-->
+                            <div class="col-10">
+                                <h6 class="text-light">@Elemento.NombreObra</h6>
+                            </div>
+                            <div class="col-2 px-1">
+                                <button type="button" class="btn btn-outline-success btn-block btn-sm" id="guardar" name="guardar">Guardar<span class="far fa-save mx-1"></span></button>
+                                <!--Manda el submit del form crearRequisicion con cada linea de la tabla-->
+                            </div>
+                        </div><!--Termina el segundo renglon de campos-->
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row mb-1">
+                            <!--Inicia el segundo renglon de campos-->
+                            <div class="col-5">
+                                <h6 class="text-light" id="licitacion" name="licitacion">Licitacion: @Elemento.NoLicitacion</h6>
+                                <!--Tabla licitaciones -> campo noLicitacion-->
+                            </div>
+                            <div class="col-5">
+                                <h6 class="text-light">Municipion: @Elemento.IdMunicipio</h6>
+                                <!--Tabla licitaciones inner join catalogoMunicipios -> campo descripcion-->
+                            </div>
+                            <div class="col-2 px-1">
+                                <button type="button" class="btn btn-outline-danger btn-block btn-sm" id="return" name="return">Regresar<span class="fas fa-sign-out-alt mx-1"></span></button>
+                                <!--Manda la visualizacion de la licitacion-->
+                            </div>
+                        </div><!--Termina el segundo renglon de campos-->
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row mb-1">
+                            <!--Inicia el segundo renglon de campos-->
+                            <div class="col-5">
+                                <h6 class="text-light">Localidad: @Elemento.Localidad</h6>
+                                <!--Tabla licitaciones -> campo localidad-->
+                            </div>
+
+                            <div class="col-5">
+                                <h6 class="text-light">Estimacion:</h6>
+                                <!--Tabla licitaciones -> campo idRequisicion-->
+
+                                <select id="est" name="est" class="custom-select custom-select-sm w-50">
+                                    @foreach (var item in ViewBag.estimaciones)
+                                    {
+                                        <option value="@item.NoEstimacion"> @item.NoEstimacion </option>
+                                        max = @item.NoEstimacion;
+                                    }
+                                    <option value="nuevo">Nueva</option>
+                                </select>
+                                <!--Se llena con base en una consulta a la tabla de catalogoMunicipios-->
+                                <!--Tabla licitaciones -> campo idMunicipio-->
+                            </div>
+
+                            @using (Html.BeginForm("RolloFotografico", "Rollo", FormMethod.Post, new { @id = "rolloFoto" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="text" name="licitacion1" id="licitacion1" value="@Elemento.IdLicitacion" hidden />
+                            }
+                            @using (Html.BeginForm("Estimacion", "Estimacion", FormMethod.Post, new { @name = "estimacion" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="text" name="idLicitacion" id="idLicitacion" value="@Elemento.IdLicitacion" hidden />
+                            }
+                            @using (Html.BeginForm("VisualizarProyecto", "Constructora", FormMethod.Post, new { @id = "regresar" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="text" name="idProyecto" id="idProyecto" value="@Elemento.IdProyecto" hidden />
+                            }
+                            <div class="col-2 px-1">
+                                <button type="button" class="btn btn-outline-warning btn-block btn-sm" id="rollo" name="rollo">Rollo<span class="fas fa-camera mx-1"></span></button>
+                            </div>
+
+                        </div><!--Termina el segundo renglon de campos-->
+
+                        <div class="row mb-1">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-5">
+                            </div>
+                            <div class="col-2 px-1">
+                                <button type="button" name="AgFila" id="AgFila" class="btn btn-outline-primary btn-block btn-sm float-right">Ag Fila<span class="fas fa-sign-out-alt mx-1"></span></button>
+                                <!--Manda la visualizacion de la licitacion-->
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+
+                    </div><!--Termina la cabecera del card-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                    <div class="card-body">
+                        <!--Inician los renglones por registro encontrado, 2 renglones por cada uno.-->
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row small border border-top-0 border-left-0 border-right-0 border-dark" id="cuerpoTabla">
+                            <!--Cabecera de la tabla para la requisicion-->
+                            <div class="col-2 text-muted font-weight-bolder text-center">
+                                Clave
+                            </div>
+                            <div class="col-3 text-muted font-weight-bolder">
+                                Descripcion
+                            </div>
+                            <div class="col-1 text-muted font-weight-bolder text-center">
+                                Ctd
+                            </div>
+                            <div class="col-1 text-muted font-weight-bolder text-center">
+                                Total
+                            </div>
+                            <div class="col-2 text-muted font-weight-bolder text-center">
+                                Estimacion
+                            </div>
+                            <div class="col-1 text-muted font-weight-bolder text-center">
+                                Subtotal
+                            </div>
+                            <div class="col-2 text-muted font-weight-bolder text-center">
+                                Acumulado
+                            </div>
+                        </div>
+                        <!--FORM PARA DAR DE ALTA ESTIMACION-->
+
+                        @using (Html.BeginForm("Agregar", "Estimacion", FormMethod.Post, new { @id = "formNuevo", @name = "formNuevo" }))
+                        {
+                            try
+                            {
+                                @Html.AntiForgeryToken()
+                            }
+                            catch (Exception)
+                            {
+
+                                throw;
+                            }
+                            <div>
+                                <input type="number" name="cantidad" id="cantidad" value="@Elemento.Cantidad" hidden />
+                                <input type="number" name="total" id="total" value="@Elemento.Total" hidden />
+                                <input type="text" name="totalfi" id="totalfi" value="0" hidden />
+                                <input type="text" name="idReq" id="idReq" value="@Elemento.RequisicionRango" hidden />
+                                <input type="text" name="idRequisicion" id="idRequisicion" value="@Elemento.IdRequisicion" hidden />
+                                <input type="text" name="estMax" id="estMax" value="@max" hidden />
+                            </div>
+                            <div id="nuevaFila" name="nuevafila">
+
+                            </div>
+
+                        }
+                        <!--FORM PARA EDITAR ESTIMACION-->
+                        <form action="/Estimacion/Editar" method="post" name="formEditar" id="formEditar">
+                            @Html.AntiForgeryToken()
+                            <div>
+                                <input type="number" name="Edcantidad" id="Edcantidad" value="@Elemento.Cantidad" hidden />
+                                <input type="number" name="Edtotal" id="Edtotal" value="@Elemento.Total" hidden />
+                                <input type="text" name="Edtotalfi" id="Edtotalfi" value="0" hidden />
+                            </div>
+                            <div id="editarFila" name="editarFila">
+
+                            </div>
+                        </form>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                        <div class="row small border border-top-0 border-left-0 border-right-0 bg-light">
+                            <div class="col-8 text-success font-weight-bolder text-right">
+                            </div>
+                            <div class="col-2 text-primary font-weight-bolder text-center">
+                                <!--<h5>Total:</h5>
+                                </div>
+                                <div class="col-2 text-primary font-weight-bolder text-center">
+                                    <h5 name="totalEst" id="totalEst">$ 250</h5>suma del total de cada concepto-->
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------------------->
+                    </div><!--Terminan body del card-->
+                    <!---------------------------------------------------------------------------------------------------------------->
+                </div><!--Termina el card de los datos-->
+            </div><!--Termina el col que contiene todo el card-->
+        </div><!--Termina el espacio para meter todo el container-->
+        <!---------------------------------------------------------------------------------------------------------------->
+        <div class="row fixed-bottom">
+            <!--Inicia el footer con la marca de agua propia de la empresa-->
+            <div class="col-12 text-center">
+                <h6 class="text-muted font-weight-bold">PineAPPs</h6>
+            </div>
+        </div><!--Termina el fotter con la marca de agua propia de la empresa-->
+
+        <hr />
+    }
+
+}
+
+@section scripts
+    {
+    <script>
+        //funcion para consultar estimacion o agregar una nueva
+        $(document).ready(function () {
+            var a = $("#totalfi").val();
+            var indiceNE = 0; // nuevo = 1 -- editar = 2
+            $("#est").change(function (e) {
+                if ($(this).val() == 'nuevo') {
+                    indiceNE = 1;
+                    $("#nuevaFila").html("");
+                    $("#editarFila").html("");
+                    e.preventDefault();
+                    var token = $("[name='__RequestVerificationToken']").val();
+                    url = "@Url.Content("~/Estimacion/Conceptos")";
+                    //parametros = { 'idReq': $("#idReq").val(), '__RequestVerificationToken': token };
+                    parametros = $("#formNuevo").serialize();
+                    $.post(url, parametros, function (data) {
+                    var div = document.createElement('div');
+                    div.setAttribute('class', 'row small border border-top-0 border-left-0 border-right-0');
+                        div.innerHTML = '<div class="col-2 text-muted font-weight-bolder text-center">'
+                                    + '<select class="custom-select custom-select-sm" onchange="desConc(' + a + ')" name="opt' + a + '" id="opt' + a + '">' + data + '</select>'
+                                    + '</div>'
+                                    + '<div class="col-3 text-muted font-weight-bolder" name="conce' + a + '" id="conce' + a + '">'
+                                    + '</div>'
+                                    + '<div class="col-1 text-muted font-weight-bolder text-center" >'
+                                    + $("#cantidad").val()
+                                    + '</div>'
+                                    + '<div class="col-1 text-muted font-weight-bolder text-center" >'
+                                    + $("#total").val()
+                                    + '</div>'
+                                    + '<div class="col-2 text-muted font-weight-bolder text-center" >'
+                                    + '<input type="text" class="form-control form-control-sm w-50 mx-auto text-center" id="est' + a + '" name="est' + a + '">'
+                                    + '</div>'
+                                    + '<div class="col-1 text-muted font-weight-bolder text-center">'
+                                    + '<label name="precio' + a + '" id="precio"' + a + '"> </label>'
+                                    + '</div>'
+                                    + '<div class="col-2 text-muted font-weight-bolder text-center" >'
+                                    + '$ 0 '
+                                    + '</div>';
+                    document.getElementById('nuevaFila').appendChild(div);
+                        a++;
+                        $("#totalfi").val(a);
+
+                    });
+                }
+                else {
+                    a = 0;
+                    indiceNE = 2;
+                    $("#nuevaFila").html("");
+                    $("#editarFila").html("");
+                    e.preventDefault();
+                    var token = $("[name='__RequestVerificationToken']").val();
+                    url = "@Url.Content("~/Estimacion/getEstimacion")";
+                    parametros = { 'est': $(this).val(), '__RequestVerificationToken': token, 'idReq': $("#idReq").val(), 'idRequisicion': $("#idRequisicion").val() };
+                    $.post(url, parametros, function (data) {
+
+                        var div = document.createElement('div');
+                        div.setAttribute('class', 'row small border border-top-0 border-left-0 border-right-0');
+                        div.innerHTML = data;
+                        document.getElementById('editarFila').appendChild(div);
+                        //document.formNuevo.totalfi.value = data[26];
+                        $("#Edtotalfi").val(data[26]);
+                        document.formEditar.Edtotalfi.value = data[26];
+                    });
+
+                }
+            });
+            //funcion para consultar la descripcion del concepto
+            $("#conce").change(function (e) {
+                e.preventDefault();
+                var token = $("[name='__RequestVerificationToken']").val();
+                url = "@Url.Content("~/Estimacion/getDescripcion")";
+                parametros = { 'conc': $(this).val(), '__RequestVerificationToken': token };
+
+                $.post(url, parametros, function (data) {
+
+                    $("#desc").html(data);
+                });
+            });
+            //funcion para guardar
+            $("#guardar").click(function (e) {
+                e.preventDefault();
+                if (indiceNE == 1) {
+
+                    jQuery.ajax({
+                        url: "@Url.Content("~/Estimacion/Agregar")",
+                        data: $("#formNuevo").serialize(),
+                        type: "POST",
+                        success: function (data) {
+                            alert("Agregada correctamente");
+                            document.estimacion.submit();
+                        },
+                        error: function () { }
+                    });
+
+                } else {
+                    jQuery.ajax({
+                        url: "@Url.Content("~/Estimacion/Editar")",
+                        data: $("#formEditar").serialize(),
+                        type: "POST",
+                        success: function (data) {
+                            alert("Modificado correctamente");
+                            document.estimacion.submit();
+                        },
+                        error: function () { }
+                    });
+                }
+            });
+
+            //funcion para redirigir a Rollo fotografico
+            $("#rollo").click (function (e)
+            {
+                e.preventDefault();
+                $("#rolloFoto").submit();
+            });
+            //funcion para regresar a ventana de proyecto
+            $("#return").click(function (e) {
+                e.preventDefault();
+                $("#regresar").submit();
+            });
+            //funcion para agregar columna a la nueva estimacion
+            $("#AgFila").click(function (e) {
+
+                indiceNE = 1;
+                e.preventDefault();
+                //alert($("#totalfi").val(a));
+                var token = $("[name='__RequestVerificationToken']").val();
+                url = "@Url.Content("~/Estimacion/Conceptos")";
+                //parametros = { 'idReq': $("#idReq").val(), '__RequestVerificationToken': token };
+                parametros = $("#formNuevo").serialize();
+                $.post(url, parametros, function (data) {
+                    if (data == '<option>Selecciona concepto</option>') {
+                        alert("ya no puede agregar mas conceptos");
+                    } else {
+                        var div = document.createElement('div');
+                        div.setAttribute('class', 'row small border border-top-0 border-left-0 border-right-0');
+                        div.innerHTML = '<div class="col-2 text-muted font-weight-bolder text-center">'
+                            + '<select class="custom-select custom-select-sm" onchange="desConc(' + a + ')" name="opt' + a + '" id="opt' + a + '">' + data + '</select>'
+                            + '</div>'
+                            + '<div class="col-3 text-muted font-weight-bolder" name="conce' + a + '" id="conce' + a + '">'
+                            + 'Concepto 1'
+                            + '</div>'
+                            + '<div class="col-1 text-muted font-weight-bolder text-center" >'
+                            + $("#cantidad").val()
+                            + '</div>'
+                            + '<div class="col-1 text-muted font-weight-bolder text-center" >'
+                            + $("#total").val()
+                            + '</div>'
+                            + '<div class="col-2 text-muted font-weight-bolder text-center" >'
+                            + '<input type="text" class="form-control form-control-sm w-50 mx-auto text-center" id="est' + a + '" name="est' + a + '">'
+                            + '</div>'
+                            + '<div class="col-1 text-muted font-weight-bolder text-center">'
+                            + '<label name="precio' + a + '" id="precio"' + a + '"> </label>'
+                            + '</div>'
+                            + '<div class="col-2 text-muted font-weight-bolder text-center" >'
+                            + '$ 0 '
+                            + '</div>';
+                        document.getElementById('nuevaFila').appendChild(div);
+                        a++;
+                        $("#totalfi").val(a);
+                    }
+
+
+                });
+            });
+        });
+        //funcion que se carga al inicio de la pagina para saber si se requiere una nueva
+        //estimacion o si ya se encuentra alguna existente
+        window.onload = function (e) {
+            if ($("#est").val() == 'nuevo') {
+                indiceNE = 1;
+                $("#nuevaFila").html("");
+                $("#editarFila").html("");
+                e.preventDefault();
+                var token = $("[name='__RequestVerificationToken']").val();
+                url = "@Url.Content("~/Estimacion/Conceptos")";
+                parametros = { 'idReq': $("#idReq").val() , '__RequestVerificationToken': token };
+                $.post(url, parametros, function (data) {
+                var div = document.createElement('div');
+                div.setAttribute('class', 'row small border border-top-0 border-left-0 border-right-0');
+                div.innerHTML = '<div class="col-2 text-muted font-weight-bolder text-center">'
+                                + '<select class="custom-select custom-select-sm" onchange="desConc(' + a + ')" name="opt' + a + '" id="opt' + a + '">' + data + '</select>'
+                                + '</div>'
+                                + '<div class="col-3 text-muted font-weight-bolder" name="conce' + a + '" id="conce' + a + '">>'
+                                + 'Concepto 1'
+                                + '</div>'
+                                + '<div class="col-1 text-muted font-weight-bolder text-center" >'
+                                + $("#cantidad").val()
+                                + '</div>'
+                                + '<div class="col-1 text-muted font-weight-bolder text-center" >'
+                                + $("#total").val()
+                                + '</div>'
+                                + '<div class="col-2 text-muted font-weight-bolder text-center" >'
+                                + '<input type="text" class="form-control form-control-sm w-50 mx-auto text-center" id="est' + a + '" name="est' + a + '">'
+                                + '</div>'
+                                + '<div class="col-1 text-muted font-weight-bolder text-center">'
+                                + '<label name="precio'+a+'" id="precio"' + a + '"> </label>'
+                                + '</div>'
+                                + '<div class="col-2 text-muted font-weight-bolder text-center" >'
+                                + '$ 0 '
+                                + '</div>';
+                document.getElementById('nuevaFila').appendChild(div);
+                    a++;
+                    $("#totalfi").val(a);
+                });
+            }
+            else {
+                a = 0;
+                indiceNE = 2;
+                $("#nuevaFila").html("");
+                $("#editarFila").html("");
+                e.preventDefault();
+                var token = $("[name='__RequestVerificationToken']").val();
+                url = "@Url.Content("~/Estimacion/getEstimacion")";
+                parametros = { 'est': 1, '__RequestVerificationToken': token, 'idReq': $("#idReq").val(), 'idRequisicion': $("#idRequisicion").val() };
+                $.post(url, parametros, function (data) {
+
+                    var div = document.createElement('div');
+                    div.setAttribute('class', 'row small border border-top-0 border-left-0 border-right-0');
+                    div.innerHTML = data;
+                    document.getElementById('editarFila').appendChild(div);
+                    //document.formNuevo.totalfi.value = data[26];
+                    $("#Edtotalfi").val(data[26]);
+                    document.formEditar.Edtotalfi.value = data[26];
+                });
+            }
+        }
+        //funcion para obtener la descripcion del concepto seleccionado
+        function desConc(x) {
+            iden = "opt" + x;
+            conc = "conce" + x;
+            var token = $("[name='__RequestVerificationToken']").val();
+            url = "@Url.Content("~/Estimacion/getDescripcion")";
+            parametros = { 'conc': document.getElementById(iden).value, '__RequestVerificationToken': token };
+
+            $.post(url, parametros, function (data) {
+                document.getElementById(conc).innerHTML = data;
+            });
+        }
+        //funcion para obtener el subtotal de  la estimacion (catidad de estimacion * precio unitario)
+        function mostrar(x) {
+
+            estima = "est" + x;
+            totaluni = "precio" + x;
+            preciouni = "unitario" + x;
+            totalunitario = document.getElementById(estima).value * document.getElementById(preciouni).value;
+
+            document.getElementById(totaluni).innerHTML = totalunitario;
+        }
+
+    </script>
+}
